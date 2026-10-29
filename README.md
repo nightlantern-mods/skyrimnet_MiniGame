@@ -140,11 +140,29 @@ texts, into the mod project.
 
 ## Files
 
-- `skyrimnet_MiniGame_0.1.0.zip`: the mod (English, usable with any game language).
+- `skyrimnet_MiniGame_0.1.0.zip`: the mod (English, usable with any game language), with
+  `THIRD_PARTY_NOTICES.txt` and `COPYING.txt` (see License).
 - `skyrimnet_MiniGame_0.1.0_Japanese.zip`: Japanese translation; install after the mod and let
   it overwrite.
 
 ## License
 
-MIT, see [LICENSE](LICENSE). The SkyrimNet API headers in `src/skyrimnet/` are MIT licensed by
-Fateless.Ai (see the LICENSE there). `src/PrismaUI_API.h` is the Prisma UI modder API header.
+The source in this repository is MIT licensed, see [LICENSE](LICENSE).
+
+The built plugin, `SKSE/Plugins/skyrimnet_MiniGame.dll`, is distributed under the
+[GPL-3.0-or-later](https://www.gnu.org/licenses/gpl-3.0.txt): it statically links
+[CommonLibSSE NG](https://github.com/alandtse/CommonLibSSE-NG) 7.5.4 (branch `ng`), which is
+GPL-3.0-or-later with a Modding Exception and a GPL-3.0 Linking Exception, so the DLL is a
+combined work under its terms. Its corresponding source is this repository together with
+CommonLibSSE NG [v7.5.4](https://github.com/alandtse/CommonLibSSE-NG/tree/v7.5.4) and the
+libraries pinned in `xmake-requires.lock`. The release archive carries the GPL text
+(`COPYING.txt`) and the third-party notices.
+
+Third-party code, with the full license texts in [THIRD_PARTY_NOTICES.txt](THIRD_PARTY_NOTICES.txt):
+
+- CommonLibSSE NG: GPL-3.0-or-later with exceptions; originally based on MIT-licensed code.
+- The SkyrimNet API headers in `src/skyrimnet/`: MIT, Fateless.Ai (see the LICENSE there).
+- `src/PrismaUI_API.h`: the Prisma UI modder API header, which modders may copy into their
+  projects.
+- nlohmann/json 3.12.0, spdlog 1.16.0, DirectXMath, DirectX Tool Kit and rapidcsv: MIT, or
+  BSD-3-Clause for rapidcsv.
