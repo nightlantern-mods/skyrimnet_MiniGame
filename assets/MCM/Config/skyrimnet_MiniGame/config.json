@@ -1,0 +1,162 @@
+{
+	"modName": "skyrimnet_MiniGame",
+	"displayName": "$SNMG_ModName",
+	"minMcmVersion": 9,
+	"cursorFillMode": "topToBottom",
+	"content": [
+		{
+			"type": "header",
+			"text": "$SNMG_HeaderGeneral"
+		},
+		{
+			"id": "iOpenKey:General",
+			"type": "keymap",
+			"text": "$SNMG_OpenKey",
+			"help": "$SNMG_OpenKeyHelp",
+			"valueOptions": {
+				"sourceType": "ModSettingInt"
+			}
+		},
+		{
+			"id": "iScanRadius:General",
+			"type": "slider",
+			"text": "$SNMG_ScanRadius",
+			"help": "$SNMG_ScanRadiusHelp",
+			"valueOptions": {
+				"min": 300,
+				"max": 6000,
+				"step": 100,
+				"formatString": "{0}",
+				"sourceType": "ModSettingInt"
+			}
+		},
+		{
+			"id": "bGather:General",
+			"type": "toggle",
+			"text": "$SNMG_Gather",
+			"help": "$SNMG_GatherHelp",
+			"valueOptions": {
+				"sourceType": "ModSettingBool"
+			}
+		},
+		{
+			"id": "bPauseGame:General",
+			"type": "toggle",
+			"text": "$SNMG_PauseGame",
+			"help": "$SNMG_PauseGameHelp",
+			"valueOptions": {
+				"sourceType": "ModSettingBool"
+			}
+		},
+		{
+			"type": "header",
+			"text": "$SNMG_HeaderReversi"
+		},
+		{
+			"id": "iDifficulty:General",
+			"type": "slider",
+			"text": "$SNMG_Difficulty",
+			"help": "$SNMG_DifficultyHelp",
+			"valueOptions": {
+				"min": 1,
+				"max": 4,
+				"step": 1,
+				"formatString": "{0}",
+				"sourceType": "ModSettingInt"
+			}
+		},
+		{
+			"id": "iColor:General",
+			"type": "enum",
+			"text": "$SNMG_Color",
+			"help": "$SNMG_ColorHelp",
+			"valueOptions": {
+				"options": ["$SNMG_ColorBlack", "$SNMG_ColorWhite", "$SNMG_ColorRandom", "$SNMG_ColorAlternate"],
+				"sourceType": "ModSettingInt"
+			}
+		},
+		{
+			"id": "bHints:General",
+			"type": "toggle",
+			"text": "$SNMG_Hints",
+			"help": "$SNMG_HintsHelp",
+			"valueOptions": {
+				"sourceType": "ModSettingBool"
+			}
+		},
+		{
+			"type": "header",
+			"text": "$SNMG_HeaderLiarsDice"
+		},
+		{
+			"id": "iDifficulty:LiarsDice",
+			"type": "slider",
+			"text": "$SNMG_DiceDifficulty",
+			"help": "$SNMG_DiceDifficultyHelp",
+			"valueOptions": {
+				"min": 1,
+				"max": 4,
+				"step": 1,
+				"formatString": "{0}",
+				"sourceType": "ModSettingInt"
+			}
+		},
+		{
+			"type": "header",
+			"text": "$SNMG_HeaderSkyrimNet"
+		},
+		{
+			"id": "bCommentary:SkyrimNet",
+			"type": "toggle",
+			"text": "$SNMG_Commentary",
+			"help": "$SNMG_CommentaryHelp",
+			"valueOptions": {
+				"sourceType": "ModSettingBool"
+			}
+		},
+		{
+			"id": "iCooldown:SkyrimNet",
+			"type": "slider",
+			"text": "$SNMG_Cooldown",
+			"help": "$SNMG_CooldownHelp",
+			"valueOptions": {
+				"min": 0,
+				"max": 60,
+				"step": 1,
+				"formatString": "{0}",
+				"sourceType": "ModSettingInt"
+			}
+		},
+		{
+			"id": "iVoiceWait:SkyrimNet",
+			"type": "slider",
+			"text": "$SNMG_VoiceWait",
+			"help": "$SNMG_VoiceWaitHelp",
+			"valueOptions": {
+				"min": 3,
+				"max": 60,
+				"step": 1,
+				"formatString": "{0}",
+				"sourceType": "ModSettingInt"
+			}
+		},
+		{
+			"id": "bPlayerVoice:SkyrimNet",
+			"type": "toggle",
+			"text": "$SNMG_PlayerVoice",
+			"help": "$SNMG_PlayerVoiceHelp",
+			"valueOptions": {
+				"sourceType": "ModSettingBool"
+			}
+		},
+		{
+			"id": "bChallenge:SkyrimNet",
+			"type": "toggle",
+			"text": "$SNMG_Challenge",
+			"help": "$SNMG_ChallengeHelp",
+			"valueOptions": {
+				"sourceType": "ModSettingBool"
+			}
+		}
+	]
+}

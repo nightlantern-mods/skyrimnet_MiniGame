@@ -1,0 +1,5 @@
+ModKey: skyrimnet_MiniGame.esp
+GameRelease: SkyrimSE
+ModHeader:
+  Flags:
+  - Small

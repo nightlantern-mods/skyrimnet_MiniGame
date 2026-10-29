@@ -1,0 +1,22 @@
+FormKey: 000800:skyrimnet_MiniGame.esp
+EditorID: skyrimnet_MiniGameMCMQuest
+VirtualMachineAdapter:
+  Scripts:
+  - Name: skyrimnet_MiniGameMCM
+  FileName: ''
+  Aliases:
+  - Property:
+      Name: ''
+      Object: 000800:skyrimnet_MiniGame.esp
+      Alias: 0
+    Scripts:
+    - Name: SKI_PlayerLoadGameAlias
+    - Name: skyrimnet_MiniGamePlayerAlias
+Flags:
+- StartGameEnabled
+NextAliasID: 1
+Aliases:
+- Name: Player
+  Flags: []
+  ForcedReference: 000014:Skyrim.esm
+  VoiceTypes: Null

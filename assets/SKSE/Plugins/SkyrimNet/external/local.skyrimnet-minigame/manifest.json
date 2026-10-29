@@ -1,0 +1,17 @@
+{
+  "id": "local.skyrimnet-minigame",
+  "type": "bundle",
+  "title": "SkyrimNet MiniGame",
+  "tagline": "Play Reversi and Liar's Dice with NPCs; they react to the game and know how it stands.",
+  "description": "Prompts for skyrimnet_MiniGame.dll. While NPCs are playing a mini game (Reversi, Liar's Dice) with the player, the minigame_state decorator (from the DLL) puts the game's current state into each one's profile (in Liar's Dice, only their own dice), so they can talk about it. The DLL also narrates the moments of the game and registers the Reversi_Challenge action. Ships with skyrimnet_MiniGame.esp.",
+  "author": "nightlantern-mods",
+  "tags": ["prompts", "actions"],
+  "nsfw": false,
+  "icon": "sparkles",
+  "mods": [
+    { "name": "SkyrimNet MiniGame", "file": "skyrimnet_MiniGame.esp", "required": true }
+  ],
+  "languages": ["en"],
+  "version": "0.1.0",
+  "min_skyrimnet_version": "0.25.0"
+}

@@ -1,0 +1,35 @@
+$SNMG_ModName	SkyrimNet MiniGame
+$SNMG_HeaderGeneral	General
+$SNMG_HeaderReversi	Reversi
+$SNMG_OpenKey	Open / close the menu
+$SNMG_OpenKeyHelp	Opens the mini game menu: choose a game, then your opponent from the people nearby (the one under your crosshair is picked to begin with). Press again or Esc to close. An unfinished game is offered at the top of the menu to continue.
+$SNMG_ScanRadius	Opponent search range
+$SNMG_ScanRadiusHelp	How far away people can be to appear in the opponent list, in game units (70 units is about 1 metre).
+$SNMG_Difficulty	Opponent strength
+$SNMG_DifficultyHelp	1 Beginner / 2 Normal / 3 Strong / 4 Master. Applies from the next game.
+$SNMG_Color	Your color
+$SNMG_ColorHelp	Black moves first. Alternate swaps Black and White every game.
+$SNMG_ColorBlack	Black (first)
+$SNMG_ColorWhite	White (second)
+$SNMG_ColorRandom	Random
+$SNMG_ColorAlternate	Alternate
+$SNMG_Hints	Show legal moves
+$SNMG_HintsHelp	On your turn, marks the squares where you can play.
+$SNMG_Gather	Call opponents over
+$SNMG_GatherHelp	When a game starts, the screen fades to black and your opponents come to stand in front of you, facing you, for the photo in their face frames. Off: nobody moves, and only faces already on screen are shown.
+$SNMG_PauseGame	Pause the game while playing
+$SNMG_PauseGameHelp	The game stops while the board is open. NPCs cannot speak while it is stopped, so leave this off to hear SkyrimNet commentary.
+$SNMG_HeaderLiarsDice	Liar's Dice
+$SNMG_DiceDifficulty	Opponent strength
+$SNMG_DiceDifficultyHelp	1 Beginner / 2 Normal / 3 Strong / 4 Master. Stronger opponents count the odds better and read your bids. Applies from the next game.
+$SNMG_HeaderSkyrimNet	SkyrimNet
+$SNMG_Commentary	Commentary
+$SNMG_CommentaryHelp	Tells SkyrimNet about the game so your opponents talk. Reversi: the start, the end (declaring victory or conceding defeat), resigning, corners, big flips, risky moves, comebacks and ordinary moves. Liar's Dice: every bid and call, each said by one person at the table, and the game waits for the line.
+$SNMG_Cooldown	Commentary interval (seconds)
+$SNMG_CooldownHelp	Reversi: at most one remark on an ordinary move per this many seconds; striking moves such as corners and comebacks wait half as long. The start, the end and resigning always go through. Lower means more talk. (Liar's Dice paces itself by the voice instead.)
+$SNMG_Challenge	NPCs may challenge you
+$SNMG_ChallengeHelp	Lets an NPC challenge you to Reversi in conversation (the SkyrimNet action Reversi_Challenge). The board opens with the challenge, and you can accept or decline.
+$SNMG_VoiceWait	Voice wait (seconds)
+$SNMG_VoiceWaitHelp	Liar's Dice waits for each line to be spoken before the next person acts. If nobody speaks within this many seconds, the game moves on anyway.
+$SNMG_PlayerVoice	You speak your own bids
+$SNMG_PlayerVoiceHelp	Liar's Dice: your bids and your "Liar!" calls go through SkyrimNet's Transform Dialogue, so your character says them aloud in their own words (one LLM request each). Off: only your opponents speak, and the next one mentions your bid.

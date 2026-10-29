@@ -1,0 +1,2531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>skyrimnet_MiniGame</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: "Yu Gothic UI", "Meiryo", sans-serif;
+        }
+
+        /* the open panel sits in the middle of the screen; fitPanels() zooms it */
+        body {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            overflow: hidden;
+            color: #e8e2d4;
+            user-select: none;
+        }
+
+        .panel {
+            display: none;
+            position: relative;
+            padding: 18px 20px;
+            gap: 20px;
+            background-color: rgba(14, 14, 14, 0.94);
+            border: 1px solid #8a7a58;
+            border-radius: 4px;
+        }
+
+        .panel.open {
+            display: flex;
+        }
+
+        /* ---- board ---- */
+
+        .frame {
+            position: relative;
+            padding: 22px;
+            background: linear-gradient(135deg, #4a3320, #2c1d10);
+            border: 1px solid #6b5230;
+            border-radius: 4px;
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(8, 62px);
+            grid-template-rows: repeat(8, 62px);
+            background-color: #24563a;
+            border: 2px solid #15301f;
+        }
+
+        .cell {
+            position: relative;
+            border: 1px solid #15301f;
+        }
+
+        .cell.legal {
+            cursor: pointer;
+        }
+
+        .cell.legal::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 12px;
+            height: 12px;
+            margin: -6px 0 0 -6px;
+            border-radius: 50%;
+            background-color: rgba(232, 226, 212, 0.28);
+        }
+
+        .cell.legal:hover::after {
+            background-color: rgba(232, 226, 212, 0.6);
+        }
+
+        .disc {
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+        }
+
+        .disc.black {
+            background: radial-gradient(circle at 35% 30%, #4a4a4a, #0c0c0c 70%);
+            box-shadow: 0 2px 3px rgba(0, 0, 0, 0.6);
+        }
+
+        .disc.white {
+            background: radial-gradient(circle at 35% 30%, #ffffff, #cfc8b8 75%);
+            box-shadow: 0 2px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        .disc.flip {
+            animation: flip 0.32s ease-in-out;
+        }
+
+        .disc.place {
+            animation: place 0.2s ease-out;
+        }
+
+        @keyframes flip {
+            0% { transform: scaleX(1); }
+            50% { transform: scaleX(0.05); }
+            100% { transform: scaleX(1); }
+        }
+
+        @keyframes place {
+            0% { transform: scale(0.4); opacity: 0.3; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .last-mark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 8px;
+            height: 8px;
+            margin: -4px 0 0 -4px;
+            border-radius: 50%;
+            background-color: #d0453a;
+        }
+
+        .label {
+            position: absolute;
+            font-size: 12px;
+            color: #b9a77c;
+            text-align: center;
+        }
+
+        /* ---- side panel ---- */
+
+        .side {
+            display: flex;
+            flex-direction: column;
+            width: 300px;
+        }
+
+        h1 {
+            margin: 0 0 14px;
+            font-size: 20px;
+            font-weight: normal;
+            letter-spacing: 0.05em;
+        }
+
+        .player {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            margin-bottom: 8px;
+            border: 1px solid #3a352a;
+            border-radius: 3px;
+            background-color: #1a1a1a;
+        }
+
+        .player.active {
+            border-color: #c9b98f;
+            background-color: #2a251b;
+        }
+
+        .player .icon {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .player .name {
+            flex: 1;
+            font-size: 15px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .player .count {
+            font-size: 22px;
+            min-width: 34px;
+            text-align: right;
+        }
+
+        .status {
+            min-height: 48px;
+            margin: 8px 0;
+            padding: 8px 10px;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #c9b98f;
+            border-left: 2px solid #8a7a58;
+        }
+
+        .meta {
+            font-size: 12px;
+            color: #9a917d;
+        }
+
+        .log {
+            flex: 1;
+            min-height: 120px;
+            max-height: 260px;
+            margin-top: 8px;
+            padding: 6px 8px;
+            overflow-y: auto;
+            font-size: 12px;
+            line-height: 1.6;
+            color: #b8b0a0;
+            border: 1px solid #3a352a;
+            border-radius: 3px;
+            background-color: #161616;
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        button {
+            flex: 1;
+            padding: 7px 10px;
+            font-size: 14px;
+            color: #e8e2d4;
+            background-color: #2a2a2a;
+            border: 1px solid #8a7a58;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #3a3428;
+        }
+
+        button:disabled {
+            opacity: 0.4;
+            cursor: default;
+        }
+
+        button.primary {
+            background-color: #5a4a2a;
+        }
+
+        button.danger {
+            border-color: #ae6464;
+        }
+
+        /* ---- invitation ---- */
+
+        .invite {
+            display: none;
+            position: absolute;
+            inset: 0;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(8, 8, 8, 0.82);
+            border-radius: 4px;
+        }
+
+        .invite.open {
+            display: flex;
+        }
+
+        .invite .box {
+            width: 420px;
+            padding: 20px 22px;
+            text-align: center;
+            background-color: #1d1a14;
+            border: 1px solid #8a7a58;
+            border-radius: 4px;
+        }
+
+        .invite p {
+            margin: 0 0 18px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        /* ---- menu: pick a game, then the opponents ---- */
+
+        .menu {
+            flex-direction: column;
+            width: 480px;
+        }
+
+        .menu h2 {
+            margin: 0 0 8px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #c9b98f;
+        }
+
+        .step {
+            display: none;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        .step.open {
+            display: flex;
+        }
+
+        .list {
+            overflow-y: auto;
+            max-height: 420px;
+            border: 1px solid #3a352a;
+            border-radius: 3px;
+            background-color: #1a1a1a;
+        }
+
+        .row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 12px;
+            border-bottom: 1px solid #2a2722;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .row:hover {
+            background-color: #26231d;
+        }
+
+        .row.selected {
+            background-color: #3b3324;
+        }
+
+        .row .title {
+            flex: 1;
+        }
+
+        .row .sub {
+            display: block;
+            margin-top: 2px;
+            font-size: 12px;
+            color: #9a917d;
+        }
+
+        .row .meta {
+            font-size: 12px;
+        }
+
+        .row.resume {
+            border-left: 3px solid #c9b98f;
+        }
+
+        .empty {
+            padding: 14px 12px;
+            font-size: 14px;
+            color: #9a917d;
+        }
+
+        /* ---- Liar's Dice table ---- */
+
+        .table {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 680px;
+            height: 620px;
+            padding: 18px;
+            background: radial-gradient(ellipse at center, #2f6145 0%, #1d3f2c 70%, #15301f 100%);
+            border: 10px solid #4a3320;
+            border-radius: 28px;
+        }
+
+        .seats {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .seat {
+            width: 200px;
+            padding: 8px;
+            text-align: center;
+            background-color: rgba(10, 10, 10, 0.45);
+            border: 1px solid #3a352a;
+            border-radius: 4px;
+        }
+
+        .seat.active {
+            border-color: #c9b98f;
+            background-color: rgba(60, 50, 30, 0.6);
+        }
+
+        .seat.out {
+            opacity: 0.4;
+        }
+
+        .seat-name {
+            font-size: 14px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .seat-dice {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 4px;
+            min-height: 26px;
+            margin: 6px 0;
+        }
+
+        .seat-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+            min-height: 22px;
+            font-size: 12px;
+            color: #b9a77c;
+        }
+
+        .die {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            flex-shrink: 0;
+            width: 22px;
+            height: 22px;
+            padding: 3px;
+            background-color: #efe6d0;
+            border-radius: 4px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+        }
+
+        .die .pip {
+            width: 4px;
+            height: 4px;
+            place-self: center;
+            border-radius: 50%;
+            background-color: #1b1b1b;
+        }
+
+        .die.mid {
+            width: 30px;
+            height: 30px;
+            padding: 4px;
+            border-radius: 5px;
+        }
+
+        .die.mid .pip {
+            width: 6px;
+            height: 6px;
+        }
+
+        .die.big {
+            width: 50px;
+            height: 50px;
+            padding: 7px;
+            border-radius: 8px;
+        }
+
+        .die.big .pip {
+            width: 9px;
+            height: 9px;
+        }
+
+        .die.hidden {
+            background-color: #3b2a18;
+            box-shadow: inset 0 0 0 1px #6b5230;
+        }
+
+        .die.match {
+            box-shadow: 0 0 0 2px #e0b84a, 0 0 8px #e0b84a;
+        }
+
+        .die.dim {
+            opacity: 0.35;
+        }
+
+        .bid-box {
+            text-align: center;
+        }
+
+        .bid-label {
+            font-size: 12px;
+            color: #c9b98f;
+        }
+
+        .bid-now {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            min-height: 30px;
+            margin-top: 4px;
+            padding: 4px 12px;
+            font-size: 16px;
+            background-color: rgba(10, 10, 10, 0.45);
+            border-radius: 3px;
+        }
+
+        .mine {
+            padding: 10px;
+            text-align: center;
+            background-color: rgba(10, 10, 10, 0.35);
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+
+        .mine.active {
+            border-color: #c9b98f;
+        }
+
+        .mine .seat-dice {
+            gap: 10px;
+        }
+
+        .ctl-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 6px 0;
+            font-size: 13px;
+        }
+
+        .ctl-row > span:first-child {
+            width: 70px;
+            color: #9a917d;
+        }
+
+        button.mini {
+            flex: none;
+            width: 32px;
+            padding: 4px 0;
+        }
+
+        .pick-q {
+            width: 32px;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .faces {
+            display: flex;
+            gap: 6px;
+        }
+
+        .faces .die {
+            cursor: pointer;
+        }
+
+        .faces .die.selected {
+            box-shadow: 0 0 0 2px #e0b84a;
+        }
+
+        .faces.disabled .die {
+            cursor: default;
+            opacity: 0.4;
+        }
+
+        #next-round {
+            flex: none;
+            width: 100%;
+            margin-top: 8px;
+        }
+
+        .status {
+            white-space: pre-line;
+        }
+
+        /* ---- faces: cropped from a photo taken when a game starts ---- */
+
+        .face {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 8px;
+            font-size: 72px;
+            color: #c9b98f;
+            background-color: #2a251b;
+            background-repeat: no-repeat;
+            border: 3px solid #6b5230;
+            border-radius: 10px;
+            transition: box-shadow 0.2s, border-color 0.2s;
+        }
+
+        .face.speaking {
+            border-color: #e0b84a;
+            box-shadow: 0 0 0 3px #e0b84a, 0 0 24px #e0b84a;
+        }
+
+        #curtain {
+            position: fixed;
+            inset: 0;
+            z-index: 10;
+            opacity: 0;
+            pointer-events: none;
+            background-color: #000;
+            transition: opacity 0.3s;
+        }
+
+        #curtain.on {
+            opacity: 1;
+        }
+
+        #curtain.block {
+            pointer-events: auto;
+        }
+
+        body.snapping .panel {
+            visibility: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div id="curtain"></div>
+    <div class="panel menu" id="menu">
+        <h1 data-s="menuTitle">Mini Games</h1>
+
+        <div class="step" id="step-game">
+            <h2 data-s="chooseGame">Choose a game</h2>
+            <div class="list" id="game-list"></div>
+        </div>
+
+        <div class="step" id="step-opponents">
+            <h2 id="opponents-heading"></h2>
+            <div class="list" id="actor-list"></div>
+            <div class="toolbar">
+                <button onclick="menuBack()" data-s="back">Back</button>
+                <button class="primary" id="menu-start" onclick="menuStart()" data-s="startGame">Start</button>
+            </div>
+        </div>
+
+        <div class="toolbar">
+            <button onclick="requestClose()" data-s="close">Close (Esc)</button>
+        </div>
+    </div>
+
+    <div class="panel" id="panel">
+        <div class="frame">
+            <div class="board" id="board"></div>
+        </div>
+
+        <div class="side">
+            <h1 data-s="title">Reversi</h1>
+            <div class="face" id="face-npc"></div>
+            <div class="player" id="row-npc">
+                <span class="icon" id="icon-npc"></span>
+                <span class="name" id="name-npc"></span>
+                <span class="count" id="count-npc">2</span>
+            </div>
+            <div class="player" id="row-human">
+                <span class="icon" id="icon-human"></span>
+                <span class="name" id="name-human"></span>
+                <span class="count" id="count-human">2</span>
+            </div>
+            <div class="status" id="status"></div>
+            <div class="meta" id="meta"></div>
+            <div class="log" id="log"></div>
+            <div class="toolbar">
+                <button id="resign-button" class="danger" onclick="onResign()">Resign</button>
+                <button id="again-button" class="primary" onclick="onAgain()" style="display: none;" data-s="again">Play again</button>
+                <button onclick="requestClose()" data-s="close">Close (Esc)</button>
+            </div>
+        </div>
+
+        <div class="invite" id="invite">
+            <div class="box">
+                <p id="invite-text"></p>
+                <div class="toolbar">
+                    <button class="primary" onclick="onAccept()" data-s="accept">Accept</button>
+                    <button onclick="onDecline()" data-s="decline">Decline</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel" id="dice">
+        <div class="table">
+            <div class="seats" id="seats"></div>
+            <div class="bid-box">
+                <div class="bid-label" id="bid-label"></div>
+                <div class="bid-now" id="bid-now"></div>
+            </div>
+            <div class="mine" id="mine">
+                <div class="seat-name" id="mine-name"></div>
+                <div class="seat-dice" id="mine-dice"></div>
+                <div class="seat-meta" id="mine-meta"></div>
+            </div>
+        </div>
+
+        <div class="side">
+            <h1 data-s="diceTitle">Liar's Dice</h1>
+            <div class="meta" data-s="diceRules"></div>
+            <div class="meta" id="dice-meta"></div>
+            <div class="status" id="dice-status"></div>
+            <div id="bid-controls">
+                <div class="ctl-row">
+                    <span data-s="qtyLabel">How many</span>
+                    <button class="mini" id="qty-down" onclick="adjustQty(-1)">−</button>
+                    <span class="pick-q" id="pick-q"></span>
+                    <button class="mini" id="qty-up" onclick="adjustQty(1)">+</button>
+                </div>
+                <div class="ctl-row">
+                    <span data-s="faceLabel">Face</span>
+                    <div class="faces" id="face-buttons"></div>
+                </div>
+                <div class="toolbar">
+                    <button class="primary" id="bid-button" onclick="onPlayerBid()" data-s="bidButton">Bid</button>
+                    <button class="danger" id="liar-button" onclick="onPlayerLiar()" data-s="liarButton">Liar!</button>
+                </div>
+            </div>
+            <button class="primary" id="next-round" onclick="onNextRound()" data-s="nextRound">Next round</button>
+            <div class="log" id="dice-log"></div>
+            <div class="toolbar">
+                <button id="leave-button" class="danger" onclick="onLeave()">Leave</button>
+                <button id="dice-again" class="primary" onclick="onDiceAgain()" style="display: none;" data-s="again">Play again</button>
+                <button onclick="requestClose()" data-s="close">Close (Esc)</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== text =====
+
+        // Every word the board shows or says, in English. The plugin passes the "view" object of
+        // SKSE/Plugins/skyrimnet_MiniGame/strings.json on open, and its keys replace these (a
+        // translation mod overrides that file). {name} placeholders are filled in by t().
+        // The narration and state texts go to SkyrimNet, which the opponent reacts to.
+        const STRINGS = {
+            // menu
+            menuTitle: "Mini Games",
+            chooseGame: "Choose a game",
+            chooseOpponent: "Choose your opponent",
+            chooseOpponents: "Choose your opponents (up to {n})",
+            back: "Back",
+            startGame: "Start",
+            resume: "Continue: {game} with {npc}",
+            noActors: "There is no one nearby to play with.",
+            distance: "{m} m",
+            inSight: "in sight",
+            gameReversi: "Reversi",
+            gameReversiDesc: "One opponent. Trap your opponent's discs between yours to turn them over.",
+            gameDice: "Liar's Dice",
+            gameDiceDesc: "Up to three opponents. Bid on the dice under every cup, or call the last bid a lie.",
+            listComma: ", ",
+            listAnd: " and ",
+
+            // board
+            title: "Reversi",
+            resign: "Resign",
+            resignConfirm: "Really resign?",
+            again: "Play again",
+            close: "Close (Esc)",
+            accept: "Accept",
+            decline: "Decline",
+            invite: "{npc} challenges you to a game of Reversi.",
+            strength: "Strength: {level}",
+            level1: "Beginner",
+            level2: "Normal",
+            level3: "Strong",
+            level4: "Master",
+            black: "Black",
+            white: "White",
+            opponentDefault: "Opponent",
+            playerDefault: "You",
+            yourTurn: "Your move. You can play on the marked squares.",
+            thinking: "{npc} is thinking…",
+            youWin: "You win! ({h} – {o})",
+            npcWins: "{npc} wins. ({h} – {o})",
+            draw: "It's a draw. ({h} – {o})",
+            resigned: "You resigned. {npc} wins.",
+            logStart: "Game start: {npc} ({npcColor}) vs {player} ({playerColor})",
+            logMove: "{color} {who}: {sq} ({n} flipped)",
+            logPass: "{who} passes",
+            logEnd: "Game over: {result} ({player} {h} – {npc} {o})",
+            logResign: "{player} resigned",
+            logResume: "Game resumed",
+            resultWin: "{name} wins",
+            resultDraw: "a draw",
+
+            // narration for SkyrimNet
+            score: "{player} {h}, {npc} {o}",
+            even: "The game is about even",
+            lead: "{name} is ahead by {n}",
+            start: "{player} and {npc} begin a game of Reversi. {npc} plays {npcColor} and {player} plays {playerColor}; Black moves first.",
+            corner: "In the Reversi game, {who} takes the corner at {sq}. A corner can never be flipped back. Discs: {score}.",
+            comebackSelf: "Late in the Reversi game, {who} turns it around and takes the lead. Discs: {score}.",
+            comebackOther: "Late in the Reversi game, {who}'s move hands the lead to {ahead}. Discs: {score}.",
+            bigFlip: "In the Reversi game, {who}'s move flips {n} discs at once. {standing}; discs: {score}.",
+            xSquare: "In the Reversi game, {who} plays {sq}, the risky square diagonal to an empty corner, which may hand that corner to the other side. Discs: {score}.",
+            closing: "The Reversi game is down to its last {n} squares; the end is near. {standing}; discs: {score}.",
+            midgame: "The Reversi game enters the middle game. {standing}; discs: {score}.",
+            endgame: "The Reversi game enters the endgame. {standing}; discs: {score}.",
+            move: "In the Reversi game, {who} plays {sq} and flips {n}. {standing}; discs: {score}.",
+            pass: "In the Reversi game, {who} has no legal move and must pass; {next} moves again. Discs: {score}.",
+            marginBig: " by a wide margin",
+            marginClose: " by a narrow margin",
+            final: "Final count: {npc} {o}, {player} {h}",
+            endNpcWins: "The Reversi game is over: {npc} beat {player}{margin}. {final}. {npc} turns to {player} and proudly declares victory.",
+            endNpcLoses: "The Reversi game is over: {npc} lost to {player}{margin}. {final}. {npc} admits defeat and concedes the game to {player}.",
+            endDraw: "The Reversi game ends in a draw, {o} to {h}. {npc} says something to {player} about the undecided game.",
+            resignNarration: "{player} resigns the Reversi game, so {npc} wins. Discs at resignation: {score}. {npc} turns to {player} and proudly declares victory.",
+            declined: "{player} turns down {npc}'s challenge to a game of Reversi.",
+            ignored: "{player} does not answer {npc}'s challenge to a game of Reversi.",
+
+            // the opponent's prompt while the board is open
+            statePlaying: "{npc} is playing Reversi with {player}. {npc} has {npcColor}, {player} has {playerColor}. Discs: {npc} {o}, {player} {h}, {empty} squares left. {standing}.",
+            statePaused: " The board is set aside for now; the game is paused.",
+            stateTurn: " It is {who}'s turn.",
+            stateResult: "{npc} has just finished a game of Reversi with {player}. Result: {result} ({final}).",
+            stateResigned: "{npc} has just finished a game of Reversi with {player}. {player} resigned, so {npc} won.",
+
+            // Liar's Dice table
+            diceTitle: "Liar's Dice",
+            diceRules: "Ones are wild. Raise the bid, or call it a lie.",
+            noBid: "No bid yet",
+            bidBy: "Bid by {who}",
+            qtyLabel: "How many",
+            faceLabel: "Face",
+            bidButton: "Bid",
+            liarButton: "Liar!",
+            nextRound: "Next round",
+            leave: "Leave the table",
+            leaveConfirm: "Really leave?",
+            stopWatching: "Stop watching",
+            diceN: "{n} dice",
+            diceOut: "Out",
+            diceYourTurn: "Your turn. Raise the bid, or call it a lie.",
+            diceOpenTurn: "Your turn. Open the round with a bid.",
+            diceListening: "{npc} is speaking…",
+            diceYouSpeaking: "You are speaking…",
+            revealStatus: "{count} dice showed {f} against a bid of {q}. {loser} loses a die.",
+            diceYouWin: "You win! Yours is the last cup with dice.",
+            diceYouLose: "You have no dice left. {npc} wins.",
+            diceWatching: "You are out. The others play on to the end.",
+            diceLeftStatus: "You left the table.",
+            logRound: "Round {r}: {who} starts",
+            logBid: "{who}: {bid}",
+            logLiar: "{who}: Liar!",
+            logReveal: "{count} × {f} against {q}: {loser} loses a die",
+            logOut: "{who} is out",
+            logDiceEnd: "Game over: {winner} wins",
+            logLeave: "{player} left the table",
+            bidSay: "{q} dice showing {f}",
+            bidSayOne: "one die showing {f}",
+            diceCount: "{name} {n}",
+            diceCountOut: "{name} out",
+
+            // Liar's Dice narration: one NPC speaks for each moment
+            dStart: "{player} sits down with {npcs} for a game of Liar's Dice. Everyone has five dice under a cup, and ones are wild. In turn, each player raises the bid on how many dice around the table show a face, or calls the last bid a lie.",
+            dOpen: "In the Liar's Dice game, round {r} begins: {npc} opens with a bid of {bid}.",
+            dRaise: "In the Liar's Dice game, {prevWho} bid {prev}; {npc} raises it to {bid}.",
+            dCallNpc: "In the Liar's Dice game, {npc} calls {bidder}'s bid of {bid} a lie. The cups are lifted: {count} dice show {f}, ones included.",
+            dCallPlayer: "In the Liar's Dice game, {player} calls {npc}'s bid of {bid} a lie. The cups are lifted: {count} dice show {f}, ones included.",
+            dBluff: " The bid was too high, so {bidder} loses a die.",
+            dHeld: " The bid held, so {caller} loses a die.",
+            dOut: " {loser} has no dice left and is out of the game.",
+            dRemain: " Dice left: {counts}.",
+            dEndPlayerWins: " The game is over: {player} wins. {npc} admits defeat and concedes the game to {player}.",
+            dEndPlayerOut: " {player} has no dice left, so the game is over and {npc} wins. {npc} turns to {player} and proudly declares victory.",
+            dEndNpcWins: " The game is over: {npc} is the last one with dice and wins. {npc} proudly declares victory.",
+            dPlayerOut: " {player} has no dice left and is out, but the others play on to the end while {player} watches.",
+            dLeave: "{player} gets up and leaves the Liar's Dice game before it is finished.",
+
+            // what the player means to say, for SkyrimNet to put in their own words (MCM bPlayerVoice)
+            pOpen: "In our game of Liar's Dice, I open the bidding: {bid}.",
+            pRaise: "In our game of Liar's Dice, I raise {prevWho}'s bid of {prev} to {bid}.",
+            pLiar: "In our game of Liar's Dice, I call {npc}'s bid of {bid} a lie!",
+            dStopWatching: "{player}, already out of the Liar's Dice game, stops watching and gets up before the others have finished.",
+
+            // each NPC's prompt at the table: only their own dice
+            dState: "{npc} is playing Liar's Dice with {others}. Round {r}; dice left: {counts}. Ones are wild. {npc}'s own dice under the cup are {own}; only {npc} has seen them, keeps them secret and may bluff.",
+            dStateOut: "{npc} is out of dice in the Liar's Dice game with {others} and is watching the rest. Round {r}; dice left: {counts}.",
+            dStateBid: " The current bid is {bid}, made by {who}.",
+            dStateNoBid: " No bid has been made this round yet.",
+            dStateTurn: " It is {who}'s turn.",
+            dStateBetween: " The cups were just lifted: {count} dice showed {f} against a bid of {q}, and {loser} lost a die. The next round is about to start.",
+            dStatePaused: " The dice are set aside for now; the game is paused.",
+            dStateResult: "{npc} has just finished a game of Liar's Dice with {others}. {winner} won.",
+            dStateLeft: "{npc} was playing Liar's Dice with {others}, but {player} left the table before it ended.",
+        };
+
+        function t(key, vars = {}) {
+            const text = STRINGS[key] ?? key;
+            return text.replace(/\{(\w+)\}/g, (m, k) => (k in vars ? vars[k] : m));
+        }
+
+        function applyStrings(overrides) {
+            if (overrides && typeof overrides === "object") {
+                for (const [k, v] of Object.entries(overrides)) {
+                    if (typeof v === "string") {
+                        STRINGS[k] = v;
+                    }
+                }
+            }
+            document.querySelectorAll("[data-s]").forEach((el) => {
+                el.textContent = t(el.dataset.s);
+            });
+        }
+
+        // ===== rules =====
+
+        const EMPTY = 0, BLACK = 1, WHITE = 2;
+        const DIRS = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
+        const CORNERS = [0, 7, 56, 63];
+        const colorName = (c) => t(c === BLACK ? "black" : "white");
+
+        const other = (c) => 3 - c;
+
+        // The discs a move at idx would turn, or an empty list if the move is illegal.
+        function flipsFor(b, idx, c) {
+            if (b[idx] !== EMPTY) {
+                return [];
+            }
+            const o = other(c);
+            const row = idx >> 3, col = idx & 7;
+            const out = [];
+            for (const [dr, dc] of DIRS) {
+                let r = row + dr, k = col + dc;
+                const run = [];
+                while (r >= 0 && r < 8 && k >= 0 && k < 8 && b[r * 8 + k] === o) {
+                    run.push(r * 8 + k);
+                    r += dr;
+                    k += dc;
+                }
+                if (run.length && r >= 0 && r < 8 && k >= 0 && k < 8 && b[r * 8 + k] === c) {
+                    out.push(...run);
+                }
+            }
+            return out;
+        }
+
+        function legalMoves(b, c) {
+            const moves = [];
+            for (let i = 0; i < 64; i++) {
+                if (b[i] === EMPTY && flipsFor(b, i, c).length) {
+                    moves.push(i);
+                }
+            }
+            return moves;
+        }
+
+        function countDiscs(b) {
+            let black = 0, white = 0;
+            for (let i = 0; i < 64; i++) {
+                if (b[i] === BLACK) black++;
+                else if (b[i] === WHITE) white++;
+            }
+            return { [BLACK]: black, [WHITE]: white, empty: 64 - black - white };
+        }
+
+        const squareName = (idx) => "abcdefgh"[idx & 7] + ((idx >> 3) + 1);
+
+        // ===== opponent AI =====
+
+        const WEIGHTS = [
+            100, -20, 10, 5, 5, 10, -20, 100,
+            -20, -50, -2, -2, -2, -2, -50, -20,
+            10, -2, -1, -1, -1, -1, -2, 10,
+            5, -2, -1, -1, -1, -1, -2, 5,
+            5, -2, -1, -1, -1, -1, -2, 5,
+            10, -2, -1, -1, -1, -1, -2, 10,
+            -20, -50, -2, -2, -2, -2, -50, -20,
+            100, -20, 10, 5, 5, 10, -20, 100,
+        ];
+        // The squares next to each corner; their penalty only applies while the corner is empty.
+        const CORNER_NEIGHBORS = { 0: [1, 8, 9], 7: [6, 14, 15], 56: [48, 49, 57], 63: [54, 55, 62] };
+        // The square diagonally inside each corner -> that corner. Playing there while the corner is
+        // empty usually hands the corner over.
+        const X_SQUARES = { 9: 0, 14: 7, 49: 56, 54: 63 };
+        const MOVE_ORDER =[...Array(64).keys()].sort((a, b) => WEIGHTS[b] - WEIGHTS[a]);
+
+        // Search depth, think time (ms), exact endgame from this many empty squares, mobility weight.
+        const LEVELS = {
+            1: { depth: 0 },
+            2: { depth: 2, time: 300, exact: 0, mobility: 0, noise: 4 },
+            3: { depth: 5, time: 900, exact: 10, mobility: 8, noise: 0 },
+            4: { depth: 9, time: 1600, exact: 14, mobility: 10, noise: 0 },
+        };
+
+        const TIMEOUT = {};
+
+        function evaluate(b, c, ctx) {
+            const o = other(c);
+            if (ctx.exact) {
+                return finalScore(b, c);
+            }
+            let score = 0;
+            for (let i = 0; i < 64; i++) {
+                if (b[i] === c) score += WEIGHTS[i];
+                else if (b[i] === o) score -= WEIGHTS[i];
+            }
+            for (const corner of CORNERS) {
+                if (b[corner] === EMPTY) {
+                    continue;
+                }
+                // a taken corner makes its neighbours safe: undo their penalty
+                for (const n of CORNER_NEIGHBORS[corner]) {
+                    if (b[n] === c) score -= WEIGHTS[n];
+                    else if (b[n] === o) score += WEIGHTS[n];
+                }
+            }
+            if (ctx.mobility) {
+                score += ctx.mobility * (legalMoves(b, c).length - legalMoves(b, o).length);
+            }
+            return score;
+        }
+
+        function finalScore(b, c) {
+            const n = countDiscs(b);
+            return (n[c] - n[other(c)]) * 1000;
+        }
+
+        function negamax(b, c, depth, alpha, beta, passed, ctx) {
+            if ((++ctx.nodes & 1023) === 0 && performance.now() > ctx.deadline) {
+                throw TIMEOUT;
+            }
+            if (depth === 0) {
+                return evaluate(b, c, ctx);
+            }
+            let any = false;
+            let best = -Infinity;
+            for (const m of MOVE_ORDER) {
+                const flips = flipsFor(b, m, c);
+                if (!flips.length) {
+                    continue;
+                }
+                any = true;
+                b[m] = c;
+                for (const f of flips) b[f] = c;
+                const v = -negamax(b, other(c), depth - 1, -beta, -alpha, false, ctx);
+                b[m] = EMPTY;
+                for (const f of flips) b[f] = other(c);
+                if (v > best) best = v;
+                if (v > alpha) alpha = v;
+                if (alpha >= beta) break;
+            }
+            if (!any) {
+                return passed ? finalScore(b, c) : -negamax(b, other(c), depth, -beta, -alpha, true, ctx);
+            }
+            return best;
+        }
+
+        // Scores every root move to the given depth; the best-known move goes first.
+        function searchRoot(b, c, moves, depth, ctx) {
+            let bestMove = moves[0], bestScore = -Infinity, alpha = -Infinity;
+            for (const m of moves) {
+                const flips = flipsFor(b, m, c);
+                b[m] = c;
+                for (const f of flips) b[f] = c;
+                let v;
+                try {
+                    v = -negamax(b, other(c), depth - 1, -Infinity, -alpha, false, ctx);
+                } finally {
+                    b[m] = EMPTY;
+                    for (const f of flips) b[f] = other(c);
+                }
+                if (ctx.noise) {
+                    v += (Math.random() * 2 - 1) * ctx.noise;
+                }
+                if (v > bestScore) {
+                    bestScore = v;
+                    bestMove = m;
+                }
+                if (v > alpha) alpha = v;
+            }
+            return bestMove;
+        }
+
+        function chooseMove(board, c, level) {
+            const b = board.slice();
+            const moves = legalMoves(b, c);
+            if (moves.length <= 1) {
+                return moves[0];
+            }
+            const cfg = LEVELS[level] || LEVELS[2];
+
+            if (!cfg.depth) {
+                // beginner: half the time any move, otherwise the most tempting-looking one
+                if (Math.random() < 0.5) {
+                    return moves[Math.floor(Math.random() * moves.length)];
+                }
+                return moves.reduce((best, m) =>
+                    WEIGHTS[m] + flipsFor(b, m, c).length * 2 > WEIGHTS[best] + flipsFor(b, best, c).length * 2 ? m : best);
+            }
+
+            const ctx = { nodes: 0, deadline: performance.now() + cfg.time, mobility: cfg.mobility, noise: cfg.noise, exact: false };
+            moves.sort((x, y) => WEIGHTS[y] - WEIGHTS[x]);
+            let best = moves[0];
+            for (let depth = 1; depth <= cfg.depth; depth++) {
+                try {
+                    best = searchRoot(b, c, moves, depth, ctx);
+                } catch (e) {
+                    if (e !== TIMEOUT) throw e;
+                    break;
+                }
+                moves.splice(moves.indexOf(best), 1);
+                moves.unshift(best);
+            }
+
+            const empties = countDiscs(board).empty;
+            if (cfg.exact && empties <= cfg.exact) {
+                // a fresh copy: a timed-out search leaves its board half-played
+                const exactCtx = { nodes: 0, deadline: performance.now() + cfg.time * 2, mobility: 0, noise: 0, exact: true };
+                try {
+                    best = searchRoot(board.slice(), c, moves, empties, exactCtx);
+                } catch (e) {
+                    if (e !== TIMEOUT) throw e;
+                }
+            }
+            return best;
+        }
+
+        // ===== game state =====
+
+        const $ = (id) => document.getElementById(id);
+
+        let board = new Array(64).fill(EMPTY);
+        let turn = BLACK;
+        let humanColor = BLACK;
+        let opponent = { id: "", name: t("opponentDefault") };
+        let playerName = t("playerDefault");
+        let level = 2;
+        let showHints = true;
+        let colorSetting = "black";   // black | white | random | alternate
+        let playing = false;
+        let over = false;
+        let thinking = false;
+        let lastMove = -1;
+        let leader = 0;               // sign of (human - npc) discs, for the late-game comeback remark
+        let closingNoted = false;     // the "few squares left" remark was made
+        let resultText = "";          // how the finished game ended, for the opponent's prompts
+        let resignArmed = false;
+        let hidden = true;
+
+        const npcColor = () => other(humanColor);
+        const nameOf = (c) => (c === humanColor ? playerName : opponent.name);
+
+        // Messages to the plugin. Outside the game (a plain browser) they go to the console.
+        function send(name, arg) {
+            if (typeof window[name] === "function") {
+                window[name](arg);
+            } else {
+                console.log(name, arg);
+            }
+        }
+
+        // Names and disc counts every text may use: {npc} {player} {o} {h} {npcColor} {playerColor}.
+        function common() {
+            const n = countDiscs(board);
+            return {
+                npc: opponent.name, player: playerName, o: n[npcColor()], h: n[humanColor],
+                npcColor: colorName(npcColor()), playerColor: colorName(humanColor), empty: n.empty,
+            };
+        }
+
+        function scoreLine() {
+            return t("score", common());
+        }
+
+        // How the board stands, from the opponent's side.
+        function standing() {
+            const n = countDiscs(board);
+            const d = n[npcColor()] - n[humanColor];
+            if (Math.abs(d) <= 4) {
+                return t("even");
+            }
+            return d > 0 ? t("lead", { name: opponent.name, n: d }) : t("lead", { name: playerName, n: -d });
+        }
+
+        // A moment of the game for SkyrimNet, which the opponent reacts to out loud.
+        // level: "important" always goes out (start, end, resign); "notable" (corners, comebacks...)
+        // and "minor" (an ordinary move) wait out the plugin's cooldown, notable ones half of it.
+        function narrate(text, level) {
+            send("rvNarrate", JSON.stringify({ text, level }));
+        }
+
+        // What the opponent knows about the game, for their prompts: the game in progress, or how
+        // the one just finished ended while the board is still open. text "" = nothing to tell.
+        function reportState() {
+            let text = "";
+            if (playing && !over) {
+                text = t("statePlaying", { ...common(), standing: standing() });
+                text += hidden ? t("statePaused") : t("stateTurn", { who: nameOf(turn) });
+            } else if (over && !hidden) {
+                text = resultText;
+            }
+            send("rvState", JSON.stringify({ states: { [opponent.id]: text }, playing: playing && !over }));
+        }
+
+        function log(text, box = "log") {
+            const line = document.createElement("div");
+            line.textContent = text;
+            $(box).appendChild(line);
+            $(box).scrollTop = $(box).scrollHeight;
+        }
+
+        function setStatus(text) {
+            $("status").textContent = text;
+        }
+
+        // ===== rendering =====
+
+        function buildBoard() {
+            const box = $("board");
+            box.innerHTML = "";
+            for (let i = 0; i < 64; i++) {
+                const cell = document.createElement("div");
+                cell.className = "cell";
+                cell.dataset.idx = i;
+                cell.onclick = () => onCellClicked(i);
+                box.appendChild(cell);
+            }
+            const frame = document.querySelector(".frame");
+            for (let i = 0; i < 8; i++) {
+                const top = document.createElement("div");
+                top.className = "label";
+                top.textContent = "abcdefgh"[i];
+                top.style.cssText = `top: 4px; left: ${24 + i * 62}px; width: 62px;`;
+                const side = document.createElement("div");
+                side.className = "label";
+                side.textContent = i + 1;
+                side.style.cssText = `left: 0; top: ${24 + i * 62 + 22}px; width: 22px;`;
+                frame.append(top, side);
+            }
+        }
+
+        // flipped: squares to animate as turned; placed: the square just played.
+        function render(flipped = [], placed = -1) {
+            const humanTurn = playing && !over && !thinking && turn === humanColor;
+            const legal = humanTurn && showHints ? new Set(legalMoves(board, humanColor)) : new Set();
+            const cells = $("board").children;
+            for (let i = 0; i < 64; i++) {
+                const cell = cells[i];
+                cell.className = "cell" + (legal.has(i) ? " legal" : "");
+                cell.innerHTML = "";
+                if (board[i] === EMPTY) {
+                    continue;
+                }
+                const disc = document.createElement("div");
+                if (flipped.includes(i)) {
+                    // show the old colour, then swap it at the middle of the turn
+                    disc.className = "disc flip " + (board[i] === BLACK ? "white" : "black");
+                    setTimeout(() => {
+                        disc.classList.remove("black", "white");
+                        disc.classList.add(board[i] === BLACK ? "black" : "white");
+                    }, 160);
+                } else {
+                    disc.className = "disc " + (board[i] === BLACK ? "black" : "white") + (i === placed ? " place" : "");
+                }
+                cell.appendChild(disc);
+                if (i === lastMove) {
+                    const mark = document.createElement("div");
+                    mark.className = "last-mark";
+                    disc.appendChild(mark);
+                }
+            }
+
+            const n = countDiscs(board);
+            $("count-npc").textContent = n[npcColor()];
+            $("count-human").textContent = n[humanColor];
+            $("row-npc").classList.toggle("active", playing && !over && turn === npcColor());
+            $("row-human").classList.toggle("active", playing && !over && turn === humanColor);
+            $("resign-button").style.display = playing && !over ? "" : "none";
+            $("again-button").style.display = over ? "" : "none";
+            $("resign-button").textContent = t(resignArmed ? "resignConfirm" : "resign");
+        }
+
+        function renderPlayers() {
+            $("name-npc").textContent = opponent.name;
+            $("face-npc").dataset.face = opponent.id;
+            paintFace($("face-npc"), opponent.id, opponent.name);
+            $("name-human").textContent = playerName;
+            $("icon-npc").className = "icon disc " + (npcColor() === BLACK ? "black" : "white");
+            $("icon-human").className = "icon disc " + (humanColor === BLACK ? "black" : "white");
+            $("icon-npc").style.position = $("icon-human").style.position = "static";
+            $("meta").textContent = t("strength", { level: t("level" + (LEVELS[level] ? level : 2)) });
+        }
+
+        // ===== game flow =====
+
+        function pickHumanColor() {
+            switch (colorSetting) {
+            case "white":
+                return WHITE;
+            case "random":
+                return Math.random() < 0.5 ? BLACK : WHITE;
+            case "alternate":
+                return over || playing ? other(humanColor) : BLACK;
+            default:
+                return BLACK;
+            }
+        }
+
+        function newGame() {
+            humanColor = pickHumanColor();
+            board = new Array(64).fill(EMPTY);
+            board[27] = board[36] = WHITE;
+            board[28] = board[35] = BLACK;
+            turn = BLACK;
+            playing = true;
+            over = false;
+            thinking = false;
+            lastMove = -1;
+            leader = 0;
+            closingNoted = false;
+            resultText = "";
+            resignArmed = false;
+            $("log").innerHTML = "";
+            renderPlayers();
+            log(t("logStart", common()));
+            narrate(t("start", common()), "important");
+            render();
+            reportState();
+            nextTurn();
+        }
+
+        function play(idx, c) {
+            const flips = flipsFor(board, idx, c);
+            if (!flips.length) {
+                return false;
+            }
+            const cornersBefore = CORNERS.filter((k) => board[k] === c).length;
+            board[idx] = c;
+            for (const f of flips) board[f] = c;
+            lastMove = idx;
+            resignArmed = false;
+            log(t("logMove", { color: colorName(c), who: nameOf(c), sq: squareName(idx), n: flips.length }));
+            render(flips, idx);
+            remarkOnMove(idx, c, flips.length, cornersBefore);
+            turn = other(c);
+            return true;
+        }
+
+        // One remark per move: the most striking thing about it, or else the move itself.
+        function remarkOnMove(idx, c, flipped, cornersBefore) {
+            const who = nameOf(c);
+            const n = countDiscs(board);
+            const diff = n[humanColor] - n[npcColor()];
+            const sign = Math.sign(diff);
+            const comeback = n.empty <= 24 && sign !== 0 && leader !== 0 && sign !== leader && Math.abs(diff) >= 4;
+            if (sign !== 0) {
+                leader = sign;
+            }
+            // the last move of the game: the end-of-game remark covers it
+            if (!legalMoves(board, c).length && !legalMoves(board, other(c)).length) {
+                return;
+            }
+
+            const vars = { who, sq: squareName(idx), n: flipped, score: scoreLine(), standing: standing() };
+            const xCorner = X_SQUARES[idx];
+            if (CORNERS.includes(idx) && cornersBefore === CORNERS.filter((k) => board[k] === c).length - 1) {
+                narrate(t("corner", vars), "notable");
+            } else if (comeback) {
+                const ahead = sign > 0 ? playerName : opponent.name;
+                narrate(t(ahead === who ? "comebackSelf" : "comebackOther", { ...vars, ahead }), "notable");
+            } else if (flipped >= 6) {
+                narrate(t("bigFlip", vars), "notable");
+            } else if (xCorner !== undefined && board[xCorner] === EMPTY) {
+                narrate(t("xSquare", vars), "notable");
+            } else if (n.empty <= 6 && !closingNoted) {
+                closingNoted = true;
+                narrate(t("closing", { ...vars, n: n.empty }), "notable");
+            } else if (n.empty === 40 || n.empty === 20) {
+                narrate(t(n.empty === 40 ? "midgame" : "endgame", vars), "notable");
+            } else {
+                narrate(t("move", vars), "minor");
+            }
+        }
+
+        function nextTurn() {
+            // thinking: the opponent's move is already on its way
+            if (over || thinking) {
+                return;
+            }
+            if (!legalMoves(board, turn).length) {
+                if (!legalMoves(board, other(turn)).length) {
+                    endGame();
+                    return;
+                }
+                log(t("logPass", { who: nameOf(turn) }));
+                narrate(t("pass", { who: nameOf(turn), next: nameOf(other(turn)), score: scoreLine() }), "notable");
+                turn = other(turn);
+            }
+            reportState();
+            if (turn === humanColor) {
+                thinking = false;
+                setStatus(t("yourTurn"));
+                render();
+                return;
+            }
+            thinking = true;
+            setStatus(t("thinking", { npc: opponent.name }));
+            render();
+            // let the board paint first; the opponent never answers instantly
+            const started = performance.now();
+            setTimeout(() => {
+                const move = chooseMove(board, turn, level);
+                const wait = Math.max(0, 700 + Math.random() * 600 - (performance.now() - started));
+                setTimeout(() => {
+                    if (!playing || over) {
+                        return;
+                    }
+                    thinking = false;
+                    play(move, turn);
+                    setTimeout(nextTurn, 380);
+                }, wait);
+            }, 60);
+        }
+
+        function endGame() {
+            over = true;
+            thinking = false;
+            const n = countDiscs(board);
+            const h = n[humanColor], o = n[npcColor()];
+            const vars = common();
+            vars.margin = Math.abs(h - o) >= 30 ? t("marginBig") : Math.abs(h - o) <= 4 ? t("marginClose") : "";
+            vars.final = t("final", vars);
+            if (o > h) {
+                vars.result = t("resultWin", { name: opponent.name });
+                setStatus(t("npcWins", vars));
+                narrate(t("endNpcWins", vars), "important");
+            } else if (o < h) {
+                vars.result = t("resultWin", { name: playerName });
+                setStatus(t("youWin", vars));
+                narrate(t("endNpcLoses", vars), "important");
+            } else {
+                vars.result = t("resultDraw");
+                setStatus(t("draw", vars));
+                narrate(t("endDraw", vars), "important");
+            }
+            resultText = t("stateResult", vars);
+            log(t("logEnd", vars));
+            render();
+            reportState();
+        }
+
+        function onCellClicked(idx) {
+            if (!playing || over || thinking || turn !== humanColor) {
+                return;
+            }
+            if (play(idx, humanColor)) {
+                setTimeout(nextTurn, 380);
+            }
+        }
+
+        function onResign() {
+            if (!playing || over) {
+                return;
+            }
+            if (!resignArmed) {
+                resignArmed = true;
+                render();
+                return;
+            }
+            over = true;
+            thinking = false;
+            resignArmed = false;
+            const vars = { ...common(), score: scoreLine() };
+            log(t("logResign", vars));
+            setStatus(t("resigned", vars));
+            narrate(t("resignNarration", vars), "important");
+            resultText = t("stateResigned", vars);
+            render();
+            reportState();
+        }
+
+        function onAgain() {
+            newGame();
+        }
+
+        // ===== invitation =====
+
+        function showInvite(open) {
+            $("invite").classList.toggle("open", open);
+            if (open) {
+                $("invite-text").textContent = t("invite", { npc: opponent.name });
+            }
+        }
+
+        function onAccept() {
+            showInvite(false);
+            snapFaces([opponent.id], newGame);
+        }
+
+        function onDecline() {
+            showInvite(false);
+            narrate(t("declined", { npc: opponent.name, player: playerName }), "important");
+            requestClose();
+        }
+
+        function requestClose() {
+            send("rvClose", "");
+        }
+
+        // ===== voice: one line at a time =====
+
+        // A paced game (Liar's Dice) gives each moment to one NPC and waits for the line: the
+        // next one goes out once the speaker has said theirs (mgSpoke, then about as long as the
+        // line takes to say) or has stayed silent for voiceWait seconds. A line waiting its turn
+        // is replaced by a newer one, so nobody talks about a moment long gone; only a kept line
+        // (the end of a game) always gets said.
+        let voiceOn = false;      // narrations reach SkyrimNet
+        let playerVoice = false;  // the player says their own moves (Transform Dialogue)
+        let voiceWait = 15;
+        const PLAYER_ID = "00000014";  // a line from the player: what they mean, in their own words
+        let voiceLine = null;     // the line out now: {speaker, heard, timer}
+        let voiceQueue = [];      // the lines waiting for it: {speaker, text, keep}
+        let voiceIdle = [];       // what runs once no line is out or waiting
+
+        function say(speaker, text, keep = false) {
+            if (!voiceOn || !speaker) {
+                return;
+            }
+            if (voiceLine) {
+                voiceQueue = voiceQueue.filter((line) => line.keep);
+                voiceQueue.push({ speaker, text, keep });
+                return;
+            }
+            sendLine(speaker, text);
+        }
+
+        function sendLine(speaker, text) {
+            if (speaker === PLAYER_ID) {
+                send("mgPlayerSay", text);
+            } else {
+                send("rvNarrate", JSON.stringify({ text, level: "important", speaker }));
+            }
+            voiceLine = { speaker, heard: false, timer: setTimeout(lineDone, voiceWait * 1000) };
+            renderDiceStatus();
+        }
+
+        function lineDone() {
+            if (voiceLine) {
+                clearTimeout(voiceLine.timer);
+            }
+            voiceLine = null;
+            if (voiceQueue.length) {
+                const next = voiceQueue.shift();
+                sendLine(next.speaker, next.text);
+                return;
+            }
+            const waiting = voiceIdle;
+            voiceIdle = [];
+            waiting.forEach((fn) => fn());
+            renderDiceStatus();
+        }
+
+        // Runs fn once the table is quiet.
+        function whenQuiet(fn) {
+            if (voiceLine) {
+                voiceIdle.push(fn);
+            } else {
+                fn();
+            }
+        }
+
+        function voiceReset() {
+            if (voiceLine) {
+                clearTimeout(voiceLine.timer);
+            }
+            voiceLine = null;
+            voiceQueue = [];
+            voiceIdle = [];
+        }
+
+        // About how long a line takes to say (kana and kanji are slower per character).
+        function speechMs(text) {
+            const wide = (String(text).match(/[぀-ヿ㐀-鿿]/g) || []).length;
+            const ms = 1000 + wide * 140 + (String(text).length - wide) * 65;
+            return Math.min(Math.max(ms, 1500), 15000);
+        }
+
+        // ===== Liar's Dice =====
+
+        const FACES = [2, 3, 4, 5, 6];   // ones are wild and cannot be bid on
+        const PIPS = { 1: [4], 2: [0, 8], 3: [0, 4, 8], 4: [0, 2, 6, 8], 5: [0, 2, 4, 6, 8], 6: [0, 2, 3, 5, 6, 8] };
+
+        // call: calls a bid it believes less than this; noise: how blurry its sums are;
+        // credit: dice of the bid face it supposes the bidder holds; bluff: how often it bids its
+        // own best face regardless; open: how sure an opening bid must feel.
+        const DICE_LEVELS = {
+            1: { call: 0.22, noise: 0.25, credit: 0, bluff: 0.2, open: 0.45 },
+            2: { call: 0.35, noise: 0.12, credit: 0.35, bluff: 0.12, open: 0.6 },
+            3: { call: 0.42, noise: 0.06, credit: 0.6, bluff: 0.08, open: 0.65 },
+            4: { call: 0.45, noise: 0.03, credit: 0.85, bluff: 0.06, open: 0.7 },
+        };
+        let diceLevel = 2;
+
+        const dice = {
+            gen: 0,          // bumped when a game is left or dropped: its pending steps stop
+            seats: [],       // seat 0 is the player: {id, name, human, count, dice, lastBid}
+            round: 0,
+            turn: 0,         // the seat to act
+            bid: null,       // {q, f, seat}: q dice show f
+            reveal: null,    // the round just called: {q, f, count, loser}
+            nextStarter: 0,
+            playing: false,
+            over: false,
+            left: false,     // the player left before the end
+            winner: -1,
+            thinking: false, // an NPC's move is on its way
+            leaveArmed: false,
+            pick: { q: 1, f: 2 },  // the player's bid being set up
+        };
+
+        const seatName = (i) => dice.seats[i].name;
+        const alive = (i) => dice.seats[i].count > 0;
+        const matches = (d, f) => d === f || d === 1;
+        const totalDice = () => dice.seats.reduce((n, s) => n + s.count, 0);
+        const diceOpponents = () => dice.seats.filter((s) => !s.human).map((s) => ({ id: s.id, name: s.name }));
+
+        function joinNames(names) {
+            if (names.length <= 1) {
+                return names[0] || "";
+            }
+            return names.slice(0, -1).join(t("listComma")) + t("listAnd") + names[names.length - 1];
+        }
+
+        function nextAlive(i) {
+            let j = i;
+            do {
+                j = (j + 1) % dice.seats.length;
+            } while (!alive(j) && j !== i);
+            return j;
+        }
+
+        // The lowest count of f that beats the current bid.
+        function minQ(f) {
+            const b = dice.bid;
+            return !b ? 1 : f > b.f ? b.q : b.q + 1;
+        }
+
+        function isRaise(q, f) {
+            return FACES.includes(f) && q >= minQ(f) && q <= totalDice();
+        }
+
+        const bidSay = (b) => t(b.q === 1 ? "bidSayOne" : "bidSay", { q: b.q, f: b.f });
+
+        function countsLine() {
+            return dice.seats.map((s) => t(s.count ? "diceCount" : "diceCountOut", { name: s.name, n: s.count })).join(t("listComma"));
+        }
+
+        // ---- opponent AI ----
+
+        function choose(n, k) {
+            let r = 1;
+            for (let i = 1; i <= k; i++) {
+                r = (r * (n - k + i)) / i;
+            }
+            return r;
+        }
+
+        // The chance that at least k of n unseen dice match a face (each does with 1/3: the face or a one).
+        function atLeast(n, k) {
+            if (k <= 0) return 1;
+            if (k > n) return 0;
+            let p = 0;
+            for (let i = k; i <= n; i++) {
+                p += choose(n, i) * Math.pow(1 / 3, i) * Math.pow(2 / 3, n - i);
+            }
+            return p;
+        }
+
+        // How likely seat i finds "q dice show f", from its own dice. credit: how many dice of f it
+        // supposes the last bidder holds, since a bid hints at what is under the bidder's cup.
+        function chance(i, q, f, credit) {
+            const own = dice.seats[i].dice;
+            const need = q - own.filter((d) => matches(d, f)).length;
+            const unseen = totalDice() - own.length;
+            const whole = Math.floor(credit), part = credit - whole;
+            const a = atLeast(unseen, need - whole), b = atLeast(unseen, need - whole - 1);
+            return a + (b - a) * part;
+        }
+
+        // {call: true} or {q, f}.
+        function aiDecide(i) {
+            const cfg = DICE_LEVELS[diceLevel] || DICE_LEVELS[2];
+            const bid = dice.bid, total = totalDice();
+            const jitter = () => (Math.random() * 2 - 1) * cfg.noise;
+            const creditFor = (f) => (bid && bid.seat !== i && f === bid.f ? cfg.credit : 0);
+            const held = (f) => dice.seats[i].dice.filter((d) => matches(d, f)).length;
+
+            // every face at its lowest legal count and a little above (any count when opening)
+            const options = [];
+            for (const f of FACES) {
+                const low = minQ(f);
+                for (let q = low; q <= Math.min(total, bid ? low + 2 : total); q++) {
+                    options.push({ q, f, p: chance(i, q, f, creditFor(f)) + jitter(), extra: q - low });
+                }
+            }
+            if (!options.length) {
+                return { call: true };
+            }
+            const favourite = FACES.reduce((a, f) => (held(f) > held(a) || (held(f) === held(a) && Math.random() < 0.5) ? f : a));
+
+            if (!bid) {
+                // the boldest opening that still feels safe enough, else the safest one
+                const safe = options.filter((o) => o.p >= cfg.open);
+                if (!safe.length) {
+                    return options.reduce((a, o) => (o.p > a.p ? o : a));
+                }
+                return safe.reduce((a, o) => (o.q > a.q || (o.q === a.q && o.f === favourite) ? o : a));
+            }
+
+            const best = options.reduce((a, o) => (o.p - 0.03 * o.extra > a.p - 0.03 * a.extra ? o : a));
+            const believed = chance(i, bid.q, bid.f, creditFor(bid.f)) + jitter();
+            if (believed < cfg.call || 1 - believed > best.p + 0.15) {
+                return { call: true };
+            }
+            if (Math.random() < cfg.bluff && isRaise(minQ(favourite), favourite)) {
+                return { q: minQ(favourite), f: favourite };
+            }
+            return best;
+        }
+
+        // ---- flow ----
+
+        function newDiceGame(opps) {
+            dice.gen++;
+            dice.seats = [
+                { id: "", name: playerName, human: true, count: 5, dice: [], lastBid: null },
+                ...opps.map((o) => ({ id: o.id, name: o.name, human: false, count: 5, dice: [], lastBid: null })),
+            ];
+            dice.round = 0;
+            dice.playing = true;
+            dice.over = false;
+            dice.left = false;
+            dice.winner = -1;
+            dice.thinking = false;
+            dice.leaveArmed = false;
+            $("dice-log").innerHTML = "";
+            $("dice-meta").textContent = t("strength", { level: t("level" + (DICE_LEVELS[diceLevel] ? diceLevel : 2)) });
+            say(opps[0].id, t("dStart", { player: playerName, npcs: joinNames(opps.map((o) => o.name)) }));
+            startRound(Math.floor(Math.random() * dice.seats.length));
+        }
+
+        function startRound(starter) {
+            dice.round++;
+            dice.bid = null;
+            dice.reveal = null;
+            dice.turn = starter;
+            for (const s of dice.seats) {
+                s.dice = Array.from({ length: s.count }, () => 1 + Math.floor(Math.random() * 6)).sort((a, b) => a - b);
+                s.lastBid = null;
+            }
+            resetPick();
+            log(t("logRound", { r: dice.round, who: seatName(starter) }), "dice-log");
+            reportDiceState();
+            diceStep();
+        }
+
+        // The seat to act acts: the player through the controls, an NPC once the table is quiet.
+        function diceStep() {
+            renderDice();
+            if (!dice.playing || dice.over || dice.reveal || dice.thinking || dice.seats[dice.turn].human) {
+                return;
+            }
+            dice.thinking = true;
+            const gen = dice.gen, seat = dice.turn;
+            renderDiceStatus();
+            whenQuiet(() => {
+                if (gen !== dice.gen) {
+                    return;
+                }
+                if (screen !== "dice") {
+                    // carried on when the table is back on screen
+                    dice.thinking = false;
+                    return;
+                }
+                renderDiceStatus();
+                setTimeout(() => {
+                    if (gen !== dice.gen) {
+                        return;
+                    }
+                    dice.thinking = false;
+                    if (screen !== "dice") {
+                        return;
+                    }
+                    const move = aiDecide(seat);
+                    if (move.call) {
+                        callLiar(seat);
+                    } else {
+                        placeBid(seat, move.q, move.f);
+                    }
+                }, 900 + Math.random() * 900);
+            });
+        }
+
+        function placeBid(i, q, f) {
+            const prev = dice.bid;
+            dice.bid = { q, f, seat: i };
+            dice.seats[i].lastBid = { q, f };
+            dice.leaveArmed = false;
+            log(t("logBid", { who: seatName(i), bid: bidSay(dice.bid) }), "dice-log");
+            // the player says their bid if they speak (MCM); either way the next NPC's line tells it
+            if (!dice.seats[i].human) {
+                const vars = { npc: seatName(i), bid: bidSay(dice.bid), r: dice.round };
+                say(dice.seats[i].id, prev ? t("dRaise", { ...vars, prevWho: seatName(prev.seat), prev: bidSay(prev) }) : t("dOpen", vars));
+            } else if (playerVoice) {
+                say(PLAYER_ID, t(prev ? "pRaise" : "pOpen", { bid: bidSay(dice.bid), prev: prev ? bidSay(prev) : "", prevWho: prev ? seatName(prev.seat) : "" }), true);
+            }
+            dice.turn = nextAlive(i);
+            resetPick();
+            reportDiceState();
+            diceStep();
+        }
+
+        // Seat i calls the current bid a lie: the cups come up, and the one who was wrong loses a die.
+        function callLiar(i) {
+            const b = dice.bid;
+            const count = dice.seats.reduce((n, s) => n + s.dice.filter((d) => matches(d, b.f)).length, 0);
+            const held = count >= b.q;
+            const loser = held ? i : b.seat;
+            dice.seats[loser].count--;
+            dice.reveal = { q: b.q, f: b.f, count, loser };
+            dice.leaveArmed = false;
+
+            const vars = {
+                player: playerName, bidder: seatName(b.seat), caller: seatName(i), loser: seatName(loser),
+                bid: bidSay(b), count, f: b.f, q: b.q,
+            };
+            log(t("logLiar", { who: seatName(i) }), "dice-log");
+            log(t("logReveal", vars), "dice-log");
+            const out = !alive(loser);
+            if (out) {
+                log(t("logOut", { who: seatName(loser) }), "dice-log");
+            }
+
+            if (dice.seats[i].human && playerVoice) {
+                say(PLAYER_ID, t("pLiar", { npc: seatName(b.seat), bid: bidSay(b) }), true);
+            }
+            // one line about it all, from the NPC it concerns most
+            let text = dice.seats[i].human ? t("dCallPlayer", { ...vars, npc: seatName(b.seat) }) : t("dCallNpc", { ...vars, npc: seatName(i) });
+            text += t(held ? "dHeld" : "dBluff", vars) + (out ? t("dOut", vars) : "");
+            let speaker = dice.seats[i].human ? b.seat : i;
+            // the game goes on, without the player once they are out, until one cup has dice
+            const left = dice.seats.flatMap((s, k) => (s.count > 0 ? [k] : []));
+            const winner = left.length === 1 ? left[0] : -1;
+            if (winner === 0) {
+                text += t("dEndPlayerWins", { player: playerName, npc: seatName(loser) });
+                speaker = loser;
+            } else if (winner > 0) {
+                text += t(loser === 0 ? "dEndPlayerOut" : "dEndNpcWins", { player: playerName, npc: seatName(winner) });
+                speaker = winner;
+            } else {
+                text += (loser === 0 && out ? t("dPlayerOut", { player: playerName }) : "") + t("dRemain", { counts: countsLine() });
+            }
+            say(dice.seats[speaker].id, text, winner >= 0);
+
+            if (winner >= 0) {
+                dice.over = true;
+                dice.winner = winner;
+                log(t("logDiceEnd", { winner: seatName(winner) }), "dice-log");
+            } else {
+                dice.nextStarter = alive(loser) ? loser : nextAlive(loser);
+            }
+            reportDiceState();
+            renderDice();
+        }
+
+        // ---- the player's controls ----
+
+        // The lowest raise on the current face, or the player's best face when opening.
+        function resetPick() {
+            const b = dice.bid;
+            const own = dice.seats[0] ? dice.seats[0].dice : [];
+            if (!b) {
+                const f = FACES.reduce((a, x) => (own.filter((d) => matches(d, x)).length > own.filter((d) => matches(d, a)).length ? x : a));
+                dice.pick = { q: Math.max(1, own.filter((d) => matches(d, f)).length), f };
+                return;
+            }
+            const f = FACES.find((x) => x >= b.f && isRaise(minQ(x), x)) ?? b.f;
+            dice.pick = { q: minQ(f), f };
+        }
+
+        const playerTurn = () => dice.playing && !dice.over && !dice.reveal && !dice.thinking && dice.turn === 0 && screen === "dice";
+
+        function adjustQty(d) {
+            if (!playerTurn()) return;
+            dice.pick.q = Math.min(Math.max(dice.pick.q + d, 1), totalDice());
+            renderDice();
+        }
+
+        function pickFace(f) {
+            if (!playerTurn()) return;
+            dice.pick.f = f;
+            if (!isRaise(dice.pick.q, f) && minQ(f) <= totalDice()) {
+                dice.pick.q = minQ(f);
+            }
+            renderDice();
+        }
+
+        function onPlayerBid() {
+            if (playerTurn() && isRaise(dice.pick.q, dice.pick.f)) {
+                placeBid(0, dice.pick.q, dice.pick.f);
+            }
+        }
+
+        function onPlayerLiar() {
+            if (playerTurn() && dice.bid) {
+                callLiar(0);
+            }
+        }
+
+        function onNextRound() {
+            if (dice.playing && !dice.over && dice.reveal) {
+                startRound(dice.nextStarter);
+            }
+        }
+
+        function onLeave() {
+            if (!dice.playing || dice.over) {
+                return;
+            }
+            // once out, the player has nothing to lose: no second press
+            const watching = !alive(0);
+            if (!dice.leaveArmed && !watching) {
+                dice.leaveArmed = true;
+                renderDice();
+                return;
+            }
+            dice.gen++;
+            dice.over = true;
+            dice.left = true;
+            dice.thinking = false;
+            dice.leaveArmed = false;
+            const first = dice.seats.find((s) => !s.human && s.count > 0) || dice.seats[1];
+            say(first.id, t(watching ? "dStopWatching" : "dLeave", { player: playerName }), true);
+            log(t("logLeave", { player: playerName }), "dice-log");
+            reportDiceState();
+            renderDice();
+        }
+
+        function onDiceAgain() {
+            newDiceGame(diceOpponents());
+        }
+
+        // ---- what each NPC knows ----
+
+        // Each NPC sees its own dice, never anyone else's.
+        function diceStateFor(k) {
+            const s = dice.seats[k];
+            const vars = {
+                npc: s.name, player: playerName, r: dice.round, counts: countsLine(),
+                others: joinNames(dice.seats.filter((x) => x !== s).map((x) => x.name)),
+            };
+            if (dice.over) {
+                if (screen !== "dice") {
+                    return "";
+                }
+                return dice.left ? t("dStateLeft", vars) : t("dStateResult", { ...vars, winner: seatName(dice.winner) });
+            }
+            if (!dice.playing) {
+                return "";
+            }
+            let text = s.count ? t("dState", { ...vars, own: s.dice.join(t("listComma")) }) : t("dStateOut", vars);
+            text += dice.bid ? t("dStateBid", { bid: bidSay(dice.bid), who: seatName(dice.bid.seat) }) : t("dStateNoBid");
+            if (dice.reveal) {
+                text += t("dStateBetween", { ...dice.reveal, loser: seatName(dice.reveal.loser) });
+            } else {
+                text += t("dStateTurn", { who: seatName(dice.turn) });
+            }
+            if (screen !== "dice") {
+                text += t("dStatePaused");
+            }
+            return text;
+        }
+
+        function reportDiceState() {
+            if (activeGame !== "dice") {
+                return;
+            }
+            const states = {};
+            dice.seats.forEach((s, k) => {
+                if (!s.human) {
+                    states[s.id] = diceStateFor(k);
+                }
+            });
+            send("rvState", JSON.stringify({ states, playing: dice.playing && !dice.over }));
+        }
+
+        // A dice game in progress is dropped (another game is starting).
+        function abandonDice() {
+            if (dice.playing && !dice.over) {
+                dice.playing = false;
+                dice.gen++;
+                dice.thinking = false;
+                voiceReset();
+            }
+        }
+
+        // Starts or resumes Liar's Dice against opps ([{id, name}], one to three).
+        function playDice(opps) {
+            const same = dice.playing && !dice.over &&
+                diceOpponents().map((o) => o.id).join() === opps.map((o) => o.id).join();
+            if (!same) {
+                abandonDice();
+            }
+            abandonReversi();
+            activeGame = "dice";
+            send("mgPlayers", opps.map((o) => o.id).join(","));
+            if (same) {
+                showScreen("dice");
+                log(t("logResume"), "dice-log");
+                reportDiceState();
+                diceStep();
+                return;
+            }
+            snapFaces(opps.map((o) => o.id), () => {
+                showScreen("dice");
+                newDiceGame(opps);
+            });
+        }
+
+        // ---- rendering ----
+
+        function dieEl(face, cls = "") {
+            const el = document.createElement("div");
+            el.className = "die " + cls;
+            for (let k = 0; k < 9; k++) {
+                const spot = document.createElement("span");
+                if (face && PIPS[face].includes(k)) {
+                    spot.className = "pip";
+                }
+                el.appendChild(spot);
+            }
+            return el;
+        }
+
+        // "4 ×" and a die.
+        function bidEls(b, size = "") {
+            const text = document.createElement("span");
+            text.textContent = b.q + " ×";
+            return [text, dieEl(b.f, size)];
+        }
+
+        // A seat's dice: face down, or face up once the cups are lifted (the ones that count lit).
+        function fillDice(box, s, faceUp, size) {
+            box.innerHTML = "";
+            const r = dice.reveal;
+            if (r || faceUp) {
+                for (const d of s.dice) {
+                    box.appendChild(dieEl(d, size + (r ? (matches(d, r.f) ? " match" : " dim") : "")));
+                }
+            } else {
+                for (let k = 0; k < s.count; k++) {
+                    box.appendChild(dieEl(0, size + " hidden"));
+                }
+            }
+        }
+
+        function renderDice() {
+            if (!dice.seats.length) {
+                return;
+            }
+            const live = dice.playing && !dice.over;
+            const seats = $("seats");
+            seats.innerHTML = "";
+            dice.seats.forEach((s, k) => {
+                if (s.human) {
+                    return;
+                }
+                const card = document.createElement("div");
+                card.className = "seat" + (live && !dice.reveal && dice.turn === k ? " active" : "") + (s.count || dice.reveal?.loser === k ? "" : " out");
+                const face = faceEl(s.id, s.name);
+                const name = document.createElement("div");
+                name.className = "seat-name";
+                name.textContent = s.name;
+                const box = document.createElement("div");
+                box.className = "seat-dice";
+                fillDice(box, s, false, "");
+                const meta = document.createElement("div");
+                meta.className = "seat-meta";
+                if (!s.count && !dice.reveal) {
+                    meta.textContent = t("diceOut");
+                } else if (s.lastBid) {
+                    meta.append(...bidEls(s.lastBid));
+                } else {
+                    meta.textContent = t("diceN", { n: s.count });
+                }
+                card.append(face, name, box, meta);
+                seats.appendChild(card);
+            });
+
+            const me = dice.seats[0];
+            $("mine").classList.toggle("active", playerTurn());
+            $("mine-name").textContent = me.name;
+            fillDice($("mine-dice"), me, true, "big");
+            $("mine-meta").innerHTML = "";
+            if (me.lastBid) {
+                $("mine-meta").append(...bidEls(me.lastBid));
+            } else {
+                $("mine-meta").textContent = t("diceN", { n: me.count });
+            }
+
+            $("bid-label").textContent = dice.bid ? t("bidBy", { who: seatName(dice.bid.seat) }) : t("noBid");
+            $("bid-now").innerHTML = "";
+            $("bid-now").style.visibility = dice.bid ? "visible" : "hidden";
+            if (dice.bid) {
+                $("bid-now").append(...bidEls(dice.bid, "mid"));
+            }
+
+            // controls
+            const mine = playerTurn();
+            $("bid-controls").style.display = live && !dice.reveal && alive(0) ? "" : "none";
+            $("pick-q").textContent = dice.pick.q;
+            $("qty-down").disabled = !mine || dice.pick.q <= 1;
+            $("qty-up").disabled = !mine || dice.pick.q >= totalDice();
+            const faces = $("face-buttons");
+            faces.innerHTML = "";
+            faces.classList.toggle("disabled", !mine);
+            for (const f of FACES) {
+                const d = dieEl(f, "mid" + (f === dice.pick.f ? " selected" : ""));
+                d.onclick = () => pickFace(f);
+                faces.appendChild(d);
+            }
+            $("bid-button").disabled = !mine || !isRaise(dice.pick.q, dice.pick.f);
+            $("liar-button").disabled = !mine || !dice.bid;
+            $("next-round").style.display = live && dice.reveal ? "" : "none";
+            $("leave-button").style.display = live ? "" : "none";
+            $("leave-button").textContent = t(!alive(0) ? "stopWatching" : dice.leaveArmed ? "leaveConfirm" : "leave");
+            $("dice-again").style.display = dice.over ? "" : "none";
+            renderDiceStatus();
+        }
+
+        function renderDiceStatus() {
+            if (!dice.seats.length) {
+                return;
+            }
+            const lines = [];
+            const r = dice.reveal;
+            if (r) {
+                lines.push(t("revealStatus", { ...r, loser: seatName(r.loser) }));
+            }
+            if (dice.over) {
+                lines.push(dice.left ? t("diceLeftStatus") : dice.winner === 0 ? t("diceYouWin") : t("diceYouLose", { npc: seatName(dice.winner) }));
+            } else if (dice.playing && !r) {
+                if (!alive(0)) {
+                    lines.push(t("diceWatching"));
+                }
+                if (dice.turn === 0) {
+                    lines.push(t(dice.bid ? "diceYourTurn" : "diceOpenTurn"));
+                } else if (voiceLine) {
+                    const speaker = dice.seats.find((s) => s.id === voiceLine.speaker);
+                    lines.push(voiceLine.speaker === PLAYER_ID ? t("diceYouSpeaking") : t("diceListening", { npc: speaker ? speaker.name : seatName(dice.turn) }));
+                } else {
+                    lines.push(t("thinking", { npc: seatName(dice.turn) }));
+                }
+            }
+            $("dice-status").textContent = lines.join("\n");
+        }
+
+        // ===== faces =====
+
+        // A new game calls its opponents over (MCM) and takes a photo: the screen goes black
+        // (mgGather), clears for the shot with the board out of the way (mgUncover), and each face
+        // is cropped out of the photo (mgFaces). Without a face, the frame shows an initial.
+        let gatherOn = true;
+        let faces = {};           // id -> {file, x, y, w, h}: the crop, as fractions of the photo
+        let speaking = {};        // id -> until when (performance.now) the frame lights up
+        let snapping = null;      // the photo being taken: {done}
+
+        function snapFaces(ids, then) {
+            if (typeof window.mgGather !== "function") {
+                then();           // a plain browser
+                return;
+            }
+            const job = {
+                done() {
+                    if (snapping !== job) return;
+                    snapping = null;
+                    document.body.classList.remove("snapping");
+                    $("curtain").classList.remove("on", "block");
+                    then();
+                },
+            };
+            snapping = job;
+            $("curtain").classList.add("block");
+            if (gatherOn) {
+                $("curtain").classList.add("on");
+            }
+            setTimeout(() => send("mgGather", ids.join(",")), gatherOn ? 350 : 0);
+            setTimeout(job.done, 6000);   // no answer: play on without faces
+        }
+
+        window.mgUncover = () => {
+            document.body.classList.add("snapping");
+            $("curtain").classList.remove("on");
+        };
+
+        window.mgFaces = (photo) => {
+            for (const [id, crop] of Object.entries(photo.faces || {})) {
+                faces[id] = { file: photo.file, ...crop };
+            }
+            if (snapping) {
+                snapping.done();
+            }
+            document.querySelectorAll("[data-face]").forEach((el) => paintFace(el, el.dataset.face, el.dataset.name));
+        };
+
+        function paintFace(el, id, name) {
+            const f = faces[id];
+            el.dataset.name = name || "";
+            el.classList.toggle("speaking", (speaking[id] || 0) > performance.now());
+            if (!f) {
+                el.style.backgroundImage = "";
+                el.textContent = (name || "?").slice(0, 1);
+                return;
+            }
+            el.textContent = "";
+            el.style.backgroundImage = `url("${f.file}")`;
+            el.style.backgroundSize = `${100 / f.w}% ${100 / f.h}%`;
+            el.style.backgroundPosition = `${f.w < 1 ? (f.x / (1 - f.w)) * 100 : 0}% ${f.h < 1 ? (f.y / (1 - f.h)) * 100 : 0}%`;
+        }
+
+        function faceEl(id, name, cls = "") {
+            const el = document.createElement("div");
+            el.className = "face " + cls;
+            el.dataset.face = id;
+            paintFace(el, id, name);
+            return el;
+        }
+
+        // id is talking for about ms: their frame lights up.
+        function markSpeaking(id, ms) {
+            speaking[id] = performance.now() + ms;
+            const refresh = () => document.querySelectorAll("[data-face]").forEach((el) =>
+                el.classList.toggle("speaking", (speaking[el.dataset.face] || 0) > performance.now()));
+            refresh();
+            setTimeout(refresh, ms + 50);
+        }
+
+        // ===== screens =====
+
+        // "menu", "board" (Reversi), "dice", or null when the plugin has hidden the view. A game
+        // counts as hidden (paused) whenever its screen is not up.
+        let screen = null;
+        let activeGame = null;    // "reversi" | "dice": the game whose state the NPCs see
+
+        function showScreen(name) {
+            screen = name;
+            $("menu").classList.toggle("open", name === "menu");
+            $("panel").classList.toggle("open", name === "board");
+            $("dice").classList.toggle("open", name === "dice");
+            hidden = name !== "board";
+            fitPanels();
+        }
+
+        // Everything is drawn this much larger, unless the open panel would not fit the screen.
+        const UI_ZOOM = 1.5;
+
+        function fitPanels() {
+            for (const el of document.querySelectorAll(".panel.open")) {
+                el.style.zoom = 1;
+                const fit = Math.min((window.innerWidth * 0.96) / el.offsetWidth, (window.innerHeight * 0.96) / el.offsetHeight);
+                el.style.zoom = Math.min(UI_ZOOM, fit);
+            }
+        }
+
+        window.addEventListener("resize", fitPanels);
+
+        // The prompts of whoever plays the active game, for the plugin.
+        function reportActive() {
+            if (activeGame === "reversi") {
+                reportState();
+            } else if (activeGame === "dice") {
+                reportDiceState();
+            }
+        }
+
+        // A Reversi game in progress is dropped (another game is starting).
+        function abandonReversi() {
+            if (playing && !over) {
+                playing = false;
+            }
+        }
+
+        // Starts or resumes Reversi against opp ({id, name}); invite: opp challenged the player.
+        function playReversi(opp, invite) {
+            abandonDice();
+            activeGame = "reversi";
+            const sameOpponent = opp.id === opponent.id;
+            if (!sameOpponent && playing && !over) {
+                // a game with someone else is left behind (reported while the plugin still has
+                // the old opponent, so their busy state and prompt are cleared)
+                playing = false;
+                reportState();
+            }
+            opponent = opp;
+            send("mgPlayers", opp.id);
+            showScreen("board");
+            renderPlayers();
+
+            if (invite) {
+                showInvite(true);
+                render();
+                return;
+            }
+            showInvite(false);
+            if (sameOpponent && playing && !over) {
+                // carry on where the game was left
+                log(t("logResume"));
+                reportState();
+                render();
+                nextTurn();
+                return;
+            }
+            snapFaces([opp.id], newGame);
+        }
+
+        // ===== menu =====
+
+        // The games on offer. opponents: how many NPCs may sit at the table.
+        const GAMES = [
+            { id: "reversi", title: "gameReversi", desc: "gameReversiDesc", opponents: 1, start: (chosen) => playReversi(chosen[0], false) },
+            { id: "dice", title: "gameDice", desc: "gameDiceDesc", opponents: 3, start: (chosen) => playDice(chosen) },
+        ];
+
+        let actors = [];          // nearby NPCs from the plugin: {id, name, distance, crosshair}
+        let menuGame = null;      // the game being set up
+        let menuChosen = [];      // ids of the chosen opponents, in the order picked
+
+        function showMenu() {
+            showScreen("menu");
+            $("step-game").classList.add("open");
+            $("step-opponents").classList.remove("open");
+            menuGame = null;
+
+            const list = $("game-list");
+            list.innerHTML = "";
+            // the unfinished game first
+            if (activeGame === "reversi" && playing && !over) {
+                list.appendChild(menuRow(t("resume", { game: t("gameReversi"), npc: opponent.name }), "", "", () => playReversi(opponent, false), "resume"));
+            } else if (activeGame === "dice" && dice.playing && !dice.over) {
+                const opps = diceOpponents();
+                list.appendChild(menuRow(t("resume", { game: t("gameDice"), npc: joinNames(opps.map((o) => o.name)) }), "", "", () => playDice(opps), "resume"));
+            }
+            for (const game of GAMES) {
+                list.appendChild(menuRow(t(game.title), t(game.desc), "", () => chooseOpponents(game)));
+            }
+            fitPanels();
+        }
+
+        function menuRow(title, sub, meta, onClick, extraClass = "") {
+            const row = document.createElement("div");
+            row.className = "row " + extraClass;
+            const text = document.createElement("span");
+            text.className = "title";
+            text.textContent = title;
+            if (sub) {
+                const small = document.createElement("span");
+                small.className = "sub";
+                small.textContent = sub;
+                text.appendChild(small);
+            }
+            row.appendChild(text);
+            if (meta) {
+                const right = document.createElement("span");
+                right.className = "meta";
+                right.textContent = meta;
+                row.appendChild(right);
+            }
+            row.onclick = onClick;
+            return row;
+        }
+
+        function chooseOpponents(game) {
+            menuGame = game;
+            // the one in sight is picked to begin with
+            const inSight = actors.find((a) => a.crosshair);
+            menuChosen = inSight ? [inSight.id] : [];
+            $("step-game").classList.remove("open");
+            $("step-opponents").classList.add("open");
+            $("opponents-heading").textContent = game.opponents > 1 ? t("chooseOpponents", { n: game.opponents }) : t("chooseOpponent");
+            renderActors();
+            fitPanels();
+        }
+
+        function renderActors() {
+            const list = $("actor-list");
+            list.innerHTML = "";
+            if (!actors.length) {
+                const empty = document.createElement("div");
+                empty.className = "empty";
+                empty.textContent = t("noActors");
+                list.appendChild(empty);
+            }
+            for (const actor of actors) {
+                const meta = (actor.crosshair ? t("inSight") + " · " : "") + t("distance", { m: actor.distance });
+                const row = menuRow(actor.name, "", meta, () => toggleActor(actor.id), menuChosen.includes(actor.id) ? "selected" : "");
+                row.ondblclick = () => {
+                    if (menuGame.opponents === 1) {
+                        menuChosen = [actor.id];
+                        menuStart();
+                    }
+                };
+                list.appendChild(row);
+            }
+            $("menu-start").disabled = menuChosen.length === 0;
+        }
+
+        function toggleActor(id) {
+            const index = menuChosen.indexOf(id);
+            if (index >= 0) {
+                menuChosen.splice(index, 1);
+            } else if (menuGame.opponents === 1) {
+                menuChosen = [id];
+            } else if (menuChosen.length < menuGame.opponents) {
+                menuChosen.push(id);
+            }
+            renderActors();
+        }
+
+        function menuBack() {
+            showMenu();
+        }
+
+        function menuStart() {
+            const chosen = menuChosen.map((id) => actors.find((a) => a.id === id)).filter(Boolean);
+            if (!menuGame || !chosen.length) {
+                return;
+            }
+            menuGame.start(chosen.map((a) => ({ id: a.id, name: a.name })));
+        }
+
+        // ===== called from the plugin =====
+
+        // Options every open carries: { player, level, hints, color, diceLevel, voice, voiceWait, strings }.
+        function applyOptions(opts) {
+            applyStrings(opts.strings);
+            playerName = opts.player || playerName;
+            level = opts.level || level;
+            showHints = opts.hints !== false;
+            colorSetting = opts.color || colorSetting;
+            diceLevel = opts.diceLevel || diceLevel;
+            voiceOn = !!opts.voice;
+            playerVoice = !!opts.playerVoice;
+            gatherOn = opts.gather !== false;
+            voiceWait = opts.voiceWait || voiceWait;
+        }
+
+        // The hotkey: the menu, with the NPCs nearby (opts.actors, nearest first).
+        window.mgOpen = (opts) => {
+            applyOptions(opts);
+            actors = opts.actors || [];
+            showMenu();
+        };
+
+        // An NPC challenged the player to Reversi: opts.opponent {id, name}.
+        window.rvOpen = (opts) => {
+            applyOptions(opts);
+            playReversi(opts.opponent, true);
+        };
+
+        // The plugin hid the view (Esc, the hotkey). A game in progress waits for the next open.
+        window.rvHidden = () => {
+            showScreen(null);
+            if ($("invite").classList.contains("open")) {
+                showInvite(false);
+                narrate(t("ignored", { npc: opponent.name, player: playerName }), "important");
+            }
+            reportActive();
+        };
+
+        // Someone at the table said a line ({id, text}). If it is the line being waited for, the
+        // table goes on once it has had about the time to be said.
+        window.mgSpoke = (spoke) => {
+            if (spoke && spoke.id) {
+                markSpeaking(spoke.id, speechMs(spoke.text));
+            }
+            if (!voiceLine || voiceLine.heard || !spoke || spoke.id !== voiceLine.speaker) {
+                return;
+            }
+            voiceLine.heard = true;
+            clearTimeout(voiceLine.timer);
+            voiceLine.timer = setTimeout(lineDone, speechMs(spoke.text));
+        };
+
+        // A save was loaded: the game on the board belongs to another timeline.
+        window.rvReset = () => {
+            playing = false;
+            over = false;
+            thinking = false;
+            opponent = { id: "", name: t("opponentDefault") };
+            showInvite(false);
+            $("log").innerHTML = "";
+            setStatus("");
+            abandonDice();
+            dice.seats = [];
+            dice.over = false;
+            activeGame = null;
+            voiceReset();
+        };
+
+        // Esc steps back or closes. It comes as a key press, from the plugin (mgEscape), or both:
+        // a second one right after the first is the same press.
+        let lastEscape = 0;
+        function onEscape() {
+            if (Date.now() - lastEscape < 300) {
+                return;
+            }
+            lastEscape = Date.now();
+            if ($("invite").classList.contains("open")) {
+                onDecline();
+            } else if ($("step-opponents").classList.contains("open") && $("menu").classList.contains("open")) {
+                menuBack();
+            } else {
+                requestClose();
+            }
+        }
+        window.mgEscape = onEscape;
+
+        document.addEventListener("keydown", (e) => {
+            if ((e.key === "Escape" || e.key === "Esc" || e.keyCode === 27) && !e.isComposing) {
+                onEscape();
+            }
+        });
+
+        buildBoard();
+        applyStrings();
+        render();
+    </script>
+</body>
+</html>

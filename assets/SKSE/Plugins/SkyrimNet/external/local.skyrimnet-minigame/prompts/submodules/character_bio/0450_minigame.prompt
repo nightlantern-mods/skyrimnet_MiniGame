@@ -1,0 +1,13 @@
+{# SkyrimNet MiniGame: the mini game (Reversi, Liar's Dice) this character is playing with the
+   player right now. minigame_state() comes from skyrimnet_MiniGame.dll and is "" when there is
+   no game. In Liar's Dice it holds only this character's own dice. #}
+{% if render_mode == "full" or render_mode == "thoughts" or render_mode == "transform" %}
+{% if actorUUID and isValidActor(actorUUID) %}
+{% set minigame = minigame_state(actorUUID) %}
+{% if isString(minigame) and minigame != "" %}
+## Mini Game
+{{ minigame }}
+{{ decnpc(actorUUID).name }} reacts to the game in character: pleased, smug, frustrated or impressed as it turns. Remarks about the game stay short, like table talk. In a game of hidden dice, {{ decnpc(actorUUID).name }} never tells anyone what their own dice show, though they may bluff about it.
+{% endif %}
+{% endif %}
+{% endif %}
