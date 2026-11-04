@@ -570,6 +570,226 @@
             white-space: pre-line;
         }
 
+        /* ---- Shut the Box ---- */
+
+        .tiles {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .tile {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 62px;
+            height: 92px;
+            font-size: 34px;
+            font-family: Georgia, "Yu Mincho", serif;
+            color: #2a1b0c;
+            background: linear-gradient(180deg, #e6cf9f, #b98f55);
+            border: 1px solid #4a3320;
+            border-radius: 4px;
+            box-shadow: 0 3px 4px rgba(0, 0, 0, 0.55);
+            transform-origin: bottom;
+        }
+
+        .tile.can {
+            cursor: pointer;
+            box-shadow: 0 0 0 2px #e0b84a, 0 3px 4px rgba(0, 0, 0, 0.55);
+        }
+
+        .tile.can:hover {
+            filter: brightness(1.12);
+        }
+
+        .tile.picked {
+            cursor: pointer;
+            background: linear-gradient(180deg, #f4dc8c, #d9a93f);
+            box-shadow: 0 0 0 3px #f4dc8c, 0 0 12px #e0b84a;
+        }
+
+        .tile.shut {
+            color: transparent;
+            background: linear-gradient(180deg, #3b2a18, #2c1d10);
+            box-shadow: inset 0 0 0 1px #6b5230;
+            transform: scaleY(0.3);
+        }
+
+        .tile.fold {
+            animation: fold 0.3s ease-in;
+        }
+
+        @keyframes fold {
+            0% { transform: scaleY(1); }
+            100% { transform: scaleY(0.3); }
+        }
+
+        .tiles.mini {
+            gap: 2px;
+            min-height: 26px;
+            margin: 6px 0;
+        }
+
+        .tiles.mini .tile {
+            width: 18px;
+            height: 26px;
+            font-size: 12px;
+            border-radius: 2px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .tiles.mini .tile.fold {
+            animation: none;
+        }
+
+        .tiles.mini .tile.shut {
+            box-shadow: inset 0 0 0 1px #6b5230;
+        }
+
+        .stb-roll {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            min-height: 54px;
+            margin-top: 10px;
+            font-size: 22px;
+            color: #e8e2d4;
+        }
+
+        .die.rolling {
+            animation: rolling 0.14s linear infinite;
+        }
+
+        @keyframes rolling {
+            0% { transform: rotate(-9deg) translateY(-2px); }
+            50% { transform: rotate(9deg) translateY(2px); }
+            100% { transform: rotate(-9deg) translateY(-2px); }
+        }
+
+        #stb-roll-button {
+            flex: none;
+            width: 100%;
+            margin-top: 8px;
+            padding: 11px 10px;
+        }
+
+        /* ---- Blackjack ---- */
+
+        .card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: #1b1b1b;
+            font-family: Georgia, "Yu Gothic UI", serif;
+            line-height: 1.05;
+            background-color: #f4eedd;
+            border: 1px solid #6f6650;
+            border-radius: 5px;
+            box-shadow: 0 2px 3px rgba(0, 0, 0, 0.55);
+        }
+
+        .card .suit {
+            font-family: "Segoe UI Symbol", "Yu Gothic UI", "Meiryo", sans-serif;
+        }
+
+        .card.red {
+            color: #b3261e;
+        }
+
+        .card.back {
+            background: repeating-linear-gradient(45deg, #5b2520, #5b2520 4px, #43190f 4px, #43190f 8px);
+            border-color: #c9b98f;
+        }
+
+        .card.new {
+            animation: place 0.2s ease-out;
+        }
+
+        .card.big {
+            width: 58px;
+            height: 82px;
+            font-size: 24px;
+        }
+
+        .card.mid {
+            width: 42px;
+            height: 58px;
+            font-size: 17px;
+        }
+
+        .card.small {
+            width: 26px;
+            height: 36px;
+            font-size: 11px;
+            border-radius: 3px;
+        }
+
+        .hand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            min-height: 58px;
+            margin: 5px 0;
+        }
+
+        .hand.small {
+            gap: 3px;
+            min-height: 36px;
+        }
+
+        #bj-dealer-hand {
+            min-height: 84px;
+        }
+
+        .hand.many .card + .card {
+            margin-left: -12px;
+        }
+
+        .hand.small.many .card + .card {
+            margin-left: -9px;
+        }
+
+        .hand-total {
+            margin-left: 6px;
+            font-size: 18px;
+            color: #e8e2d4;
+            white-space: nowrap;
+        }
+
+        .hand.small .hand-total {
+            margin-left: 3px;
+            font-size: 12px;
+        }
+
+        .seat.dealer .seat-name,
+        .mine.dealer .seat-name {
+            color: #e0b84a;
+        }
+
+        #bj-deal,
+        #bj-next {
+            flex: none;
+            width: 100%;
+            margin-top: 8px;
+            padding: 11px 10px;
+        }
+
+        #bj-bets,
+        #bj-moves {
+            margin-top: 8px;
+        }
+
+        #bj-seats .face {
+            width: 150px;
+            height: 150px;
+            font-size: 60px;
+        }
+
         /* ---- faces: cropped from a photo taken when a game starts ---- */
 
         .face {
@@ -633,6 +853,14 @@
             <div class="toolbar">
                 <button onclick="menuBack()" data-s="back">Back</button>
                 <button class="primary" id="menu-start" onclick="menuStart()" data-s="startGame">Start</button>
+            </div>
+        </div>
+
+        <div class="step" id="step-dealer">
+            <h2 data-s="chooseDealer">Who deals?</h2>
+            <div class="list" id="dealer-list"></div>
+            <div class="toolbar">
+                <button onclick="menuBack()" data-s="back">Back</button>
             </div>
         </div>
 
@@ -725,6 +953,72 @@
         </div>
     </div>
 
+    <div class="panel" id="stb">
+        <div class="table">
+            <div class="seats" id="stb-seats"></div>
+            <div class="bid-box">
+                <div class="bid-label" id="stb-label"></div>
+                <div class="tiles" id="stb-tiles"></div>
+                <div class="stb-roll" id="stb-dice"></div>
+            </div>
+            <div class="mine" id="stb-mine">
+                <div class="seat-name" id="stb-mine-name"></div>
+                <div class="tiles mini" id="stb-mine-tiles"></div>
+                <div class="seat-meta" id="stb-mine-meta"></div>
+            </div>
+        </div>
+
+        <div class="side">
+            <h1 data-s="stbTitle">Shut the Box</h1>
+            <div class="meta" data-s="stbRules"></div>
+            <div class="meta" id="stb-meta"></div>
+            <div class="status" id="stb-status"></div>
+            <button class="primary" id="stb-roll-button" onclick="onStbRoll()" data-s="stbRoll">Roll the dice</button>
+            <div class="log" id="stb-log"></div>
+            <div class="toolbar">
+                <button id="stb-leave" class="danger" onclick="onStbLeave()">Leave</button>
+                <button id="stb-again" class="primary" onclick="onStbAgain()" style="display: none;" data-s="again">Play again</button>
+                <button onclick="requestClose()" data-s="close">Close (Esc)</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel" id="bj">
+        <div class="table">
+            <div class="seats" id="bj-seats"></div>
+            <div class="bid-box">
+                <div class="bid-label" id="bj-label"></div>
+                <div class="hand" id="bj-dealer-hand"></div>
+            </div>
+            <div class="mine" id="bj-mine">
+                <div class="seat-name" id="bj-mine-name"></div>
+                <div class="hand" id="bj-mine-hand"></div>
+                <div class="seat-meta" id="bj-mine-meta"></div>
+            </div>
+        </div>
+
+        <div class="side">
+            <h1 data-s="bjTitle">Blackjack</h1>
+            <div class="meta" data-s="bjRules"></div>
+            <div class="meta" id="bj-meta"></div>
+            <div class="status" id="bj-status"></div>
+            <div class="toolbar" id="bj-bets"></div>
+            <button class="primary" id="bj-deal" onclick="onBjDeal()" data-s="bjDealButton">Deal the cards</button>
+            <div class="toolbar" id="bj-moves">
+                <button class="primary" id="bj-hit" onclick="onBjHit()" data-s="bjHit">Hit</button>
+                <button id="bj-stand" onclick="onBjStand()" data-s="bjStand">Stand</button>
+                <button id="bj-double" onclick="onBjDouble()" data-s="bjDouble">Double</button>
+            </div>
+            <button class="primary" id="bj-next" onclick="onBjNext()" data-s="nextRound">Next round</button>
+            <div class="log" id="bj-log"></div>
+            <div class="toolbar">
+                <button id="bj-leave" class="danger" onclick="onBjLeave()">Leave</button>
+                <button id="bj-again" class="primary" onclick="onBjAgain()" style="display: none;" data-s="again">Play again</button>
+                <button onclick="requestClose()" data-s="close">Close (Esc)</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // ===== text =====
 
@@ -738,6 +1032,8 @@
             chooseGame: "Choose a game",
             chooseOpponent: "Choose your opponent",
             chooseOpponents: "Choose your opponents (up to {n})",
+            chooseDealer: "Who deals? The dealer stays the same until the game ends.",
+            dealerYou: "{name} (you)",
             back: "Back",
             startGame: "Start",
             resume: "Continue: {game} with {npc}",
@@ -748,6 +1044,10 @@
             gameReversiDesc: "One opponent. Trap your opponent's discs between yours to turn them over.",
             gameDice: "Liar's Dice",
             gameDiceDesc: "Up to three opponents. Bid on the dice under every cup, or call the last bid a lie.",
+            gameStb: "Shut the Box",
+            gameStbDesc: "Up to three opponents. Roll the dice and shut the numbered tiles; the fewest points left wins.",
+            gameBj: "Blackjack",
+            gameBjDesc: "Up to three opponents. Choose who deals, you or one of them, for the whole game. Closest to 21 wins.",
             listComma: ", ",
             listAnd: " and ",
 
@@ -884,6 +1184,120 @@
             dStatePaused: " The dice are set aside for now; the game is paused.",
             dStateResult: "{npc} has just finished a game of Liar's Dice with {others}. {winner} won.",
             dStateLeft: "{npc} was playing Liar's Dice with {others}, but {player} left the table before it ended.",
+
+            // Shut the Box table
+            stbTitle: "Shut the Box",
+            stbRules: "Shut tiles that add up to your roll. One die once 7, 8 and 9 are shut. Lowest score wins.",
+            stbRoll: "Roll the dice",
+            stbTilesOf: "{who}'s tiles",
+            stbScore: "Score {score}",
+            stbWaiting: "Waiting",
+            stbPlaying: "Playing",
+            stbYourRoll: "Your turn. Roll the dice.",
+            stbYourShut: "You rolled {n}. Shut tiles that add up to {n}.",
+            stbNoMove: "{who} rolled {n}, and no open tiles add up to it. Score: {score}.",
+            stbShutStatus: "{who} shut the box!",
+            stbYouWin: "You win with a score of {score}!",
+            stbNpcWins: "{npc} wins with a score of {score}.",
+            stbTieStatus: "{names} tie with a score of {score}.",
+            stbLogStart: "Order: {order}",
+            stbLogShut: "{who}: rolled {n}, shut {tiles}",
+            stbLogNoMove: "{who}: rolled {n}, no move. Score {score}",
+            stbLogShutBox: "{who} shut the box!",
+            stbLogEnd: "Game over: {result}",
+            stbTieResult: "a tie between {names}",
+
+            // Shut the Box narration: a line for the start, a close finish and each finished turn
+            sStart: "{player} sits down with {npcs} for a game of Shut the Box. The tiles 1 to 9 stand open. In turn, each player rolls the dice and shuts open tiles that add up to the roll, until a roll cannot be made. The tiles left open are that player's score, and the lowest score wins. Shutting every tile wins at once.",
+            sClose: "In the Shut the Box game, {who} is close to shutting the box: only {tiles} still open.",
+            sTurnEnd: "In the Shut the Box game, {who} rolls {n}, and no open tiles add up to it. {who}'s turn ends with {tiles} still open, a score of {score}.",
+            sBest: " The lowest score so far is {who}'s {score}.",
+            sNext: " {who} goes next.",
+            sShutNpc: "In the Shut the Box game, {npc} shuts every last tile and wins at once. {npc} proudly declares victory.",
+            sShutPlayer: "In the Shut the Box game, {player} shuts every last tile and wins at once. {npc} is impressed and concedes the game to {player}.",
+            sEndPlayerWins: " The game is over: {player} wins with the lowest score, {score}. {npc} admits defeat and concedes the game to {player}.",
+            sEndNpcWins: " The game is over: {npc} wins with the lowest score, {score}. {npc} proudly declares victory.",
+            sEndTie: " The game is over: {names} tie for the lowest score, {score}. {npc} says something about the shared win.",
+            sLeave: "{player} gets up and leaves the Shut the Box game before it is finished.",
+
+            // each NPC's prompt at the table
+            sState: "{npc} is playing Shut the Box with {others}. In turn, each player rolls the dice and shuts open tiles that add up to the roll; the tiles left open when a roll cannot be made are the score, and the lowest score wins.",
+            sStateScores: " Scores so far: {scores}.",
+            sStateTurn: " It is {who}'s turn, with {tiles} still open.",
+            sStateRolled: " {who} has just rolled {n}.",
+            sStatePaused: " The tiles are set aside for now; the game is paused.",
+            sStateResult: "{npc} has just finished a game of Shut the Box with {others}. Result: {result}.",
+            sStateLeft: "{npc} was playing Shut the Box with {others}, but {player} left the table before it ended.",
+
+            // Blackjack table
+            bjTitle: "Blackjack",
+            bjRules: "The dealer stays the same for the whole game and holds no chips. Closest to 21 without going over beats the dealer; a blackjack pays 3 to 2. The dealer must draw on 16 or less, and may choose on 17 or more.",
+            bjHit: "Hit",
+            bjStand: "Stand",
+            bjDouble: "Double",
+            bjDealButton: "Deal the cards",
+            bjBetButton: "Bet {n}",
+            bjRoundLabel: "Round {r} of {n}: {who} deals",
+            bjDealerBadge: "Dealer · overall {profit}",
+            bjChips: "{chips} chips",
+            bjChipsBet: "{chips} chips · bet {bet}",
+            bjBlackjack: "Blackjack",
+            bjBustMark: "Bust",
+            bjSoft: "soft {n}",
+            bjRankA: "ace",
+            bjRankJ: "jack",
+            bjRankQ: "queen",
+            bjRankK: "king",
+            bjBetPrompt: "{dealer} is the dealer. Place your bet.",
+            bjDealPrompt: "You are the dealer. Deal the cards.",
+            bjYourTurn: "Your turn: {total}. Hit or stand.",
+            bjYourDealerMust: "You are the dealer: {total}. You must draw on 16 or less.",
+            bjYourDealerFree: "You are the dealer: {total}. On 17 or more you may draw or stand.",
+            bjWatching: "You are out of chips. The others play on to the end.",
+            bjYouWin: "You win with {chips} chips!",
+            bjNpcWins: "{npc} wins with {chips} chips.",
+            bjTieStatus: "{names} tie with {chips} chips.",
+            bjResultWin: "{name} wins {n}",
+            bjResultLose: "{name} loses {n}",
+            bjResultPush: "{name} pushes",
+            bjLogRound: "Round {r} of {n}: {who} deals",
+            bjLogBet: "{who} bets {n}",
+            bjLogNatural: "{who}: blackjack!",
+            bjLogHit: "{who}: draws {card} ({total})",
+            bjLogStand: "{who}: stands on {total}",
+            bjLogDouble: "{who}: doubles to {bet}, draws {card} ({total})",
+            bjLogReveal: "{who} turns over: {cards} ({total})",
+            bjLogResult: "Result: {results}",
+
+            // Blackjack narration: a line for the deal, a bust or double, and the end of each round
+            bjStart: "{player} sits down with {npcs} for a game of Blackjack: {n} rounds. {dealer} deals for the whole game, holds no chips and plays against the others, who each start with {chips} chips. Cards closest to 21 without going over beat the dealer.",
+            bjRoundLine: "In the Blackjack game, round {r} of {n}: {dealer} the dealer shows {up}. {hands}.",
+            bjHand: "{name} holds {cards} ({total})",
+            bjHandNatural: "{name} holds {cards} ({total})!",
+            bjBust: "In the Blackjack game, {who} draws {card} and goes bust with {total}.",
+            bjDoubleLine: "In the Blackjack game, {who} doubles the bet to {bet} and draws {card}, for {total}.",
+            bjDoubleBust: "In the Blackjack game, {who} doubles the bet to {bet}, draws {card} and goes bust with {total}.",
+            bjRoundEnd: "In the Blackjack game, round {r} ends: {dealer} the dealer finishes with {hand}. {results}. Chips: {chips}.",
+            bjOut: " {names} has no chips left and is out.",
+            bjEndHouse: " The game is over: no one has any chips left, so {dealer} the dealer wins.",
+            bjHouseNote: " {dealer} the dealer finishes {profit} overall.",
+            bjHouseWins: "No one has any chips left: {dealer} the dealer wins.",
+            bjHouseStatus: "Dealer {dealer}: {profit} overall.",
+            bjEndPlayerWins: " The game is over: {player} wins with {chips} chips. {npc} admits defeat and concedes the game to {player}.",
+            bjEndNpcWins: " The game is over: {npc} wins with {chips} chips. {npc} proudly declares victory.",
+            bjEndTie: " The game is over: {names} tie with {chips} chips. {npc} says something about the shared win.",
+            bjLeave: "{player} gets up and leaves the Blackjack game before it is finished.",
+            bjStopWatching: "{player}, already out of the Blackjack game, stops watching and gets up before the others have finished.",
+
+            // each NPC's prompt at the table: the dealer alone knows their face-down card
+            bjState: "{npc} is playing Blackjack with {others}, round {r} of {n}. Chips: {chips}.",
+            bjStateDealer: " {dealer} is the dealer for the whole game, holds no chips and plays against the rest.",
+            bjStateTable: " On the table: {dealer} shows {up}; {hands}.",
+            bjStateHole: " {npc}'s own face-down card is {hole}; only {npc} has seen it and keeps it secret.",
+            bjStateRound: " The round just ended: {results}.",
+            bjStatePaused: " The cards are set aside for now; the game is paused.",
+            bjStateResult: "{npc} has just finished a game of Blackjack with {others}. Result: {result}. Chips: {chips}.",
+            bjStateLeft: "{npc} was playing Blackjack with {others}, but {player} left the table before it ended.",
         };
 
         function t(key, vars = {}) {
@@ -1534,6 +1948,8 @@
             }
             voiceLine = { speaker, heard: false, timer: setTimeout(lineDone, voiceWait * 1000) };
             renderDiceStatus();
+            renderStbStatus();
+            renderBjStatus();
         }
 
         function lineDone() {
@@ -1550,6 +1966,8 @@
             voiceIdle = [];
             waiting.forEach((fn) => fn());
             renderDiceStatus();
+            renderStbStatus();
+            renderBjStatus();
         }
 
         // Runs fn once the table is quiet.
@@ -2004,6 +2422,8 @@
                 abandonDice();
             }
             abandonReversi();
+            abandonStb();
+            abandonBj();
             activeGame = "dice";
             send("mgPlayers", opps.map((o) => o.id).join(","));
             if (same) {
@@ -2157,6 +2577,1465 @@
             $("dice-status").textContent = lines.join("\n");
         }
 
+        // ===== Shut the Box =====
+
+        // A seat's tiles are a mask: bit k stands for the tile k + 1, set while it is open.
+        const ALL_TILES = 0b111111111;
+        const HIGH_TILES = 0b111000000;    // 7, 8, 9: while any is open, two dice are rolled
+
+        const tileList = (mask) => [1, 2, 3, 4, 5, 6, 7, 8, 9].filter((n) => mask & (1 << (n - 1)));
+        const tileSum = (mask) => tileList(mask).reduce((a, n) => a + n, 0);
+        const tilesText = (mask) => tileList(mask).join(t("listComma"));
+        const stbDiceCount = (mask) => (mask & HIGH_TILES ? 2 : 1);
+
+        // Every set of tiles, by what it adds up to.
+        const TILE_SETS = {};
+        for (let mask = 1; mask <= ALL_TILES; mask++) {
+            const sum = tileSum(mask);
+            TILE_SETS[sum] = TILE_SETS[sum] || [];
+            TILE_SETS[sum].push(mask);
+        }
+
+        // The sets of open tiles that make a roll of n.
+        const shutOptions = (open, n) => (TILE_SETS[n] || []).filter((m) => (m & open) === m);
+
+        // [sum, chance] for each roll a seat with these tiles open can get.
+        const ONE_DIE = [1, 2, 3, 4, 5, 6].map((n) => [n, 1 / 6]);
+        const TWO_DICE = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((n) => [n, (6 - Math.abs(n - 7)) / 36]);
+        const rollChances = (open) => (stbDiceCount(open) === 1 ? ONE_DIE : TWO_DICE);
+
+        // ---- opponent AI ----
+
+        // The value of every position, from what is worth most at the end of a turn (end) and
+        // the better of two values (better). A shut tile only ever lowers the mask, so counting
+        // up has every position's successors ready.
+        function solveTiles(end, better) {
+            const value = new Float64Array(ALL_TILES + 1);
+            value[0] = end(0);
+            for (let open = 1; open <= ALL_TILES; open++) {
+                let v = 0;
+                for (const [n, p] of rollChances(open)) {
+                    const options = shutOptions(open, n);
+                    v += p * (options.length ? options.map((m) => value[open ^ m]).reduce((a, b) => better(a, b)) : end(tileSum(open)));
+                }
+                value[open] = v;
+            }
+            return value;
+        }
+
+        const stbCache = {};
+        // The lowest score to expect from each position.
+        const expectedScore = () => stbCache.expected || (stbCache.expected = solveTiles((score) => score, Math.min));
+        // The chance from each position of beating a score to beat (a tie counts for half).
+        const beatChance = (target) => stbCache[target] || (stbCache[target] = solveTiles((score) => (score < target ? 1 : score === target ? 0.5 : 0), Math.max));
+
+        // The tiles seat i shuts for its roll of n.
+        // 1: any that fit. 2: the highest tile it can, as most people play. 3: the best on
+        // average. 4: the same, but once a score stands, what gives the best chance of beating it.
+        function stbChoose(i, n) {
+            const open = stb.seats[i].tiles;
+            const options = shutOptions(open, n);
+            if (stbLevel <= 1) {
+                return options[Math.floor(Math.random() * options.length)];
+            }
+            if (stbLevel === 2) {
+                const top = (m) => Math.max(...tileList(m));
+                return options.reduce((a, m) => (top(m) > top(a) || (top(m) === top(a) && tileList(m).length < tileList(a).length) ? m : a));
+            }
+            const low = expectedScore();
+            const scores = stb.seats.filter((s) => s.score !== null).map((s) => s.score);
+            if (stbLevel >= 4 && scores.length) {
+                const chance = beatChance(Math.min(...scores));
+                const v = (m) => chance[open ^ m];
+                return options.reduce((a, m) => (v(m) > v(a) + 1e-9 || (Math.abs(v(m) - v(a)) <= 1e-9 && low[open ^ m] < low[open ^ a]) ? m : a));
+            }
+            return options.reduce((a, m) => (low[open ^ m] < low[open ^ a] ? m : a));
+        }
+
+        // ---- flow ----
+
+        let stbLevel = 2;
+
+        const stb = {
+            gen: 0,          // bumped when a game is left or dropped: its pending steps stop
+            seats: [],       // seat 0 is the player: {id, name, human, tiles, score}; score null until they have played
+            turn: 0,         // the seat playing
+            phase: "roll",   // roll: the dice are next | shut: tiles to shut for the roll | done: the turn just ended
+            dice: [],        // what the dice show
+            rolling: false,
+            picked: 0,       // the tiles the player has picked for this roll
+            lastShut: 0,     // the tiles just shut, so they fold down
+            closeNoted: false,  // this turn's "close to shutting the box" line was said
+            playing: false,
+            over: false,
+            left: false,     // the player left before the end
+            shutBy: -1,      // the seat that shut the box
+            winners: [],     // seats with the lowest score
+            thinking: false, // an NPC's move is on its way
+            leaveArmed: false,
+        };
+
+        const stbName = (i) => stb.seats[i].name;
+        const stbRollTotal = () => stb.dice.reduce((a, d) => a + d, 0);
+        const stbOpponents = () => stb.seats.filter((s) => !s.human).map((s) => ({ id: s.id, name: s.name }));
+        const stbPlayerActs = () => stb.playing && !stb.over && stb.turn === 0 && !stb.rolling && screen === "stb";
+
+        function newStbGame(opps) {
+            stb.gen++;
+            stb.seats = [
+                { id: "", name: playerName, human: true, tiles: ALL_TILES, score: null },
+                ...opps.map((o) => ({ id: o.id, name: o.name, human: false, tiles: ALL_TILES, score: null })),
+            ];
+            stb.turn = Math.floor(Math.random() * stb.seats.length);
+            stb.phase = "roll";
+            stb.dice = [];
+            stb.rolling = false;
+            stb.picked = 0;
+            stb.lastShut = 0;
+            stb.closeNoted = false;
+            stb.playing = true;
+            stb.over = false;
+            stb.left = false;
+            stb.shutBy = -1;
+            stb.winners = [];
+            stb.thinking = false;
+            stb.leaveArmed = false;
+            $("stb-log").innerHTML = "";
+            $("stb-meta").textContent = t("strength", { level: t("level" + (stbLevel >= 1 && stbLevel <= 4 ? stbLevel : 2)) });
+            const order = stb.seats.map((s, k) => stbName((stb.turn + k) % stb.seats.length));
+            log(t("stbLogStart", { order: order.join(t("listComma")) }), "stb-log");
+            say(opps[0].id, t("sStart", { player: playerName, npcs: joinNames(opps.map((o) => o.name)) }));
+            reportStbState();
+            stbStep();
+        }
+
+        // The seat playing moves: the player through the board, an NPC once the table is quiet.
+        function stbStep() {
+            renderStb();
+            if (!stb.playing || stb.over || stb.rolling || stb.thinking || stb.phase === "done" || stb.seats[stb.turn].human) {
+                return;
+            }
+            stb.thinking = true;
+            const gen = stb.gen, seat = stb.turn;
+            renderStbStatus();
+            whenQuiet(() => {
+                if (gen !== stb.gen) {
+                    return;
+                }
+                if (screen !== "stb") {
+                    // carried on when the table is back on screen
+                    stb.thinking = false;
+                    return;
+                }
+                renderStbStatus();
+                setTimeout(() => {
+                    if (gen !== stb.gen) {
+                        return;
+                    }
+                    stb.thinking = false;
+                    if (screen !== "stb") {
+                        return;
+                    }
+                    if (stb.phase === "roll") {
+                        stbRoll();
+                    } else {
+                        stbShut(seat, stbChoose(seat, stbRollTotal()));
+                    }
+                }, 700 + Math.random() * 600);
+            });
+        }
+
+        // The dice tumble for a moment, then the roll stands.
+        function stbRoll() {
+            const gen = stb.gen, seat = stb.turn;
+            const count = stbDiceCount(stb.seats[seat].tiles);
+            const throwDice = () => Array.from({ length: count }, () => 1 + Math.floor(Math.random() * 6));
+            stb.rolling = true;
+            stb.lastShut = 0;
+            stb.dice = throwDice();
+            renderStb();
+            const tumble = setInterval(() => {
+                if (gen !== stb.gen) {
+                    clearInterval(tumble);
+                    return;
+                }
+                stb.dice = throwDice();
+                renderStbDice();
+            }, 90);
+            setTimeout(() => {
+                clearInterval(tumble);
+                if (gen !== stb.gen) {
+                    return;
+                }
+                stb.rolling = false;
+                stb.dice = throwDice();
+                const n = stbRollTotal();
+                if (!shutOptions(stb.seats[seat].tiles, n).length) {
+                    stbTurnOver(seat, n);
+                    return;
+                }
+                stb.phase = "shut";
+                stb.picked = 0;
+                reportStbState();
+                stbStep();
+            }, 650);
+        }
+
+        // Seat i shuts these tiles for the roll.
+        function stbShut(i, mask) {
+            const s = stb.seats[i];
+            log(t("stbLogShut", { who: s.name, n: stbRollTotal(), tiles: tilesText(mask) }), "stb-log");
+            s.tiles &= ~mask;
+            stb.lastShut = mask;
+            stb.picked = 0;
+            stb.phase = "roll";
+            stb.leaveArmed = false;
+            if (!s.tiles) {
+                stbShutBox(i);
+                return;
+            }
+            if (tileSum(s.tiles) <= 6 && !stb.closeNoted) {
+                stb.closeNoted = true;
+                const speaker = s.human ? stbNextToSpeak(i) : s.id;
+                say(speaker, t("sClose", { who: s.name, tiles: tilesText(s.tiles) }));
+            }
+            reportStbState();
+            stbStep();
+        }
+
+        // An NPC to voice what happened to seat i: the next to play, or else the first one in.
+        function stbNextToSpeak(i) {
+            for (let k = 1; k <= stb.seats.length; k++) {
+                const s = stb.seats[(i + k) % stb.seats.length];
+                if (!s.human && s.score === null) {
+                    return s.id;
+                }
+            }
+            return stb.seats.find((s) => !s.human).id;
+        }
+
+        // Every tile is down: seat i wins at once.
+        function stbShutBox(i) {
+            const s = stb.seats[i];
+            s.score = 0;
+            stb.shutBy = i;
+            stb.winners = [i];
+            stb.over = true;
+            log(t("stbLogShutBox", { who: s.name }), "stb-log");
+            log(t("stbLogEnd", { result: stbResult() }), "stb-log");
+            const speaker = s.human ? stb.seats[1] : s;
+            say(speaker.id, t(s.human ? "sShutPlayer" : "sShutNpc", { npc: speaker.name, player: playerName }), true);
+            reportStbState();
+            renderStb();
+        }
+
+        // Seat i's roll of n cannot be made: the open tiles are its score.
+        function stbTurnOver(i, n) {
+            const s = stb.seats[i];
+            s.score = tileSum(s.tiles);
+            stb.phase = "done";
+            stb.leaveArmed = false;
+            log(t("stbLogNoMove", { who: s.name, n, score: s.score }), "stb-log");
+
+            const next = stbNextSeat(i);
+            let text = t("sTurnEnd", { who: s.name, n, tiles: tilesText(s.tiles), score: s.score });
+            let speaker = s.human ? stbNextToSpeak(i) : s.id;
+            let keep = false;
+
+            if (next < 0) {
+                const low = Math.min(...stb.seats.map((x) => x.score));
+                stb.winners = stb.seats.flatMap((x, k) => (x.score === low ? [k] : []));
+                stb.over = true;
+                const names = joinNames(stb.winners.map(stbName));
+                const champ = stb.winners.find((k) => k > 0);
+                if (stb.winners.length > 1) {
+                    speaker = stb.seats[champ].id;
+                    text += t("sEndTie", { names, score: low, npc: stbName(champ) });
+                } else if (stb.winners[0] === 0) {
+                    const loser = stb.seats.find((x) => !x.human);
+                    speaker = loser.id;
+                    text += t("sEndPlayerWins", { player: playerName, npc: loser.name, score: low });
+                } else {
+                    speaker = stb.seats[champ].id;
+                    text += t("sEndNpcWins", { npc: stbName(champ), score: low });
+                }
+                keep = true;
+                log(t("stbLogEnd", { result: stbResult() }), "stb-log");
+            } else {
+                const played = stb.seats.filter((x) => x.score !== null);
+                if (played.length > 1) {
+                    const best = played.reduce((a, x) => (x.score < a.score ? x : a));
+                    text += t("sBest", { who: best.name, score: best.score });
+                }
+                text += t("sNext", { who: stbName(next) });
+            }
+            say(speaker, text, keep);
+            reportStbState();
+            renderStb();
+
+            if (next >= 0) {
+                // a moment to see how the turn ended
+                const gen = stb.gen;
+                setTimeout(() => {
+                    if (gen !== stb.gen) {
+                        return;
+                    }
+                    stb.turn = next;
+                    stb.phase = "roll";
+                    stb.dice = [];
+                    stb.lastShut = 0;
+                    stb.closeNoted = false;
+                    reportStbState();
+                    stbStep();
+                }, 1800);
+            }
+        }
+
+        // The seat after i that has yet to play, or -1.
+        function stbNextSeat(i) {
+            for (let k = 1; k < stb.seats.length; k++) {
+                const j = (i + k) % stb.seats.length;
+                if (stb.seats[j].score === null) {
+                    return j;
+                }
+            }
+            return -1;
+        }
+
+        // How the finished game ended, in a few words.
+        function stbResult() {
+            if (stb.winners.length > 1) {
+                return t("stbTieResult", { names: joinNames(stb.winners.map(stbName)) });
+            }
+            return t("resultWin", { name: stbName(stb.winners[0]) });
+        }
+
+        // ---- the player's moves ----
+
+        function onStbRoll() {
+            if (stbPlayerActs() && stb.phase === "roll") {
+                stbRoll();
+            }
+        }
+
+        // A tile that can go towards the roll toggles; once the picked tiles make the roll, they shut.
+        function onStbTile(bit) {
+            if (!stbPlayerActs() || stb.phase !== "shut") {
+                return;
+            }
+            if (stb.picked & bit) {
+                stb.picked &= ~bit;
+            } else if (stbCanPick(bit)) {
+                stb.picked |= bit;
+            } else {
+                return;
+            }
+            if (tileSum(stb.picked) === stbRollTotal()) {
+                stbShut(0, stb.picked);
+            } else {
+                renderStb();
+            }
+        }
+
+        // Whether some way of making the roll has this tile along with those already picked.
+        function stbCanPick(bit) {
+            const want = stb.picked | bit;
+            return shutOptions(stb.seats[0].tiles, stbRollTotal()).some((m) => (m & want) === want);
+        }
+
+        function onStbLeave() {
+            if (!stb.playing || stb.over) {
+                return;
+            }
+            if (!stb.leaveArmed) {
+                stb.leaveArmed = true;
+                renderStb();
+                return;
+            }
+            stb.gen++;
+            stb.over = true;
+            stb.left = true;
+            stb.rolling = false;
+            stb.thinking = false;
+            stb.leaveArmed = false;
+            say(stb.seats[1].id, t("sLeave", { player: playerName }), true);
+            log(t("logLeave", { player: playerName }), "stb-log");
+            reportStbState();
+            renderStb();
+        }
+
+        function onStbAgain() {
+            newStbGame(stbOpponents());
+        }
+
+        // ---- what each NPC knows ----
+
+        function stbStateFor(k) {
+            const s = stb.seats[k];
+            const vars = {
+                npc: s.name, player: playerName,
+                others: joinNames(stb.seats.filter((x) => x !== s).map((x) => x.name)),
+            };
+            if (stb.over) {
+                if (screen !== "stb") {
+                    return "";
+                }
+                return stb.left ? t("sStateLeft", vars) : t("sStateResult", { ...vars, result: stbResult() });
+            }
+            if (!stb.playing) {
+                return "";
+            }
+            let text = t("sState", vars);
+            const played = stb.seats.filter((x) => x.score !== null);
+            if (played.length) {
+                text += t("sStateScores", { scores: played.map((x) => t("diceCount", { name: x.name, n: x.score })).join(t("listComma")) });
+            }
+            if (stb.phase !== "done") {
+                const now = stb.seats[stb.turn];
+                text += t("sStateTurn", { who: now.name, tiles: tilesText(now.tiles) });
+                if (stb.phase === "shut") {
+                    text += t("sStateRolled", { who: now.name, n: stbRollTotal() });
+                }
+            }
+            if (screen !== "stb") {
+                text += t("sStatePaused");
+            }
+            return text;
+        }
+
+        function reportStbState() {
+            if (activeGame !== "stb") {
+                return;
+            }
+            const states = {};
+            stb.seats.forEach((s, k) => {
+                if (!s.human) {
+                    states[s.id] = stbStateFor(k);
+                }
+            });
+            send("rvState", JSON.stringify({ states, playing: stb.playing && !stb.over }));
+        }
+
+        // A game in progress is dropped (another game is starting).
+        function abandonStb() {
+            if (stb.playing && !stb.over) {
+                stb.playing = false;
+                stb.gen++;
+                stb.rolling = false;
+                stb.thinking = false;
+                voiceReset();
+            }
+        }
+
+        // Starts or resumes Shut the Box against opps ([{id, name}], one to three).
+        function playStb(opps) {
+            const same = stb.playing && !stb.over &&
+                stbOpponents().map((o) => o.id).join() === opps.map((o) => o.id).join();
+            if (!same) {
+                abandonStb();
+            }
+            abandonDice();
+            abandonReversi();
+            abandonBj();
+            activeGame = "stb";
+            send("mgPlayers", opps.map((o) => o.id).join(","));
+            if (same) {
+                showScreen("stb");
+                log(t("logResume"), "stb-log");
+                reportStbState();
+                stbStep();
+                return;
+            }
+            snapFaces(opps.map((o) => o.id), () => {
+                showScreen("stb");
+                newStbGame(opps);
+            });
+        }
+
+        // ---- rendering ----
+
+        function stbTileEls(box, open, onClick) {
+            box.innerHTML = "";
+            for (let n = 1; n <= 9; n++) {
+                const bit = 1 << (n - 1);
+                const el = document.createElement("div");
+                el.className = "tile" + (open & bit ? "" : " shut") + (stb.lastShut & bit ? " fold" : "");
+                el.textContent = n;
+                if (onClick) {
+                    onClick(el, bit);
+                }
+                box.appendChild(el);
+            }
+        }
+
+        function stbMetaText(s, k) {
+            if (s.score !== null) {
+                return t("stbScore", { score: s.score });
+            }
+            return t(k === stb.turn && !stb.over ? "stbPlaying" : "stbWaiting");
+        }
+
+        function renderStb() {
+            if (!stb.seats.length) {
+                return;
+            }
+            const live = stb.playing && !stb.over;
+            const seats = $("stb-seats");
+            seats.innerHTML = "";
+            stb.seats.forEach((s, k) => {
+                if (s.human) {
+                    return;
+                }
+                const card = document.createElement("div");
+                card.className = "seat" + (live && stb.turn === k ? " active" : "");
+                const name = document.createElement("div");
+                name.className = "seat-name";
+                name.textContent = s.name;
+                const tiles = document.createElement("div");
+                tiles.className = "tiles mini";
+                stbTileEls(tiles, s.tiles);
+                const meta = document.createElement("div");
+                meta.className = "seat-meta";
+                meta.textContent = stbMetaText(s, k);
+                card.append(faceEl(s.id, s.name), name, tiles, meta);
+                seats.appendChild(card);
+            });
+
+            const me = stb.seats[0];
+            $("stb-mine").classList.toggle("active", live && stb.turn === 0);
+            $("stb-mine-name").textContent = me.name;
+            stbTileEls($("stb-mine-tiles"), me.tiles);
+            $("stb-mine-meta").textContent = stbMetaText(me, 0);
+
+            // the tiles in the middle are those of whoever is playing, or the winner's at the end
+            const shown = stb.over && stb.winners.length ? stb.winners[0] : stb.turn;
+            const choosing = stbPlayerActs() && stb.phase === "shut";
+            $("stb-label").textContent = t("stbTilesOf", { who: stbName(shown) });
+            stbTileEls($("stb-tiles"), stb.seats[shown].tiles, choosing ? (el, bit) => {
+                if (!(stb.seats[0].tiles & bit)) {
+                    return;
+                }
+                if (stb.picked & bit) {
+                    el.classList.add("picked");
+                } else if (stbCanPick(bit)) {
+                    el.classList.add("can");
+                }
+                el.onclick = () => onStbTile(bit);
+            } : null);
+
+            renderStbDice();
+            $("stb-roll-button").style.display = live && stb.turn === 0 && stb.phase === "roll" && !stb.rolling ? "" : "none";
+            $("stb-roll-button").disabled = !stbPlayerActs();
+            $("stb-leave").style.display = live ? "" : "none";
+            $("stb-leave").textContent = t(stb.leaveArmed ? "leaveConfirm" : "leave");
+            $("stb-again").style.display = stb.over ? "" : "none";
+            renderStbStatus();
+        }
+
+        function renderStbDice() {
+            const box = $("stb-dice");
+            box.innerHTML = "";
+            for (const d of stb.dice) {
+                box.appendChild(dieEl(d, "big" + (stb.rolling ? " rolling" : "")));
+            }
+            if (stb.dice.length && !stb.rolling) {
+                const sum = document.createElement("span");
+                sum.textContent = "= " + stbRollTotal();
+                box.appendChild(sum);
+            }
+        }
+
+        function renderStbStatus() {
+            if (!stb.seats.length) {
+                return;
+            }
+            const lines = [];
+            if (stb.over) {
+                const low = stb.left ? 0 : stb.seats[stb.winners[0]].score;
+                if (stb.left) {
+                    lines.push(t("diceLeftStatus"));
+                } else if (stb.shutBy >= 0) {
+                    lines.push(t("stbShutStatus", { who: stbName(stb.shutBy) }));
+                } else if (stb.winners.length > 1) {
+                    lines.push(t("stbTieStatus", { names: joinNames(stb.winners.map(stbName)), score: low }));
+                } else if (stb.winners[0] === 0) {
+                    lines.push(t("stbYouWin", { score: low }));
+                } else {
+                    lines.push(t("stbNpcWins", { npc: stbName(stb.winners[0]), score: low }));
+                }
+            } else if (stb.playing) {
+                const s = stb.seats[stb.turn];
+                if (stb.phase === "done") {
+                    lines.push(t("stbNoMove", { who: s.name, n: stbRollTotal(), score: s.score }));
+                } else if (s.human) {
+                    if (!stb.rolling) {
+                        lines.push(stb.phase === "roll" ? t("stbYourRoll") : t("stbYourShut", { n: stbRollTotal() }));
+                    }
+                } else if (voiceLine && voiceLine.speaker !== PLAYER_ID) {
+                    const speaker = stb.seats.find((x) => x.id === voiceLine.speaker);
+                    lines.push(t("diceListening", { npc: speaker ? speaker.name : s.name }));
+                } else {
+                    lines.push(t("thinking", { npc: s.name }));
+                }
+            }
+            $("stb-status").textContent = lines.join("\n");
+        }
+
+        // ===== Blackjack =====
+
+        const BJ_CHIPS = 100;
+        const BJ_BETS = [10, 20, 50];
+        const SUITS = ["♠", "♥", "♦", "♣"];
+        const RANK_MARKS = { 1: "A", 11: "J", 12: "Q", 13: "K" };
+        const rankMark = (r) => RANK_MARKS[r] || String(r);
+        const cardPoints = (c) => (c.r === 1 ? 11 : Math.min(c.r, 10));
+
+        // {total, soft}: soft while an ace still counts as 11.
+        function handValue(cards) {
+            let total = 0, aces = 0;
+            for (const c of cards) {
+                total += cardPoints(c);
+                if (c.r === 1) aces++;
+            }
+            while (total > 21 && aces > 0) {
+                total -= 10;
+                aces--;
+            }
+            return { total, soft: aces > 0 };
+        }
+
+        const isNatural = (cards) => cards.length === 2 && handValue(cards).total === 21;
+
+        function newDeck() {
+            const deck = [];
+            for (let s = 0; s < 4; s++) {
+                for (let r = 1; r <= 13; r++) {
+                    deck.push({ r, s });
+                }
+            }
+            for (let i = deck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [deck[i], deck[j]] = [deck[j], deck[i]];
+            }
+            return deck;
+        }
+
+        // ---- opponent AI ----
+
+        // What a player does against the dealer's face-up card: "hit", "stand" or "double".
+        // 1: stands on a feeling. 2: mostly by the book, doubling only on 11. 3, 4: by the book.
+        function bjPlayerMove(cards, upCard, level, canDouble) {
+            const { total, soft } = handValue(cards);
+            const up = cardPoints(upCard);
+            if (total >= 21) {
+                return "stand";
+            }
+            if (level <= 1) {
+                return total <= 14 || (total <= 16 && Math.random() < 0.5) ? "hit" : "stand";
+            }
+            let move;
+            if (soft) {
+                move = total >= 19 || (total === 18 && up <= 8) ? "stand" : "hit";
+            } else if (total >= 17) {
+                move = "stand";
+            } else if (total >= 13) {
+                move = up <= 6 ? "stand" : "hit";
+            } else if (total === 12) {
+                move = up >= 4 && up <= 6 ? "stand" : "hit";
+            } else {
+                move = "hit";
+            }
+            if (level === 2 && total >= 12 && total <= 16 && Math.random() < 0.15) {
+                move = move === "hit" ? "stand" : "hit";
+            }
+            if (canDouble && !soft) {
+                const doubles = level === 2 ? total === 11 :
+                    total === 11 ? up <= 10 : total === 10 ? up <= 9 : total === 9 && up >= 3 && up <= 6;
+                if (doubles) {
+                    return "double";
+                }
+            }
+            return move;
+        }
+
+        // What the dealer's total wins (+) or loses (-) against these hands: [{total, bet}].
+        function bjStake(total, hands) {
+            return hands.reduce((sum, h) => sum + (total > 21 || total < h.total ? -h.bet : total > h.total ? h.bet : 0), 0);
+        }
+
+        // The most the dealer can expect from these cards, drawing from what is left unseen.
+        function bjBestValue(cards, hands, counts, left) {
+            const { total } = handValue(cards);
+            const stand = bjStake(total, hands);
+            if (total >= 21) {
+                return stand;
+            }
+            let draw = 0;
+            for (let r = 1; r <= 13; r++) {
+                if (counts[r]) {
+                    const p = counts[r] / left;
+                    counts[r]--;
+                    draw += p * bjBestValue([...cards, { r, s: 0 }], hands, counts, left - 1);
+                    counts[r]++;
+                }
+            }
+            return total <= 16 ? draw : Math.max(stand, draw);
+        }
+
+        // Whether the dealer draws. On 16 or less they must; on 17 or more it is their choice.
+        // 1: stands. 2: draws on a soft 17. 3: draws when standing would lose more than it wins.
+        // 4: works out from the cards still unseen whether drawing pays.
+        function bjDealerDraws(cards, hands, unseen, level) {
+            const { total, soft } = handValue(cards);
+            if (total <= 16) {
+                return true;
+            }
+            if (total >= 21 || level <= 1) {
+                return false;
+            }
+            if (level === 2) {
+                return total === 17 && soft;
+            }
+            if (bjStake(total, hands) >= 0) {
+                return false;
+            }
+            if (level === 3) {
+                return total < 20;
+            }
+            const counts = {};
+            unseen.forEach((c) => {
+                counts[c.r] = (counts[c.r] || 0) + 1;
+            });
+            let draw = 0;
+            for (let r = 1; r <= 13; r++) {
+                if (counts[r]) {
+                    const p = counts[r] / unseen.length;
+                    counts[r]--;
+                    draw += p * bjBestValue([...cards, { r, s: 0 }], hands, counts, unseen.length - 1);
+                    counts[r]++;
+                }
+            }
+            return draw > bjStake(total, hands);
+        }
+
+        // An NPC's bet. Stronger ones bet up when they are behind with few rounds left.
+        function bjNpcBet(chips, leader, roundsLeft, level) {
+            let bet = BJ_BETS[Math.floor(Math.random() * 2)];
+            if (level >= 3 && chips < leader && roundsLeft <= 2) {
+                bet = 50;
+            }
+            return Math.min(bet, chips);
+        }
+
+        // ---- flow ----
+
+        let bjLevel = 2;
+        let bjRounds = 5;
+
+        const bj = {
+            gen: 0,          // bumped when a game is left or dropped: its pending steps stop
+            seats: [],       // seat 0 is the player: {id, name, human, chips, bet, cards, inRound, natural, bust, delta}
+            round: 0,
+            dealer: 0,       // the seat dealing this round
+            turn: 0,         // the seat to act
+            phase: "bet",    // bet | act | dealer | result
+            deck: [],
+            house: 0,        // what the dealer, who holds no chips, has won or lost over the game
+            revealed: false, // the dealer's face-down card is up
+            fresh: null,     // the card just drawn
+            playing: false,
+            over: false,
+            left: false,     // the player left before the end
+            winners: [],
+            results: "",     // how the last round went, in words
+            thinking: false, // an NPC's move is on its way
+            leaveArmed: false,
+        };
+
+        const bjName = (i) => bj.seats[i].name;
+        // Still at the table: the dealer always, the others while they have chips.
+        const bjIn = (k) => k === bj.dealer || bj.seats[k].chips > 0;
+        const bjProfit = () => (bj.house > 0 ? "+" : "") + bj.house;
+        const bjOpponents = () => bj.seats.filter((s) => !s.human).map((s) => ({ id: s.id, name: s.name }));
+        const bjChipsLine = () => bj.seats.filter((s, k) => k !== bj.dealer).map((s) => t(s.chips > 0 ? "diceCount" : "diceCountOut", { name: s.name, n: s.chips })).join(t("listComma"));
+        const bjCardsText = (cards) => cards.map((c) => (RANK_MARKS[c.r] ? t("bjRank" + RANK_MARKS[c.r]) : String(c.r))).join(t("listComma"));
+        // What is known of a hand: "soft 17", "bust", "blackjack", or the total.
+        function bjTotalText(s) {
+            if (s.natural) return t("bjBlackjack");
+            const { total, soft } = handValue(s.cards);
+            if (total > 21) return t("bjBustMark");
+            return soft ? t("bjSoft", { n: total }) : String(total);
+        }
+
+        // Whose turn it is to answer for what happened to seat i: them, or else the dealer or
+        // the first NPC still in.
+        function bjSpeaker(i) {
+            if (!bj.seats[i].human) return bj.seats[i].id;
+            if (!bj.seats[bj.dealer].human) return bj.seats[bj.dealer].id;
+            const s = bj.seats.find((x) => !x.human && x.inRound) || bj.seats[1];
+            return s.id;
+        }
+
+        // dealer: the seat that deals until the game ends (0 is the player).
+        function newBjGame(opps, dealer) {
+            bj.gen++;
+            bj.dealer = dealer;
+            bj.seats = [
+                { id: "", name: playerName, human: true, chips: BJ_CHIPS, bet: 0, cards: [], inRound: false, natural: false, bust: false, delta: null },
+                ...opps.map((o) => ({ id: o.id, name: o.name, human: false, chips: BJ_CHIPS, bet: 0, cards: [], inRound: false, natural: false, bust: false, delta: null })),
+            ];
+            bj.seats[dealer].chips = 0;
+            bj.house = 0;
+            bj.round = 0;
+            bj.playing = true;
+            bj.over = false;
+            bj.left = false;
+            bj.winners = [];
+            bj.results = "";
+            bj.thinking = false;
+            bj.leaveArmed = false;
+            $("bj-log").innerHTML = "";
+            $("bj-meta").textContent = t("strength", { level: t("level" + (bjLevel >= 1 && bjLevel <= 4 ? bjLevel : 2)) });
+            say(opps[0].id, t("bjStart", { player: playerName, npcs: joinNames(opps.map((o) => o.name)), n: bjRounds, chips: BJ_CHIPS, dealer: bjName(dealer) }));
+            bjStartRound();
+        }
+
+        // The NPCs bet, then it is up to the player.
+        function bjStartRound() {
+            bj.round++;
+            bj.phase = "bet";
+            bj.revealed = false;
+            bj.fresh = null;
+            bj.results = "";
+            bj.leaveArmed = false;
+            bj.deck = newDeck();
+            bj.seats.forEach((s, k) => {
+                s.bet = 0;
+                s.cards = [];
+                s.inRound = bjIn(k);
+                s.natural = false;
+                s.bust = false;
+                s.delta = null;
+            });
+            bj.turn = bj.dealer;
+            log(t("bjLogRound", { r: bj.round, n: bjRounds, who: bjName(bj.dealer) }), "bj-log");
+            const leader = Math.max(...bj.seats.map((s) => s.chips));
+            bj.seats.forEach((s, k) => {
+                if (!s.human && s.inRound && k !== bj.dealer) {
+                    s.bet = bjNpcBet(s.chips, leader, bjRounds - bj.round, bjLevel);
+                    log(t("bjLogBet", { who: s.name, n: s.bet }), "bj-log");
+                }
+            });
+            reportBjState();
+            bjStep();
+        }
+
+        // Two cards each. A dealer's blackjack ends the round at once.
+        function bjDeal() {
+            for (let pass = 0; pass < 2; pass++) {
+                for (let k = 1; k <= bj.seats.length; k++) {
+                    const s = bj.seats[(bj.dealer + k) % bj.seats.length];
+                    if (s.inRound) {
+                        s.cards.push(bj.deck.pop());
+                    }
+                }
+            }
+            bj.seats.forEach((s) => {
+                s.natural = s.inRound && isNatural(s.cards);
+                if (s.natural) {
+                    log(t("bjLogNatural", { who: s.name }), "bj-log");
+                }
+            });
+            const d = bj.seats[bj.dealer];
+            if (d.natural) {
+                bj.revealed = true;
+                bjSettle();
+                return;
+            }
+            const hands = bj.seats
+                .filter((s, k) => s.inRound && k !== bj.dealer)
+                .map((s) => t(s.natural ? "bjHandNatural" : "bjHand", { name: s.name, cards: bjCardsText(s.cards), total: bjTotalText(s) }));
+            const speaker = d.human ? bj.seats.find((s) => !s.human && s.inRound) : d;
+            say(speaker.id, t("bjRoundLine", { r: bj.round, n: bjRounds, dealer: d.name, up: bjCardsText([d.cards[0]]), hands: hands.join(t("listComma")) }));
+            bjAdvance();
+        }
+
+        // On to the next seat that has a move, the dealer last.
+        function bjAdvance() {
+            bj.phase = "act";
+            let k = bj.turn;
+            for (;;) {
+                k = (k + 1) % bj.seats.length;
+                if (k === bj.dealer) {
+                    bjDealerTurn();
+                    return;
+                }
+                const s = bj.seats[k];
+                if (s.inRound && !s.natural) {
+                    bj.turn = k;
+                    reportBjState();
+                    bjStep();
+                    return;
+                }
+            }
+        }
+
+        // The hands the dealer still has to beat.
+        const bjLiveHands = () => bj.seats
+            .filter((s, k) => s.inRound && k !== bj.dealer && !s.bust && !s.natural)
+            .map((s) => ({ total: handValue(s.cards).total, bet: s.bet }));
+
+        function bjDealerTurn() {
+            bj.phase = "dealer";
+            bj.turn = bj.dealer;
+            bj.revealed = true;
+            const d = bj.seats[bj.dealer];
+            log(t("bjLogReveal", { who: d.name, cards: bjCardsText(d.cards), total: bjTotalText(d) }), "bj-log");
+            if (!bjLiveHands().length || handValue(d.cards).total >= 21) {
+                bjSettle();
+                return;
+            }
+            reportBjState();
+            bjStep();
+        }
+
+        // The seat to act moves: the player through the controls, an NPC once the table is quiet.
+        function bjStep() {
+            renderBj();
+            if (!bj.playing || bj.over || bj.thinking) {
+                return;
+            }
+            const me = bj.seats[0];
+            const mine = bj.phase === "bet" || bj.phase === "result" ? bjIn(0) : bj.turn === 0;
+            if (mine) {
+                return;
+            }
+            bj.thinking = true;
+            const gen = bj.gen;
+            renderBjStatus();
+            whenQuiet(() => {
+                if (gen !== bj.gen) {
+                    return;
+                }
+                if (screen !== "bj") {
+                    // carried on when the table is back on screen
+                    bj.thinking = false;
+                    return;
+                }
+                renderBjStatus();
+                setTimeout(() => {
+                    if (gen !== bj.gen) {
+                        return;
+                    }
+                    bj.thinking = false;
+                    if (screen === "bj") {
+                        bjAuto();
+                    }
+                }, bj.phase === "result" ? 2500 : 800 + Math.random() * 700);
+            });
+        }
+
+        // What happens next without the player.
+        function bjAuto() {
+            if (bj.phase === "bet") {
+                bjDeal();
+            } else if (bj.phase === "result") {
+                bjStartRound();
+            } else if (bj.phase === "dealer") {
+                const d = bj.seats[bj.dealer];
+                if (bjDealerDraws(d.cards, bjLiveHands(), bj.deck, bjLevel)) {
+                    bjHit(bj.dealer);
+                } else {
+                    bjStand(bj.dealer);
+                }
+            } else {
+                const s = bj.seats[bj.turn];
+                const canDouble = s.cards.length === 2 && s.chips >= s.bet * 2;
+                const move = bjPlayerMove(s.cards, bj.seats[bj.dealer].cards[0], bjLevel, canDouble);
+                if (move === "double") {
+                    bjDouble(bj.turn);
+                } else if (move === "hit") {
+                    bjHit(bj.turn);
+                } else {
+                    bjStand(bj.turn);
+                }
+            }
+        }
+
+        function bjDraw(i) {
+            const c = bj.deck.pop();
+            bj.seats[i].cards.push(c);
+            bj.fresh = c;
+            return c;
+        }
+
+        function bjHit(i) {
+            const s = bj.seats[i];
+            const c = bjDraw(i);
+            const { total } = handValue(s.cards);
+            log(t("bjLogHit", { who: s.name, card: bjCardsText([c]), total: bjTotalText(s) }), "bj-log");
+            bj.leaveArmed = false;
+            if (total > 21) {
+                s.bust = true;
+                if (i !== bj.dealer) {
+                    say(bjSpeaker(i), t("bjBust", { who: s.name, card: bjCardsText([c]), total }));
+                }
+            }
+            bjAfterMove(i, total >= 21);
+        }
+
+        function bjStand(i) {
+            const s = bj.seats[i];
+            log(t("bjLogStand", { who: s.name, total: bjTotalText(s) }), "bj-log");
+            bj.leaveArmed = false;
+            bjAfterMove(i, true);
+        }
+
+        // Twice the bet for one more card.
+        function bjDouble(i) {
+            const s = bj.seats[i];
+            s.bet *= 2;
+            const c = bjDraw(i);
+            const { total } = handValue(s.cards);
+            log(t("bjLogDouble", { who: s.name, card: bjCardsText([c]), total: bjTotalText(s), bet: s.bet }), "bj-log");
+            bj.leaveArmed = false;
+            s.bust = total > 21;
+            say(bjSpeaker(i), t(s.bust ? "bjDoubleBust" : "bjDoubleLine", { who: s.name, card: bjCardsText([c]), total, bet: s.bet }));
+            bjAfterMove(i, true);
+        }
+
+        function bjAfterMove(i, finished) {
+            if (!finished) {
+                reportBjState();
+                bjStep();
+            } else if (i === bj.dealer) {
+                bjSettle();
+            } else {
+                bjAdvance();
+            }
+        }
+
+        // The dealer pays or collects from each hand, out of no chips of their own: the house
+        // always pays, and only the running total changes.
+        function bjSettle() {
+            const d = bj.seats[bj.dealer];
+            const dTotal = handValue(d.cards).total;
+            const dBust = dTotal > 21;
+            const words = [];
+            d.delta = 0;
+            bj.seats.forEach((s, k) => {
+                if (!s.inRound || k === bj.dealer) {
+                    return;
+                }
+                const total = handValue(s.cards).total;
+                let delta;
+                if (s.bust) {
+                    delta = -s.bet;
+                } else if (s.natural) {
+                    delta = d.natural ? 0 : s.bet * 1.5;
+                } else if (d.natural) {
+                    delta = -s.bet;
+                } else {
+                    delta = dBust || total > dTotal ? s.bet : total < dTotal ? -s.bet : 0;
+                }
+                s.delta = delta;
+                s.chips += delta;
+                d.delta -= delta;
+                words.push(t(delta > 0 ? "bjResultWin" : delta < 0 ? "bjResultLose" : "bjResultPush", { name: s.name, n: Math.abs(delta) }));
+            });
+            bj.house += d.delta;
+            bj.phase = "result";
+            bj.turn = bj.dealer;
+            bj.results = words.join(t("listComma"));
+            bj.fresh = null;
+            bj.leaveArmed = false;
+            log(t("bjLogResult", { results: bj.results }), "bj-log");
+
+            // out of chips: a player is out, and the game goes on until no player is left
+            const out = bj.seats.filter((s) => s !== d && s.inRound && s.chips <= 0);
+            out.forEach((s) => log(t("logOut", { who: s.name }), "bj-log"));
+            const playersLeft = bj.seats.some((s) => s !== d && s.chips > 0);
+            bj.over = bj.round >= bjRounds || !playersLeft;
+
+            let text = t("bjRoundEnd", { r: bj.round, dealer: d.name, hand: bjTotalText(d), results: bj.results, chips: bjChipsLine() });
+            if (out.length) {
+                text += t("bjOut", { names: joinNames(out.map((s) => s.name)) });
+            }
+            let speaker = d.human ? null : d;
+            if (!speaker) {
+                const npcs = bj.seats.filter((s) => !s.human && s.inRound);
+                speaker = npcs.reduce((a, s) => (Math.abs(s.delta) > Math.abs(a.delta) ? s : a));
+            }
+            if (bj.over) {
+                // the most chips among the players; if none has any, the dealer has beaten them all
+                const top = Math.max(...bj.seats.map((s) => s.chips));
+                bj.winners = !playersLeft ? [bj.dealer] : bj.seats.flatMap((s, k) => (s !== d && s.chips === top ? [k] : []));
+                const champ = bj.winners.find((k) => k > 0);
+                if (!playersLeft) {
+                    text += t("bjEndHouse", { dealer: d.name });
+                } else if (bj.winners.length > 1) {
+                    speaker = bj.seats[champ];
+                    text += t("bjEndTie", { names: joinNames(bj.winners.map(bjName)), chips: top, npc: speaker.name });
+                } else if (bj.winners[0] === 0) {
+                    text += t("bjEndPlayerWins", { player: playerName, chips: top, npc: speaker.name });
+                } else {
+                    speaker = bj.seats[champ];
+                    text += t("bjEndNpcWins", { npc: speaker.name, chips: top });
+                }
+                text += t("bjHouseNote", { dealer: d.name, profit: bjProfit() });
+                log(t("stbLogEnd", { result: bjResult() }), "bj-log");
+            }
+            say(speaker.id, text, bj.over);
+            reportBjState();
+            bjStep();
+        }
+
+        // How the finished game ended, in a few words.
+        function bjResult() {
+            if (bj.winners.length > 1) {
+                return t("stbTieResult", { names: joinNames(bj.winners.map(bjName)) });
+            }
+            return t("resultWin", { name: bjName(bj.winners[0]) });
+        }
+
+        // ---- the player's controls ----
+
+        const bjMyMove = () => bj.playing && !bj.over && bj.turn === 0 && (bj.phase === "act" || bj.phase === "dealer") && screen === "bj";
+        const bjMyDouble = () => bjMyMove() && bj.phase === "act" && bj.seats[0].cards.length === 2 && bj.seats[0].chips >= bj.seats[0].bet * 2;
+        const bjMyBet = () => bj.playing && !bj.over && bj.phase === "bet" && bj.dealer !== 0 && bj.seats[0].chips > 0 && screen === "bj";
+        const bjMyDeal = () => bj.playing && !bj.over && bj.phase === "bet" && bj.dealer === 0 && screen === "bj";
+        // The dealer must draw on 16 or less.
+        const bjMustDraw = () => bj.phase === "dealer" && handValue(bj.seats[0].cards).total <= 16;
+
+        function onBjBet(n) {
+            if (bjMyBet()) {
+                bj.seats[0].bet = n;
+                log(t("bjLogBet", { who: playerName, n }), "bj-log");
+                bjDeal();
+            }
+        }
+
+        function onBjDeal() {
+            if (bjMyDeal()) {
+                bjDeal();
+            }
+        }
+
+        function onBjHit() {
+            if (bjMyMove()) {
+                bjHit(0);
+            }
+        }
+
+        function onBjStand() {
+            if (bjMyMove() && !bjMustDraw()) {
+                bjStand(0);
+            }
+        }
+
+        function onBjDouble() {
+            if (bjMyDouble()) {
+                bjDouble(0);
+            }
+        }
+
+        function onBjNext() {
+            if (bj.playing && !bj.over && bj.phase === "result" && bjIn(0)) {
+                bjStartRound();
+            }
+        }
+
+        function onBjLeave() {
+            if (!bj.playing || bj.over) {
+                return;
+            }
+            // once out, the player has nothing to lose: no second press
+            const watching = !bjIn(0);
+            if (!bj.leaveArmed && !watching) {
+                bj.leaveArmed = true;
+                renderBj();
+                return;
+            }
+            bj.gen++;
+            bj.over = true;
+            bj.left = true;
+            bj.thinking = false;
+            bj.leaveArmed = false;
+            const first = bj.seats.find((s, k) => !s.human && bjIn(k)) || bj.seats[1];
+            say(first.id, t(watching ? "bjStopWatching" : "bjLeave", { player: playerName }), true);
+            log(t("logLeave", { player: playerName }), "bj-log");
+            reportBjState();
+            renderBj();
+        }
+
+        // Who deals the next game is chosen anew.
+        function onBjAgain() {
+            const opps = bjOpponents();
+            menuGame = null;
+            chooseDealer(opps, (dealer) => {
+                showScreen("bj");
+                newBjGame(opps, dealer);
+            });
+        }
+
+        // ---- what each NPC knows ----
+
+        // Everyone's cards lie face up but the dealer's second, which only the dealer has seen.
+        function bjStateFor(k) {
+            const s = bj.seats[k];
+            const vars = {
+                npc: s.name, player: playerName, r: bj.round, n: bjRounds, chips: bjChipsLine(),
+                others: joinNames(bj.seats.filter((x) => x !== s).map((x) => x.name)),
+            };
+            if (bj.over) {
+                if (screen !== "bj") {
+                    return "";
+                }
+                return bj.left ? t("bjStateLeft", vars) : t("bjStateResult", { ...vars, result: bjResult() });
+            }
+            if (!bj.playing) {
+                return "";
+            }
+            let text = t("bjState", vars) + t("bjStateDealer", { dealer: bjName(bj.dealer) });
+            const d = bj.seats[bj.dealer];
+            if (d.cards.length) {
+                const shown = bj.revealed ? d.cards : [d.cards[0]];
+                const hands = bj.seats
+                    .filter((x, j) => x.inRound && j !== bj.dealer)
+                    .map((x) => t("bjHand", { name: x.name, cards: bjCardsText(x.cards), total: bjTotalText(x) }));
+                text += t("bjStateTable", { dealer: d.name, up: bjCardsText(shown), hands: hands.join(t("listComma")) });
+                if (k === bj.dealer && !bj.revealed) {
+                    text += t("bjStateHole", { npc: s.name, hole: bjCardsText([d.cards[1]]) });
+                }
+            }
+            if (bj.phase === "act" || bj.phase === "dealer") {
+                text += t("dStateTurn", { who: bjName(bj.turn) });
+            } else if (bj.phase === "result") {
+                text += t("bjStateRound", { results: bj.results });
+            }
+            if (screen !== "bj") {
+                text += t("bjStatePaused");
+            }
+            return text;
+        }
+
+        function reportBjState() {
+            if (activeGame !== "bj") {
+                return;
+            }
+            const states = {};
+            bj.seats.forEach((s, k) => {
+                if (!s.human) {
+                    states[s.id] = bjStateFor(k);
+                }
+            });
+            send("rvState", JSON.stringify({ states, playing: bj.playing && !bj.over }));
+        }
+
+        // A game in progress is dropped (another game is starting).
+        function abandonBj() {
+            if (bj.playing && !bj.over) {
+                bj.playing = false;
+                bj.gen++;
+                bj.thinking = false;
+                voiceReset();
+            }
+        }
+
+        const bjUnfinishedWith = (opps) => bj.playing && !bj.over &&
+            bjOpponents().map((o) => o.id).join() === opps.map((o) => o.id).join();
+
+        // Starts Blackjack against opps ([{id, name}], one to three) with this seat dealing, or
+        // resumes the unfinished game against them.
+        function playBj(opps, dealer) {
+            const same = bjUnfinishedWith(opps);
+            if (!same) {
+                abandonBj();
+            }
+            abandonDice();
+            abandonStb();
+            abandonReversi();
+            activeGame = "bj";
+            send("mgPlayers", opps.map((o) => o.id).join(","));
+            if (same) {
+                showScreen("bj");
+                log(t("logResume"), "bj-log");
+                reportBjState();
+                bjStep();
+                return;
+            }
+            snapFaces(opps.map((o) => o.id), () => {
+                showScreen("bj");
+                newBjGame(opps, dealer);
+            });
+        }
+
+        // ---- rendering ----
+
+        function cardEl(c, size, faceDown) {
+            const el = document.createElement("div");
+            el.className = "card " + size + (faceDown ? " back" : "") + (!faceDown && c === bj.fresh ? " new" : "");
+            if (!faceDown) {
+                el.classList.toggle("red", c.s === 1 || c.s === 2);
+                const rank = document.createElement("span");
+                rank.textContent = rankMark(c.r);
+                const suit = document.createElement("span");
+                suit.className = "suit";
+                suit.textContent = SUITS[c.s];
+                el.append(rank, suit);
+            }
+            return el;
+        }
+
+        // A hand and what it is worth, as far as the player may know.
+        function fillHand(box, s, k, size) {
+            box.innerHTML = "";
+            box.classList.toggle("many", s.cards.length > 4);
+            const hideHole = k === bj.dealer && k !== 0 && !bj.revealed;
+            s.cards.forEach((c, j) => box.appendChild(cardEl(c, size, hideHole && j === 1)));
+            if (s.cards.length) {
+                const total = document.createElement("span");
+                total.className = "hand-total";
+                total.textContent = hideHole ? "?" : bjTotalText(s);
+                box.appendChild(total);
+            }
+        }
+
+        function bjMetaText(s, k) {
+            if (!bjIn(k) && !(bj.phase === "result" && s.inRound)) {
+                return t("diceOut");
+            }
+            let text = k === bj.dealer ? t("bjDealerBadge", { profit: bjProfit() }) :
+                s.bet ? t("bjChipsBet", { chips: s.chips, bet: s.bet }) : t("bjChips", { chips: s.chips });
+            if (s.delta !== null && bj.phase === "result") {
+                text += ` (${s.delta > 0 ? "+" : ""}${s.delta})`;
+            }
+            return text;
+        }
+
+        function renderBj() {
+            if (!bj.seats.length) {
+                return;
+            }
+            const live = bj.playing && !bj.over;
+            const acting = live && (bj.phase === "act" || bj.phase === "dealer");
+            const seats = $("bj-seats");
+            seats.innerHTML = "";
+            bj.seats.forEach((s, k) => {
+                if (s.human) {
+                    return;
+                }
+                const card = document.createElement("div");
+                card.className = "seat" + (acting && bj.turn === k ? " active" : "") + (k === bj.dealer ? " dealer" : "") + (bjIn(k) || (bj.phase === "result" && s.inRound) ? "" : " out");
+                const name = document.createElement("div");
+                name.className = "seat-name";
+                name.textContent = s.name;
+                const hand = document.createElement("div");
+                hand.className = "hand small";
+                if (k !== bj.dealer) {
+                    fillHand(hand, s, k, "small");
+                }
+                const meta = document.createElement("div");
+                meta.className = "seat-meta";
+                meta.textContent = bjMetaText(s, k);
+                card.append(faceEl(s.id, s.name), name, hand, meta);
+                seats.appendChild(card);
+            });
+
+            const d = bj.seats[bj.dealer];
+            $("bj-label").textContent = t("bjRoundLabel", { r: bj.round, n: bjRounds, who: d.name });
+            fillHand($("bj-dealer-hand"), d, bj.dealer, "big");
+
+            const me = bj.seats[0];
+            $("bj-mine").classList.toggle("active", acting && bj.turn === 0);
+            $("bj-mine").classList.toggle("dealer", bj.dealer === 0);
+            $("bj-mine-name").textContent = me.name;
+            const hand = $("bj-mine-hand");
+            if (bj.dealer === 0) {
+                hand.innerHTML = "";
+            } else {
+                fillHand(hand, me, 0, "mid");
+            }
+            $("bj-mine-meta").textContent = bjMetaText(me, 0);
+
+            // controls
+            const bets = $("bj-bets");
+            bets.innerHTML = "";
+            bets.style.display = bjMyBet() ? "" : "none";
+            if (bjMyBet()) {
+                const options = me.chips < BJ_BETS[0] ? [me.chips] : BJ_BETS.filter((n) => n <= me.chips);
+                for (const n of options) {
+                    const b = document.createElement("button");
+                    b.className = "primary";
+                    b.textContent = t("bjBetButton", { n });
+                    b.onclick = () => onBjBet(n);
+                    bets.appendChild(b);
+                }
+            }
+            $("bj-deal").style.display = bjMyDeal() ? "" : "none";
+            $("bj-moves").style.display = bjMyMove() ? "" : "none";
+            $("bj-stand").disabled = bjMyMove() && bjMustDraw();
+            $("bj-double").style.display = bj.phase === "act" ? "" : "none";
+            $("bj-double").disabled = !bjMyDouble();
+            $("bj-next").style.display = live && bj.phase === "result" && bjIn(0) ? "" : "none";
+            $("bj-leave").style.display = live ? "" : "none";
+            $("bj-leave").textContent = t(!bjIn(0) ? "stopWatching" : bj.leaveArmed ? "leaveConfirm" : "leave");
+            $("bj-again").style.display = bj.over ? "" : "none";
+            renderBjStatus();
+        }
+
+        function renderBjStatus() {
+            if (!bj.seats.length) {
+                return;
+            }
+            const lines = [];
+            const me = bj.seats[0];
+            if (bj.phase === "result" && bj.results) {
+                lines.push(bj.results);
+            }
+            if (bj.over) {
+                const top = bj.left ? 0 : bj.seats[bj.winners[0]].chips;
+                if (bj.left) {
+                    lines.length = 0;
+                    lines.push(t("diceLeftStatus"));
+                } else if (bj.winners[0] === bj.dealer) {
+                    lines.push(t("bjHouseWins", { dealer: bjName(bj.dealer) }));
+                } else if (bj.winners.length > 1) {
+                    lines.push(t("bjTieStatus", { names: joinNames(bj.winners.map(bjName)), chips: top }));
+                } else if (bj.winners[0] === 0) {
+                    lines.push(t("bjYouWin", { chips: top }));
+                } else {
+                    lines.push(t("bjNpcWins", { npc: bjName(bj.winners[0]), chips: top }));
+                }
+                if (!bj.left) {
+                    lines.push(t("bjHouseStatus", { dealer: bjName(bj.dealer), profit: bjProfit() }));
+                }
+            } else if (bj.playing) {
+                if (!bjIn(0)) {
+                    lines.push(t("bjWatching"));
+                }
+                if (bjMyBet()) {
+                    lines.push(t("bjBetPrompt", { dealer: bjName(bj.dealer) }));
+                } else if (bjMyDeal()) {
+                    lines.push(t("bjDealPrompt"));
+                } else if (bjMyMove()) {
+                    if (bj.phase === "act") {
+                        lines.push(t("bjYourTurn", { total: bjTotalText(me) }));
+                    } else {
+                        lines.push(t(bjMustDraw() ? "bjYourDealerMust" : "bjYourDealerFree", { total: bjTotalText(me) }));
+                    }
+                } else if (bj.phase !== "result" && bj.turn !== 0) {
+                    if (voiceLine && voiceLine.speaker !== PLAYER_ID) {
+                        const speaker = bj.seats.find((x) => x.id === voiceLine.speaker);
+                        lines.push(t("diceListening", { npc: speaker ? speaker.name : bjName(bj.turn) }));
+                    } else {
+                        lines.push(t("thinking", { npc: bjName(bj.turn) }));
+                    }
+                }
+            }
+            $("bj-status").textContent = lines.join("\n");
+        }
+
         // ===== faces =====
 
         // A new game calls its opponents over (MCM) and takes a photo: the screen goes black
@@ -2239,16 +4118,18 @@
 
         // ===== screens =====
 
-        // "menu", "board" (Reversi), "dice", or null when the plugin has hidden the view. A game
-        // counts as hidden (paused) whenever its screen is not up.
+        // "menu", "board" (Reversi), "dice", "stb", "bj", or null when the plugin has hidden the view. A
+        // game counts as hidden (paused) whenever its screen is not up.
         let screen = null;
-        let activeGame = null;    // "reversi" | "dice": the game whose state the NPCs see
+        let activeGame = null;    // "reversi" | "dice" | "stb" | "bj": the game whose state the NPCs see
 
         function showScreen(name) {
             screen = name;
             $("menu").classList.toggle("open", name === "menu");
             $("panel").classList.toggle("open", name === "board");
             $("dice").classList.toggle("open", name === "dice");
+            $("stb").classList.toggle("open", name === "stb");
+            $("bj").classList.toggle("open", name === "bj");
             hidden = name !== "board";
             fitPanels();
         }
@@ -2272,6 +4153,10 @@
                 reportState();
             } else if (activeGame === "dice") {
                 reportDiceState();
+            } else if (activeGame === "stb") {
+                reportStbState();
+            } else if (activeGame === "bj") {
+                reportBjState();
             }
         }
 
@@ -2285,6 +4170,8 @@
         // Starts or resumes Reversi against opp ({id, name}); invite: opp challenged the player.
         function playReversi(opp, invite) {
             abandonDice();
+            abandonStb();
+            abandonBj();
             activeGame = "reversi";
             const sameOpponent = opp.id === opponent.id;
             if (!sameOpponent && playing && !over) {
@@ -2321,6 +4208,14 @@
         const GAMES = [
             { id: "reversi", title: "gameReversi", desc: "gameReversiDesc", opponents: 1, start: (chosen) => playReversi(chosen[0], false) },
             { id: "dice", title: "gameDice", desc: "gameDiceDesc", opponents: 3, start: (chosen) => playDice(chosen) },
+            { id: "stb", title: "gameStb", desc: "gameStbDesc", opponents: 3, start: (chosen) => playStb(chosen) },
+            { id: "bj", title: "gameBj", desc: "gameBjDesc", opponents: 3, start: (chosen) => {
+                if (bjUnfinishedWith(chosen)) {
+                    playBj(chosen);
+                } else {
+                    chooseDealer(chosen, (dealer) => playBj(chosen, dealer));
+                }
+            } },
         ];
 
         let actors = [];          // nearby NPCs from the plugin: {id, name, distance, crosshair}
@@ -2331,6 +4226,7 @@
             showScreen("menu");
             $("step-game").classList.add("open");
             $("step-opponents").classList.remove("open");
+            $("step-dealer").classList.remove("open");
             menuGame = null;
 
             const list = $("game-list");
@@ -2341,6 +4237,12 @@
             } else if (activeGame === "dice" && dice.playing && !dice.over) {
                 const opps = diceOpponents();
                 list.appendChild(menuRow(t("resume", { game: t("gameDice"), npc: joinNames(opps.map((o) => o.name)) }), "", "", () => playDice(opps), "resume"));
+            } else if (activeGame === "stb" && stb.playing && !stb.over) {
+                const opps = stbOpponents();
+                list.appendChild(menuRow(t("resume", { game: t("gameStb"), npc: joinNames(opps.map((o) => o.name)) }), "", "", () => playStb(opps), "resume"));
+            } else if (activeGame === "bj" && bj.playing && !bj.over) {
+                const opps = bjOpponents();
+                list.appendChild(menuRow(t("resume", { game: t("gameBj"), npc: joinNames(opps.map((o) => o.name)) }), "", "", () => playBj(opps), "resume"));
             }
             for (const game of GAMES) {
                 list.appendChild(menuRow(t(game.title), t(game.desc), "", () => chooseOpponents(game)));
@@ -2371,12 +4273,16 @@
             return row;
         }
 
-        function chooseOpponents(game) {
+        // keep: coming back to the list, with the picks as they were.
+        function chooseOpponents(game, keep = false) {
             menuGame = game;
-            // the one in sight is picked to begin with
-            const inSight = actors.find((a) => a.crosshair);
-            menuChosen = inSight ? [inSight.id] : [];
+            if (!keep) {
+                // the one in sight is picked to begin with
+                const inSight = actors.find((a) => a.crosshair);
+                menuChosen = inSight ? [inSight.id] : [];
+            }
             $("step-game").classList.remove("open");
+            $("step-dealer").classList.remove("open");
             $("step-opponents").classList.add("open");
             $("opponents-heading").textContent = game.opponents > 1 ? t("chooseOpponents", { n: game.opponents }) : t("chooseOpponent");
             renderActors();
@@ -2418,8 +4324,25 @@
             renderActors();
         }
 
+        // Blackjack: who deals, the player or one of the opponents. then(seat): 0 is the player.
+        function chooseDealer(opps, then) {
+            showScreen("menu");
+            $("step-game").classList.remove("open");
+            $("step-opponents").classList.remove("open");
+            $("step-dealer").classList.add("open");
+            const list = $("dealer-list");
+            list.innerHTML = "";
+            list.appendChild(menuRow(t("dealerYou", { name: playerName }), "", "", () => then(0)));
+            opps.forEach((o, k) => list.appendChild(menuRow(o.name, "", "", () => then(k + 1))));
+            fitPanels();
+        }
+
         function menuBack() {
-            showMenu();
+            if ($("step-dealer").classList.contains("open") && menuGame) {
+                chooseOpponents(menuGame, true);
+            } else {
+                showMenu();
+            }
         }
 
         function menuStart() {
@@ -2432,7 +4355,7 @@
 
         // ===== called from the plugin =====
 
-        // Options every open carries: { player, level, hints, color, diceLevel, voice, voiceWait, strings }.
+        // Options every open carries: { player, level, hints, color, diceLevel, stbLevel, bjLevel, bjRounds, voice, voiceWait, strings }.
         function applyOptions(opts) {
             applyStrings(opts.strings);
             playerName = opts.player || playerName;
@@ -2440,6 +4363,9 @@
             showHints = opts.hints !== false;
             colorSetting = opts.color || colorSetting;
             diceLevel = opts.diceLevel || diceLevel;
+            stbLevel = opts.stbLevel || stbLevel;
+            bjLevel = opts.bjLevel || bjLevel;
+            bjRounds = opts.bjRounds || bjRounds;
             voiceOn = !!opts.voice;
             playerVoice = !!opts.playerVoice;
             gatherOn = opts.gather !== false;
@@ -2495,6 +4421,12 @@
             abandonDice();
             dice.seats = [];
             dice.over = false;
+            abandonStb();
+            stb.seats = [];
+            stb.over = false;
+            abandonBj();
+            bj.seats = [];
+            bj.over = false;
             activeGame = null;
             voiceReset();
         };
@@ -2509,7 +4441,7 @@
             lastEscape = Date.now();
             if ($("invite").classList.contains("open")) {
                 onDecline();
-            } else if ($("step-opponents").classList.contains("open") && $("menu").classList.contains("open")) {
+            } else if (($("step-opponents").classList.contains("open") || $("step-dealer").classList.contains("open")) && $("menu").classList.contains("open")) {
                 menuBack();
             } else {
                 requestClose();

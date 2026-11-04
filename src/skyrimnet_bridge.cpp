@@ -71,7 +71,7 @@ namespace SkyrimNetBridge
 
         // {{ minigame_state(actorUUID) }}: the game this actor is playing with the player, or "".
         if (PublicRegisterDecorator) {
-            PublicRegisterDecorator("minigame_state", "The mini game (Reversi, Liar's Dice...) this actor is playing with the player right now (empty if none)",
+            PublicRegisterDecorator("minigame_state", "The mini game (Reversi, Liar's Dice, Shut the Box, Blackjack...) this actor is playing with the player right now (empty if none)",
                 [](RE::Actor* a_actor) -> std::string {
                     if (!a_actor) {
                         return {};

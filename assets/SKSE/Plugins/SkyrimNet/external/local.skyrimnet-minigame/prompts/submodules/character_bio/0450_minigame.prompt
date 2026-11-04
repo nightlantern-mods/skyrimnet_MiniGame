@@ -1,4 +1,4 @@
-{# SkyrimNet MiniGame: the mini game (Reversi, Liar's Dice) this character is playing with the
+{# SkyrimNet MiniGame: the mini game (Reversi, Liar's Dice, Shut the Box, Blackjack) this character is playing with the
    player right now. minigame_state() comes from skyrimnet_MiniGame.dll and is "" when there is
    no game. In Liar's Dice it holds only this character's own dice. #}
 {% if render_mode == "full" or render_mode == "thoughts" or render_mode == "transform" %}

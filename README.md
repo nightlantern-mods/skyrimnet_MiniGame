@@ -1,14 +1,17 @@
-# SkyrimNet MiniGame 0.1.0
+# SkyrimNet MiniGame 0.1.1
 
 Play table games with the people around you. Open the menu, pick a game and your opponents
 from the NPCs nearby, and play on a board drawn over the game. SkyrimNet gives your opponents
 a voice: they talk about the game as it goes, know how it stands, and remember it afterwards.
 
-Two games so far:
+Four games so far:
 
 - **Reversi** (Othello) against one NPC, at four strengths.
 - **Liar's Dice** against one to three NPCs. Everyone hides five dice under a cup; in turn you
   raise the bid on how many dice around the table show a face, or call the last bid a lie.
+- **Shut the Box** against one to three NPCs. Roll the dice and shut the numbered tiles that add
+  up to the roll; the lowest score left wins.
+- **Blackjack** against one to three NPCs. You choose who deals, you or one of them, for the whole game.
 
 When a game starts, your opponents come over to stand in front of you, and their faces are
 photographed for the frames on the board.
@@ -63,6 +66,38 @@ flipped to yours. The player with more discs when the board is full wins. You ca
 The current bid is shown in the middle of the table. Every bid and call is spoken by one person
 at the table, and the game waits for each line before the next person moves.
 
+### Shut the Box
+
+- The tiles 1 to 9 start open. Each player plays one turn, in a random order.
+- Roll the dice and shut open tiles that add up to the roll. Click tiles to pick them; once they
+  make the roll, they shut. While 7, 8 or 9 is open you roll two dice, after that one.
+- Your turn ends when a roll cannot be made. The tiles left open are your score.
+- The lowest score wins, and a tie is shared. Shutting every tile wins at once.
+
+A line is spoken at the start, when someone is close to shutting the box and at the end of each
+turn, and the game waits for each one, so it plays faster than Liar's Dice.
+
+### Blackjack
+
+- When the game starts, you choose who deals: you or one of your opponents. The dealer stays the
+  same until the game ends, and plays against each of the others. There is one deck, shuffled
+  every round.
+- The dealer holds no chips and can always pay; only their running total is kept. The others
+  start with 100 chips each, and the most chips after the last round wins. A tie is shared.
+- Out of chips: a player is out, and the others play on (if it is you, you watch). If no player
+  has chips left, the game ends and the dealer wins.
+- Place your bet (10, 20 or 50) and take two cards. Hit, stand or double down on your first two
+  cards. Over 21 is a bust. Closest to 21 beats the dealer.
+- A two-card 21 is a blackjack and pays 3 to 2. A dealer's blackjack ends the round at once.
+- **When you deal**, you deal the cards and play your hand last, seeing everyone
+  else's. You must draw on 16 or less, and may choose on 17 or more. The NPC dealers have the same
+  choice.
+
+There is no splitting or insurance. The chips exist only for the game: no gold changes hands.
+
+A line is spoken at the start, at each deal, on a bust or a double, and at the end of each round,
+and the game waits for each one.
+
 ## SkyrimNet
 
 - **Commentary.** Each moment of a game is told to SkyrimNet as a narration from one opponent,
@@ -90,9 +125,12 @@ at the table, and the game waits for each line before the next person moves.
 | Reversi: your color | Black | Black, White, Random or Alternate. Black moves first. |
 | Reversi: show legal moves | On | |
 | Liar's Dice: opponent strength | 2 | Stronger opponents count the odds better and read your bids. |
+| Shut the Box: opponent strength | 2 | Stronger opponents pick the tiles that leave the best odds; a Master also plays to beat the lowest score so far. |
+| Blackjack: opponent strength | 2 | Stronger opponents play by the book, double down, bet up when behind late in the game and, as dealer, work out whether to draw on 17 or more. |
+| Blackjack: rounds in a game | 5 | 1 to 12. |
 | Commentary | On | Off: the games are silent. |
 | Commentary interval | 8 s | Reversi only: at most one remark on an ordinary move per this many seconds. |
-| Voice wait | 15 s | Liar's Dice waits for each line to be spoken; if nobody speaks for this long, the game moves on anyway. |
+| Voice wait | 15 s | Liar's Dice, Shut the Box and Blackjack wait for each line to be spoken; if nobody speaks for this long, the game moves on anyway. |
 | You speak your own bids | On | Liar's Dice: your bids and calls go through Transform Dialogue (one LLM request each). Off: only your opponents speak. |
 | NPCs may challenge you | On | The `Reversi_Challenge` action. |
 
@@ -105,6 +143,8 @@ at the table, and the game waits for each line before the next person moves.
   Organizer, in the overwrite folder) and deleted when the next one is taken or Skyrim
   starts. An opponent whose face cannot be seen (behind someone, off screen) gets their
   initial instead.
+- **Other mods' views.** If another mod's Prisma UI view takes the input from the board, the board
+  takes it back within a few seconds, and Esc closes it. A game in progress waits in the menu.
 - **Seated NPCs** get up to come over, and go back to what they were doing after the game.
 - If your character's lines leave the table waiting for the full *Voice wait* each time, turn
   *You speak your own bids* off and report it.
@@ -127,7 +167,7 @@ The repository holds the source; the release archives hold the built mod.
 | Folder | |
 |---|---|
 | `src/` | The SKSE plugin (C++23, [CommonLibSSE-NG](https://github.com/alandtse/CommonLibVR/tree/ng)). |
-| `view/` | The Prisma UI view: the menu, both games and their AI (one HTML file). |
+| `view/` | The Prisma UI view: the menu, the games and their AI (one HTML file). |
 | `translations/` | The English MCM texts (`mcm_en.tsv`). |
 | `tools/` | Node scripts that export the view's texts to `strings.json`, write the MCM translation files and check a translation against the English keys. |
 | `plugin/` | `skyrimnet_MiniGame.esp` as YAML (a quest that runs the MCM and the hotkey). |
@@ -140,9 +180,9 @@ texts, into the mod project.
 
 ## Files
 
-- `skyrimnet_MiniGame_0.1.0.zip`: the mod (English, usable with any game language), with
+- `skyrimnet_MiniGame_0.1.1.zip`: the mod (English, usable with any game language), with
   `THIRD_PARTY_NOTICES.txt` and `COPYING.txt` (see License).
-- `skyrimnet_MiniGame_0.1.0_Japanese.zip`: Japanese translation; install after the mod and let
+- `skyrimnet_MiniGame_0.1.1_Japanese.zip`: Japanese translation; install after the mod and let
   it overwrite.
 
 ## License

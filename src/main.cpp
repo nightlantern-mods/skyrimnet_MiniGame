@@ -11,7 +11,7 @@
 
 #include <nlohmann/json.hpp>
 
-// SkyrimNet MiniGame: mini games against nearby NPCs on a Prisma UI view (Reversi, Liar's Dice).
+// SkyrimNet MiniGame: mini games against nearby NPCs on a Prisma UI view (Reversi, Liar's Dice, Shut the Box, Blackjack).
 // The hotkey (MCM, skyrimnet_MiniGamePlayerAlias) calls skyrimnet_MiniGameNative.ToggleBoard(),
 // which opens the menu: pick a game, then the opponents from the NPCs nearby. The view runs the
 // games and their AI; this plugin lists the NPCs, opens and closes the view, passes the view's
@@ -27,6 +27,7 @@ namespace
     constexpr float kUnitsPerMetre = 70.0f;
 
     std::atomic<bool>       g_open = false;
+    std::atomic<bool>       g_pause = false;  // the open board pauses the game (MCM)
     std::atomic<RE::FormID> g_opponent = 0;  // the first NPC at the table: who speaks when the view names no one
 
     std::mutex              g_playersLock;
@@ -138,6 +139,70 @@ namespace
         PrismaUI->Hide(view);
     }
 
+    // The menus up right now, for the log.
+    std::string OpenMenus()
+    {
+        std::string names;
+        if (const auto ui = RE::UI::GetSingleton()) {
+            for (const auto& [name, entry] : ui->menuMap) {
+                if (entry.menu && entry.menu->OnStack()) {
+                    names += (names.empty() ? "" : ", ") + std::string(name.c_str());
+                }
+            }
+        }
+        return names;
+    }
+
+    // Whether Skyrim's window is the one in front.
+    bool GameInFront()
+    {
+        DWORD process = 0;
+        GetWindowThreadProcessId(GetForegroundWindow(), &process);
+        return process == GetCurrentProcessId();
+    }
+
+    // UI thread, twice a second while the board is open. Something else (another mod's view, a
+    // menu closing) can take the input focus from a board that stays on screen: it then reacts
+    // to nothing. So it takes the focus back, a moment later if another view reports having it.
+    // If it keeps losing it, the board closes rather than stay stuck; a game in progress waits.
+    void KeepFocus()
+    {
+        using clock = std::chrono::steady_clock;
+        static std::optional<clock::time_point> lostAt;
+        static std::vector<clock::time_point>   retaken;
+
+        if (!PrismaUI || !g_open || PrismaUI->HasFocus(view)) {
+            lostAt.reset();
+            return;
+        }
+        // not while the player is elsewhere, or over a game menu or a conversation
+        const auto ui = RE::UI::GetSingleton();
+        if (!GameInFront() || !ui || ui->GameIsPaused() || ui->IsMenuOpen(RE::DialogueMenu::MENU_NAME) ||
+            ui->IsMenuOpen(RE::Console::MENU_NAME) || ui->IsMenuOpen(RE::LoadingMenu::MENU_NAME)) {
+            return;
+        }
+        const auto now = clock::now();
+        const bool otherFocus = PrismaUI->HasAnyActiveFocus();
+        if (!lostAt) {
+            lostAt = now;
+            logger::warn("The board lost the input focus (a view reports focus: {}; menus: {})", otherFocus, OpenMenus());
+        }
+        if (otherFocus && now - *lostAt < 5s) {
+            return;
+        }
+        lostAt.reset();
+        std::erase_if(retaken, [&](const auto& a_time) { return now - a_time > 30s; });
+        if (retaken.size() >= 4) {
+            logger::warn("The board keeps losing the input focus; closing it");
+            retaken.clear();
+            CloseBoard();
+            return;
+        }
+        retaken.push_back(now);
+        const bool focused = PrismaUI->Focus(view, g_pause);
+        logger::info("The board took the input focus back: {}", focused);
+    }
+
     // The view's texts: the "view" object of SKSE/Plugins/skyrimnet_MiniGame/strings.json (a
     // translation mod overrides the file); the view has English built in for anything missing.
     // Read on every open, so an edited file needs no restart.
@@ -159,6 +224,9 @@ namespace
             { "hints", a_settings.hints },
             { "color", kColors[a_settings.color] },
             { "diceLevel", a_settings.diceDifficulty },
+            { "stbLevel", a_settings.stbDifficulty },
+            { "bjLevel", a_settings.bjDifficulty },
+            { "bjRounds", a_settings.bjRounds },
             { "voice", SkyrimNetBridge::CanNarrate() },
             { "playerVoice", SkyrimNetBridge::CanPlayerSay() },
             { "voiceWait", a_settings.voiceWaitSeconds },
@@ -175,6 +243,7 @@ namespace
             if (g_open.exchange(true)) {
                 return;
             }
+            g_pause = a_pause;
             PrismaUI->Show(view);
             Invoke(script);
             if (!PrismaUI->Focus(view, a_pause)) {
@@ -503,6 +572,8 @@ namespace
                     SKSE::GetTaskInterface()->AddUITask([]() {
                         if (g_open && PrismaUI->HasFocus(view)) {
                             Invoke("mgEscape()");
+                        } else {
+                            CloseBoard();  // it cannot hear the key: Esc still gets rid of it
                         }
                     });
                 }
@@ -611,6 +682,15 @@ static void SetUp()
         const auto script = "mgSpoke(" + spoke.dump(-1, ' ', false, nlohmann::json::error_handler_t::replace) + ")";
         SKSE::GetTaskInterface()->AddUITask([script]() { Invoke(script); });
     });
+    std::thread([]() {
+        for (;;) {
+            std::this_thread::sleep_for(500ms);
+            if (g_open) {
+                SKSE::GetTaskInterface()->AddUITask(KeepFocus);
+            }
+        }
+    }).detach();
+
     logger::info("Board ready");
 }
 

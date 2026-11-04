@@ -103,6 +103,53 @@
 		},
 		{
 			"type": "header",
+			"text": "$SNMG_HeaderShutTheBox"
+		},
+		{
+			"id": "iDifficulty:ShutTheBox",
+			"type": "slider",
+			"text": "$SNMG_StbDifficulty",
+			"help": "$SNMG_StbDifficultyHelp",
+			"valueOptions": {
+				"min": 1,
+				"max": 4,
+				"step": 1,
+				"formatString": "{0}",
+				"sourceType": "ModSettingInt"
+			}
+		},
+		{
+			"type": "header",
+			"text": "$SNMG_HeaderBlackjack"
+		},
+		{
+			"id": "iDifficulty:Blackjack",
+			"type": "slider",
+			"text": "$SNMG_BjDifficulty",
+			"help": "$SNMG_BjDifficultyHelp",
+			"valueOptions": {
+				"min": 1,
+				"max": 4,
+				"step": 1,
+				"formatString": "{0}",
+				"sourceType": "ModSettingInt"
+			}
+		},
+		{
+			"id": "iRounds:Blackjack",
+			"type": "slider",
+			"text": "$SNMG_BjRounds",
+			"help": "$SNMG_BjRoundsHelp",
+			"valueOptions": {
+				"min": 1,
+				"max": 12,
+				"step": 1,
+				"formatString": "{0}",
+				"sourceType": "ModSettingInt"
+			}
+		},
+		{
+			"type": "header",
 			"text": "$SNMG_HeaderSkyrimNet"
 		},
 		{

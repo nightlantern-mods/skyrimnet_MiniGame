@@ -22,14 +22,22 @@ $SNMG_PauseGameHelp	The game stops while the board is open. NPCs cannot speak wh
 $SNMG_HeaderLiarsDice	Liar's Dice
 $SNMG_DiceDifficulty	Opponent strength
 $SNMG_DiceDifficultyHelp	1 Beginner / 2 Normal / 3 Strong / 4 Master. Stronger opponents count the odds better and read your bids. Applies from the next game.
+$SNMG_HeaderShutTheBox	Shut the Box
+$SNMG_StbDifficulty	Opponent strength
+$SNMG_StbDifficultyHelp	1 Beginner / 2 Normal / 3 Strong / 4 Master. Stronger opponents pick the tiles that leave the best odds; a Master also plays to beat the lowest score so far. Applies from the next game.
+$SNMG_HeaderBlackjack	Blackjack
+$SNMG_BjDifficulty	Opponent strength
+$SNMG_BjDifficultyHelp	1 Beginner / 2 Normal / 3 Strong / 4 Master. Stronger opponents play by the book, double down, bet up when behind late in the game and, as dealer, work out whether to draw on 17 or more. Applies from the next game.
+$SNMG_BjRounds	Rounds in a game
+$SNMG_BjRoundsHelp	The game ends after this many rounds, or sooner if every player runs out of chips. You choose who deals when the game starts, and the dealer stays the same until it ends. The dealer holds no chips and can always pay. Most chips among the players wins. Applies from the next game.
 $SNMG_HeaderSkyrimNet	SkyrimNet
 $SNMG_Commentary	Commentary
-$SNMG_CommentaryHelp	Tells SkyrimNet about the game so your opponents talk. Reversi: the start, the end (declaring victory or conceding defeat), resigning, corners, big flips, risky moves, comebacks and ordinary moves. Liar's Dice: every bid and call, each said by one person at the table, and the game waits for the line.
+$SNMG_CommentaryHelp	Tells SkyrimNet about the game so your opponents talk. Reversi: the start, the end (declaring victory or conceding defeat), resigning, corners, big flips, risky moves, comebacks and ordinary moves. Liar's Dice: every bid and call, each said by one person at the table, and the game waits for the line. Shut the Box: the start, a close finish and the end of each turn, and the game waits for the line. Blackjack: the start, each deal, busts, doubles and the end of each round, and the game waits for the line.
 $SNMG_Cooldown	Commentary interval (seconds)
-$SNMG_CooldownHelp	Reversi: at most one remark on an ordinary move per this many seconds; striking moves such as corners and comebacks wait half as long. The start, the end and resigning always go through. Lower means more talk. (Liar's Dice paces itself by the voice instead.)
+$SNMG_CooldownHelp	Reversi: at most one remark on an ordinary move per this many seconds; striking moves such as corners and comebacks wait half as long. The start, the end and resigning always go through. Lower means more talk. (Liar's Dice, Shut the Box and Blackjack pace themselves by the voice instead.)
 $SNMG_Challenge	NPCs may challenge you
 $SNMG_ChallengeHelp	Lets an NPC challenge you to Reversi in conversation (the SkyrimNet action Reversi_Challenge). The board opens with the challenge, and you can accept or decline.
 $SNMG_VoiceWait	Voice wait (seconds)
-$SNMG_VoiceWaitHelp	Liar's Dice waits for each line to be spoken before the next person acts. If nobody speaks within this many seconds, the game moves on anyway.
+$SNMG_VoiceWaitHelp	Liar's Dice, Shut the Box and Blackjack wait for each line to be spoken before the next person acts. If nobody speaks within this many seconds, the game moves on anyway.
 $SNMG_PlayerVoice	You speak your own bids
 $SNMG_PlayerVoiceHelp	Liar's Dice: your bids and your "Liar!" calls go through SkyrimNet's Transform Dialogue, so your character says them aloud in their own words (one LLM request each). Off: only your opponents speak, and the next one mentions your bid.
