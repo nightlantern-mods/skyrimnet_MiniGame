@@ -24,7 +24,7 @@ photographed for the frames on the board.
 | [SKSE64](https://skse.silverlock.org/) | |
 | [Address Library for SKSE Plugins](https://www.nexusmods.com/skyrimspecialedition/mods/32444) | |
 | [Prisma UI](https://www.nexusmods.com/skyrimspecialedition/mods/148718) | Draws the board. Tested on 1.5.1. |
-| [SkyrimNet](https://github.com/MinLL/SkyrimNet-GamePlugin) | Tested on beta 28. The games also run without it, but then nobody talks. |
+| [SkyrimNet](https://github.com/MinLL/SkyrimNet-GamePlugin) | Beta 28 or later. The games also run without it, but then nobody talks. |
 | [SkyUI](https://www.nexusmods.com/skyrimspecialedition/mods/12604) | |
 | [MCM Helper](https://www.nexusmods.com/skyrimspecialedition/mods/53000) | The settings menu and the hotkey. |
 
