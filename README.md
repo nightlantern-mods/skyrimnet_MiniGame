@@ -1,4 +1,4 @@
-# SkyrimNet MiniGame 0.1.1
+# SkyrimNet MiniGame 0.1.2
 
 Play table games with the people around you. Open the menu, pick a game and your opponents
 from the NPCs nearby, and play on a board drawn over the game. SkyrimNet gives your opponents
@@ -120,6 +120,7 @@ and the game waits for each one.
 | Open / close the menu | K | The hotkey. |
 | Opponent search range | 1500 | How far away people can be to appear in the opponent list, in game units (70 is about a metre). |
 | Call opponents over | On | Opponents come to stand in front of you for the photo in their face frames. Off: nobody moves, and only faces already on screen are shown. |
+| Face photos | On | A screenshot for the face frames when a game starts. Off: no screenshot, and the frames show initials. Turn this off if the game crashes or freezes when a mini game starts. With ENB or Skyrim Upscaler there is never a photo, since saving it crashes the game. |
 | Pause the game while playing | Off | NPCs cannot speak while the game is paused, so leave this off to hear them. |
 | Reversi: opponent strength | 2 | 1 Beginner, 2 Normal, 3 Strong, 4 Master. |
 | Reversi: your color | Black | Black, White, Random or Alternate. Black moves first. |
@@ -145,6 +146,8 @@ and the game waits for each one.
   initial instead.
 - **Other mods' views.** If another mod's Prisma UI view takes the input from the board, the board
   takes it back within a few seconds, and Esc closes it. A game in progress waits in the menu.
+- **ENB and Skyrim Upscaler.** With either of them installed, saving the photo crashes the game,
+  so there is no photo: the frames show initials. The log says so at startup.
 - **Seated NPCs** get up to come over, and go back to what they were doing after the game.
 - If your character's lines leave the table waiting for the full *Voice wait* each time, turn
   *You speak your own bids* off and report it.
@@ -180,9 +183,9 @@ texts, into the mod project.
 
 ## Files
 
-- `skyrimnet_MiniGame_0.1.1.zip`: the mod (English, usable with any game language), with
+- `skyrimnet_MiniGame_0.1.2.zip`: the mod (English, usable with any game language), with
   `THIRD_PARTY_NOTICES.txt` and `COPYING.txt` (see License).
-- `skyrimnet_MiniGame_0.1.1_Japanese.zip`: Japanese translation; install after the mod and let
+- `skyrimnet_MiniGame_0.1.2_Japanese.zip`: Japanese translation; install after the mod and let
   it overwrite.
 
 ## License

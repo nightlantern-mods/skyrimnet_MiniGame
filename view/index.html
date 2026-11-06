@@ -4042,13 +4042,17 @@
         // (mgGather), clears for the shot with the board out of the way (mgUncover), and each face
         // is cropped out of the photo (mgFaces). Without a face, the frame shows an initial.
         let gatherOn = true;
+        let photoOn = true;       // MCM: without the photo, the frames show initials
         let faces = {};           // id -> {file, x, y, w, h}: the crop, as fractions of the photo
         let speaking = {};        // id -> until when (performance.now) the frame lights up
         let snapping = null;      // the photo being taken: {done}
 
         function snapFaces(ids, then) {
-            if (typeof window.mgGather !== "function") {
-                then();           // a plain browser
+            if (!photoOn) {
+                faces = {};
+            }
+            if (typeof window.mgGather !== "function" || (!photoOn && !gatherOn)) {
+                then();           // a plain browser, or nothing to do first
                 return;
             }
             const job = {
@@ -4369,6 +4373,7 @@
             voiceOn = !!opts.voice;
             playerVoice = !!opts.playerVoice;
             gatherOn = opts.gather !== false;
+            photoOn = opts.facePhoto !== false;
             voiceWait = opts.voiceWait || voiceWait;
         }
 

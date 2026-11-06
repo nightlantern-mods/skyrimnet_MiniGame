@@ -40,6 +40,15 @@
 			}
 		},
 		{
+			"id": "bFacePhoto:General",
+			"type": "toggle",
+			"text": "$SNMG_FacePhoto",
+			"help": "$SNMG_FacePhotoHelp",
+			"valueOptions": {
+				"sourceType": "ModSettingBool"
+			}
+		},
+		{
 			"id": "bPauseGame:General",
 			"type": "toggle",
 			"text": "$SNMG_PauseGame",

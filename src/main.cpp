@@ -28,6 +28,9 @@ namespace
 
     std::atomic<bool>       g_open = false;
     std::atomic<bool>       g_pause = false;  // the open board pauses the game (MCM)
+    // Saving the frame crashes the game with some graphics mods (seen with ENB and Skyrim
+    // Upscaler, inside the game's own save): no photo then.
+    bool                    g_photoUnsafe = false;
     std::atomic<RE::FormID> g_opponent = 0;  // the first NPC at the table: who speaks when the view names no one
 
     std::mutex              g_playersLock;
@@ -231,6 +234,7 @@ namespace
             { "playerVoice", SkyrimNetBridge::CanPlayerSay() },
             { "voiceWait", a_settings.voiceWaitSeconds },
             { "gather", a_settings.gather },
+            { "facePhoto", a_settings.facePhoto && !g_photoUnsafe },
             { "strings", LoadViewStrings() },
         };
     }
@@ -410,8 +414,11 @@ namespace
         const auto      name = std::format("face_{}.jpg", n);
         std::error_code ec;
         std::filesystem::remove(std::format("{}/face_{}.jpg", kViewFolder, n - 1), ec);
+        // the logs around the save show whether a crash at the start of a game is in it
+        logger::info("saving the photo {}", name);
         RE::BSGraphics::Renderer::GetSingleton()->SaveRenderTargetToFile(RE::RENDER_TARGETS::kFRAMEBUFFER,
             std::format("{}/{}", kViewFolder, name).c_str(), RE::BSGraphics::TextureFileFormat::kJPG);
+        logger::info("saved the photo {}", name);
         if (const auto ui = RE::UI::GetSingleton()) {
             ui->ShowMenus(true);
         }
@@ -442,6 +449,11 @@ namespace
                 }
                 SKSE::GetTaskInterface()->AddTask([ids]() { GatherOpponents(LookUpActors(ids)); });
                 std::this_thread::sleep_for(700ms);  // they land and turn
+            }
+            if (!Settings::Get().facePhoto || g_photoUnsafe) {
+                logger::info("no photo ({})", g_photoUnsafe ? "a graphics mod that crashes it" : "MCM");
+                SKSE::GetTaskInterface()->AddUITask([]() { Invoke("mgFaces({})"); });
+                return;
             }
             SKSE::GetTaskInterface()->AddUITask([]() { Invoke("mgUncover()"); });
             SKSE::GetTaskInterface()->AddTask([ids, gather = Settings::Get().gather]() {
@@ -690,6 +702,12 @@ static void SetUp()
             }
         }
     }).detach();
+
+    const auto d3d11 = GetModuleHandleW(L"d3d11.dll");
+    const bool enb = d3d11 && GetProcAddress(d3d11, "ENBGetSDKVersion");
+    const bool upscaler = GetModuleHandleW(L"SkyrimUpscaler.dll") != nullptr;
+    g_photoUnsafe = enb || upscaler;
+    logger::info("ENB: {}, Skyrim Upscaler: {}; face photos {}", enb, upscaler, g_photoUnsafe ? "off" : "on");
 
     logger::info("Board ready");
 }

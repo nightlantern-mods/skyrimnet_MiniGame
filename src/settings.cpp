@@ -72,6 +72,7 @@ namespace Settings
         v.pauseGame = ToInt(ini, "General:bPauseGame", v.pauseGame) != 0;
         v.scanRadius = std::clamp(ToInt(ini, "General:iScanRadius", v.scanRadius), 300, 6000);
         v.gather = ToInt(ini, "General:bGather", v.gather) != 0;
+        v.facePhoto = ToInt(ini, "General:bFacePhoto", v.facePhoto) != 0;
         v.diceDifficulty = std::clamp(ToInt(ini, "LiarsDice:iDifficulty", v.diceDifficulty), 1, 4);
         v.stbDifficulty = std::clamp(ToInt(ini, "ShutTheBox:iDifficulty", v.stbDifficulty), 1, 4);
         v.bjDifficulty = std::clamp(ToInt(ini, "Blackjack:iDifficulty", v.bjDifficulty), 1, 4);

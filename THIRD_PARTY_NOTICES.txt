@@ -16,8 +16,8 @@ How this mod is licensed
   https://www.gnu.org/licenses/gpl-3.0.txt.
 
 - Corresponding Source of the DLL:
-    * this mod's source, version 0.1.1:
-      https://github.com/nightlantern-mods/skyrimnet_MiniGame (tag v0.1.1 and the main branch);
+    * this mod's source, version 0.1.2:
+      https://github.com/nightlantern-mods/skyrimnet_MiniGame (tag v0.1.2 and the main branch);
     * CommonLibSSE NG 7.5.4, built from source with this mod:
       https://github.com/alandtse/CommonLibSSE-NG/tree/v7.5.4;
     * the other libraries listed below, at the versions given (pinned in xmake-requires.lock in
