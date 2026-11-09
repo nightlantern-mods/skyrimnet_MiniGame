@@ -17,6 +17,8 @@ namespace Settings
         int  stbDifficulty = 2;   // Shut the Box: 1 beginner .. 4 master
         int  bjDifficulty = 2;    // Blackjack: 1 beginner .. 4 master
         int  bjRounds = 5;        // Blackjack: rounds in a game
+        int  pokerDifficulty = 2;  // Texas Hold'em: 1 beginner .. 4 master
+        int  pokerHands = 10;      // Texas Hold'em: hands in a game at most
         bool commentary = true;
         int  cooldownSeconds = 8;
         int  voiceWaitSeconds = 15;  // a paced game moves on when the speaker stays silent this long

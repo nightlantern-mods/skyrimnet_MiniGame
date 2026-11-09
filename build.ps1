@@ -8,7 +8,11 @@ try {
     & 'C:\Program Files\xmake\xmake.exe' build -y
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
     Copy-Item build\windows\x64\release\skyrimnet_MiniGame.dll "$project\SKSE\Plugins\" -Force
-    Copy-Item view\* "$project\PrismaUI\views\skyrimnet_MiniGame\" -Force
+    # the same page, where each UI host looks for it (Prisma UI / Magelight UI)
+    foreach ($views in "$project\PrismaUI\views\skyrimnet_MiniGame", "$project\Magelight\skyrimnet_MiniGame\views") {
+        New-Item -ItemType Directory -Force $views | Out-Null
+        Copy-Item view\* "$views\" -Force
+    }
     node tools\export_strings.js "$project\SKSE\Plugins\skyrimnet_MiniGame\strings.json"
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
     node tools\make_translation.js translations\mcm_en.tsv "$project\Interface\Translations\skyrimnet_MiniGame_ENGLISH.txt"

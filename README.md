@@ -1,10 +1,10 @@
-# SkyrimNet MiniGame 0.1.2
+# SkyrimNet MiniGame 0.2.0
 
 Play table games with the people around you. Open the menu, pick a game and your opponents
 from the NPCs nearby, and play on a board drawn over the game. SkyrimNet gives your opponents
 a voice: they talk about the game as it goes, know how it stands, and remember it afterwards.
 
-Four games so far:
+Five games so far:
 
 - **Reversi** (Othello) against one NPC, at four strengths.
 - **Liar's Dice** against one to three NPCs. Everyone hides five dice under a cup; in turn you
@@ -12,6 +12,8 @@ Four games so far:
 - **Shut the Box** against one to three NPCs. Roll the dice and shut the numbered tiles that add
   up to the roll; the lowest score left wins.
 - **Blackjack** against one to three NPCs. You choose who deals, you or one of them, for the whole game.
+- **Texas Hold'em** against one to three NPCs. No-limit poker, and each opponent plays in a way that
+  fits who they are.
 
 When a game starts, your opponents come over to stand in front of you, and their faces are
 photographed for the frames on the board.
@@ -23,7 +25,7 @@ photographed for the frames on the board.
 | Skyrim Special Edition / Anniversary Edition | Built and tested on 1.6.1170. |
 | [SKSE64](https://skse.silverlock.org/) | |
 | [Address Library for SKSE Plugins](https://www.nexusmods.com/skyrimspecialedition/mods/32444) | |
-| [Prisma UI](https://www.nexusmods.com/skyrimspecialedition/mods/148718) | Draws the board. Tested on 1.5.1. |
+| [Magelight UI](https://www.nexusmods.com/skyrimspecialedition/mods/193303) 1.0 or later, **or** [Prisma UI](https://www.nexusmods.com/skyrimspecialedition/mods/148718) | Draws the board. One of the two is enough; with both installed, Magelight UI is used. Tested on Magelight UI 1.7.1 and Prisma UI 1.5.1. The log says which one is in use. |
 | [SkyrimNet](https://github.com/MinLL/SkyrimNet-GamePlugin) | Beta 28 or later. The games also run without it, but then nobody talks. |
 | [SkyUI](https://www.nexusmods.com/skyrimspecialedition/mods/12604) | |
 | [MCM Helper](https://www.nexusmods.com/skyrimspecialedition/mods/53000) | The settings menu and the hotkey. |
@@ -98,6 +100,23 @@ There is no splitting or insurance. The chips exist only for the game: no gold c
 A line is spoken at the start, at each deal, on a bust or a double, and at the end of each round,
 and the game waits for each one.
 
+### Texas Hold'em
+
+- No-limit, blinds of 5 and 10, everyone starting with 200 chips. The game ends after the number of
+  hands set in the MCM (10 by default) or when one player has all the chips; the most chips wins.
+- Each player holds two cards; five more come up on the table over the flop, the turn and the
+  river. Fold, check, call, bet, raise or go all in; side pots are kept for all-ins.
+- **How each opponent plays comes from their character.** When the game starts, SkyrimNet reads
+  each opponent's profile and decides whether they play tight or loose, bold or cautious, and how
+  often they bluff (one LLM request each, with the prompt `skyrimnet_minigame_poker_style`). The
+  board shows it under their name, and their own prompt knows it, so they talk the way they play.
+  If no answer comes, they play a middling game.
+- The opponent strength in the MCM is their skill: how well they judge their chances and the pot
+  odds. A Master also reads how the others play.
+
+A line is spoken at the start, on bets, raises and all-ins, and at the end of each hand, and the
+game waits for each one.
+
 ## SkyrimNet
 
 - **Commentary.** Each moment of a game is told to SkyrimNet as a narration from one opponent,
@@ -106,8 +125,9 @@ and the game waits for each one.
 - **They know the game.** While they play, each opponent's prompt holds the state of the game
   (the `minigame_state` decorator, used by the bundled prompt `0450_minigame.prompt`). In Liar's
   Dice an opponent sees only their own dice, keeps them secret and may bluff.
-- **You speak your own bids** (Liar's Dice, MCM option). Your bids and "Liar!" calls go through
-  SkyrimNet's Transform Dialogue, so your character says them aloud in their own words.
+- **You speak your own moves** (Liar's Dice and Texas Hold'em, MCM option). Your bids and "Liar!"
+  calls, and your folds, checks, calls, bets and raises, go through SkyrimNet's Transform
+  Dialogue, so your character says them aloud in their own words.
 - **Challenges.** An NPC may challenge you to Reversi in conversation (the action
   `Reversi_Challenge`). The board opens with the challenge, and you can accept or decline.
 - Opponents are marked busy in SkyrimNet while a game is played, so they are not pulled into
@@ -129,10 +149,12 @@ and the game waits for each one.
 | Shut the Box: opponent strength | 2 | Stronger opponents pick the tiles that leave the best odds; a Master also plays to beat the lowest score so far. |
 | Blackjack: opponent strength | 2 | Stronger opponents play by the book, double down, bet up when behind late in the game and, as dealer, work out whether to draw on 17 or more. |
 | Blackjack: rounds in a game | 5 | 1 to 12. |
+| Texas Hold'em: opponent strength | 2 | How well they judge their chances and the pot odds. How each one plays comes from their character. |
+| Texas Hold'em: hands in a game | 10 | 5 to 50. |
 | Commentary | On | Off: the games are silent. |
 | Commentary interval | 8 s | Reversi only: at most one remark on an ordinary move per this many seconds. |
-| Voice wait | 15 s | Liar's Dice, Shut the Box and Blackjack wait for each line to be spoken; if nobody speaks for this long, the game moves on anyway. |
-| You speak your own bids | On | Liar's Dice: your bids and calls go through Transform Dialogue (one LLM request each). Off: only your opponents speak. |
+| Voice wait | 15 s | Liar's Dice, Shut the Box, Blackjack and Texas Hold'em wait for each line to be spoken; if nobody speaks for this long, the game moves on anyway. |
+| You speak your own moves | On | Liar's Dice: your bids and calls; Texas Hold'em: your folds, checks, calls, bets and raises. They go through Transform Dialogue (one LLM request each). Off: only your opponents speak. |
 | NPCs may challenge you | On | The `Reversi_Challenge` action. |
 
 ## Notes and limits
@@ -140,17 +162,18 @@ and the game waits for each one.
 - **Liar's Dice takes its time.** Every bid is spoken before the next one, so a game of four
   players can last a while, longer still once you are out and only NPCs play.
 - **The face photo** is a screenshot of the game: the board steps aside for a moment and the HUD
-  is hidden. It is saved as `PrismaUI/views/skyrimnet_MiniGame/face_N.jpg` under Data (in Mod
-  Organizer, in the overwrite folder) and deleted when the next one is taken or Skyrim
-  starts. An opponent whose face cannot be seen (behind someone, off screen) gets their
+  is hidden. It is saved next to the board's page under Data (`Magelight/skyrimnet_MiniGame/views/face_N.jpg`
+  or `PrismaUI/views/skyrimnet_MiniGame/face_N.jpg`; in Mod Organizer, in the overwrite folder)
+  and deleted when the next one is taken or Skyrim starts. An opponent whose face cannot be seen (behind someone, off screen) gets their
   initial instead.
-- **Other mods' views.** If another mod's Prisma UI view takes the input from the board, the board
+- **Other mods' views.** If another mod's web view takes the input from the board, the board
   takes it back within a few seconds, and Esc closes it. A game in progress waits in the menu.
+  On Magelight UI, its toggle key (Page Up by default) closes the board as well.
 - **ENB and Skyrim Upscaler.** With either of them installed, saving the photo crashes the game,
   so there is no photo: the frames show initials. The log says so at startup.
 - **Seated NPCs** get up to come over, and go back to what they were doing after the game.
 - If your character's lines leave the table waiting for the full *Voice wait* each time, turn
-  *You speak your own bids* off and report it.
+  *You speak your own moves* off and report it.
 
 ## Uninstalling
 
@@ -170,7 +193,7 @@ The repository holds the source; the release archives hold the built mod.
 | Folder | |
 |---|---|
 | `src/` | The SKSE plugin (C++23, [CommonLibSSE-NG](https://github.com/alandtse/CommonLibVR/tree/ng)). |
-| `view/` | The Prisma UI view: the menu, the games and their AI (one HTML file). |
+| `view/` | The board's web page: the menu, the games and their AI (one HTML file). The build copies it to where Magelight UI and Prisma UI each look for it. |
 | `translations/` | The English MCM texts (`mcm_en.tsv`). |
 | `tools/` | Node scripts that export the view's texts to `strings.json`, write the MCM translation files and check a translation against the English keys. |
 | `plugin/` | `skyrimnet_MiniGame.esp` as YAML (a quest that runs the MCM and the hotkey). |
@@ -183,9 +206,9 @@ texts, into the mod project.
 
 ## Files
 
-- `skyrimnet_MiniGame_0.1.2.zip`: the mod (English, usable with any game language), with
+- `skyrimnet_MiniGame_0.2.0.zip`: the mod (English, usable with any game language), with
   `THIRD_PARTY_NOTICES.txt` and `COPYING.txt` (see License).
-- `skyrimnet_MiniGame_0.1.2_Japanese.zip`: Japanese translation; install after the mod and let
+- `skyrimnet_MiniGame_0.2.0_Japanese.zip`: Japanese translation; install after the mod and let
   it overwrite.
 
 ## License
@@ -207,5 +230,6 @@ Third-party code, with the full license texts in [THIRD_PARTY_NOTICES.txt](THIRD
 - The SkyrimNet API headers in `src/skyrimnet/`: MIT, Fateless.Ai (see the LICENSE there).
 - `src/PrismaUI_API.h`: the Prisma UI modder API header, which modders may copy into their
   projects.
+- `src/MagelightUI_API.h`: the Magelight UI API header, MIT, Severause.
 - nlohmann/json 3.12.0, spdlog 1.16.0, DirectXMath, DirectX Tool Kit and rapidcsv: MIT, or
   BSD-3-Clause for rapidcsv.

@@ -77,6 +77,8 @@ namespace Settings
         v.stbDifficulty = std::clamp(ToInt(ini, "ShutTheBox:iDifficulty", v.stbDifficulty), 1, 4);
         v.bjDifficulty = std::clamp(ToInt(ini, "Blackjack:iDifficulty", v.bjDifficulty), 1, 4);
         v.bjRounds = std::clamp(ToInt(ini, "Blackjack:iRounds", v.bjRounds), 1, 12);
+        v.pokerDifficulty = std::clamp(ToInt(ini, "Poker:iDifficulty", v.pokerDifficulty), 1, 4);
+        v.pokerHands = std::clamp(ToInt(ini, "Poker:iHands", v.pokerHands), 5, 50);
         v.commentary = ToInt(ini, "SkyrimNet:bCommentary", v.commentary) != 0;
         v.cooldownSeconds = std::clamp(ToInt(ini, "SkyrimNet:iCooldown", v.cooldownSeconds), 0, 600);
         v.voiceWaitSeconds = std::clamp(ToInt(ini, "SkyrimNet:iVoiceWait", v.voiceWaitSeconds), 3, 60);

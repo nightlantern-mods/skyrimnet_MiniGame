@@ -772,7 +772,8 @@
         }
 
         #bj-deal,
-        #bj-next {
+        #bj-next,
+        #pk-next {
             flex: none;
             width: 100%;
             margin-top: 8px;
@@ -784,7 +785,8 @@
             margin-top: 8px;
         }
 
-        #bj-seats .face {
+        #bj-seats .face,
+        #pk-seats .face {
             width: 150px;
             height: 150px;
             font-size: 60px;
@@ -1019,6 +1021,49 @@
         </div>
     </div>
 
+    <div class="panel" id="pk">
+        <div class="table">
+            <div class="seats" id="pk-seats"></div>
+            <div class="bid-box">
+                <div class="bid-label" id="pk-label"></div>
+                <div class="hand" id="pk-board"></div>
+            </div>
+            <div class="mine" id="pk-mine">
+                <div class="seat-name" id="pk-mine-name"></div>
+                <div class="hand" id="pk-mine-hand"></div>
+                <div class="seat-meta" id="pk-mine-meta"></div>
+            </div>
+        </div>
+
+        <div class="side">
+            <h1 data-s="pkTitle">Texas Hold'em</h1>
+            <div class="meta" data-s="pkRules"></div>
+            <div class="meta" id="pk-meta"></div>
+            <div class="status" id="pk-status"></div>
+            <div id="pk-moves">
+                <div class="toolbar">
+                    <button class="danger" id="pk-fold" onclick="onPkFold()" data-s="pkFold">Fold</button>
+                    <button class="primary" id="pk-call" onclick="onPkCall()">Check</button>
+                </div>
+                <div class="ctl-row" id="pk-raise-row">
+                    <button class="mini" id="pk-raise-down" onclick="adjustPkRaise(-1)">−</button>
+                    <button class="primary" id="pk-raise" onclick="onPkRaise()">Raise</button>
+                    <button class="mini" id="pk-raise-up" onclick="adjustPkRaise(1)">+</button>
+                </div>
+                <div class="toolbar">
+                    <button id="pk-allin" onclick="onPkAllIn()">All-in</button>
+                </div>
+            </div>
+            <button class="primary" id="pk-next" onclick="onPkNext()" data-s="pkNextHand">Next hand</button>
+            <div class="log" id="pk-log"></div>
+            <div class="toolbar">
+                <button id="pk-leave" class="danger" onclick="onPkLeave()">Leave</button>
+                <button id="pk-again" class="primary" onclick="onPkAgain()" style="display: none;" data-s="again">Play again</button>
+                <button onclick="requestClose()" data-s="close">Close (Esc)</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // ===== text =====
 
@@ -1048,6 +1093,8 @@
             gameStbDesc: "Up to three opponents. Roll the dice and shut the numbered tiles; the fewest points left wins.",
             gameBj: "Blackjack",
             gameBjDesc: "Up to three opponents. Choose who deals, you or one of them, for the whole game. Closest to 21 wins.",
+            gamePk: "Texas Hold'em",
+            gamePkDesc: "Up to three opponents. No-limit poker: each opponent plays in their own way, read from who they are.",
             listComma: ", ",
             listAnd: " and ",
 
@@ -1298,6 +1345,96 @@
             bjStatePaused: " The cards are set aside for now; the game is paused.",
             bjStateResult: "{npc} has just finished a game of Blackjack with {others}. Result: {result}. Chips: {chips}.",
             bjStateLeft: "{npc} was playing Blackjack with {others}, but {player} left the table before it ended.",
+
+            // Texas Hold'em
+            pkTitle: "Texas Hold'em",
+            pkRules: "No-limit, blinds of 5 and 10, 200 chips each. Two cards of your own and five on the table: the best five cards win. Most chips at the end wins.",
+            pkFold: "Fold",
+            pkCheck: "Check",
+            pkCall: "Call {n}",
+            pkCallAllIn: "Call {n} (all-in)",
+            pkBet: "Bet {n}",
+            pkRaise: "Raise to {n}",
+            pkAllIn: "All-in ({n})",
+            pkHandLabel: "Hand {h} of {n} · Pot {pot}",
+            pkFolded: "Folded",
+            pkAllInMark: "All-in",
+            pkDealer: "Dealer",
+            pkYourTurn: "Your turn: {n} to call.",
+            pkYourTurnFree: "Your turn: check or bet.",
+            pkReading: "Reading how everyone plays…",
+            pkStyleReading: "Reading…",
+            pkStyleBold: "Bold",
+            pkStyleCautious: "Cautious",
+            pkStyleTight: "Tight",
+            pkStyleLoose: "Loose",
+            pkStyleBluffOften: "Bluffs often",
+            pkStyleBluffRare: "Rarely bluffs",
+            pkStyleSteady: "Steady",
+            pkStyleSep: " · ",
+            pkHand0: "high card",
+            pkHand1: "a pair",
+            pkHand2: "two pair",
+            pkHand3: "three of a kind",
+            pkHand4: "a straight",
+            pkHand5: "a flush",
+            pkHand6: "a full house",
+            pkHand7: "four of a kind",
+            pkHand8: "a straight flush",
+            pkHandRoyal: "a royal flush",
+            pkSuit0: "spades",
+            pkSuit1: "hearts",
+            pkSuit2: "diamonds",
+            pkSuit3: "clubs",
+            pkCardName: "{rank} of {suit}",
+            pkFlop: "Flop",
+            pkTurn: "Turn",
+            pkRiver: "River",
+            pkLogHand: "Hand {h} of {n}: {who} deals",
+            pkLogBlinds: "{sb} posts {s}, {bb} posts {b}",
+            pkLogFold: "{who}: fold",
+            pkLogCheck: "{who}: check",
+            pkLogCall: "{who}: call {n}",
+            pkLogBet: "{who}: bet {n}",
+            pkLogRaise: "{who}: raise to {n}",
+            pkLogAllIn: "{who}: all-in ({n})",
+            pkLogBoard: "{street}: {cards}",
+            pkLogWin: "{who} wins {n}{hand}",
+            pkLogStyle: "{who} plays: {style}",
+            pkLogStyleDefault: "{who} plays: steady (no reading from SkyrimNet)",
+            pkResultWin: "{name} wins {n} with {hand}",
+            pkResultTake: "{name} takes the pot of {n}",
+            pkStart: "{player} sits down with {npcs} for a game of Texas Hold'em: no-limit, blinds of {small} and {big}, everyone starting with {chips} chips, for at most {n} hands. Each player holds two cards of their own, five more are dealt face up for everyone, and the best five cards take the pot unless everyone else folds first.",
+            pkBetLine: "In the poker game, {who} bets {n}. The pot is now {pot}.",
+            pkRaiseLine: "In the poker game, {who} raises to {n}. The pot is now {pot}.",
+            pkAllInLine: "In the poker game, {who} goes all in for {n}! The pot is now {pot}.",
+            // the player's own moves, said in their words (MCM: playerVoice)
+            pPkFold: "In the poker game, I fold.",
+            pPkCheck: "In the poker game, I check.",
+            pPkCall: "In the poker game, I call {n}.",
+            pPkBet: "In the poker game, I bet {n}.",
+            pPkRaise: "In the poker game, I raise to {n}.",
+            pPkAllIn: "In the poker game, I go all in for {n}!",
+            pkShows: "{name} shows {cards} for {hand}",
+            pkShowdownLine: "In the poker game, hand {h} comes to a showdown with {board} on the table. {shows}. {results}.",
+            pkFoldWinLine: "In the poker game, everyone else folds, and {who} takes the pot of {n} without showing their cards.",
+            pkOut: " {names} has no chips left and is out.",
+            pkEndPlayerWins: " The game is over: {player} wins with {chips} chips. {npc} admits defeat and concedes the game to {player}.",
+            pkEndNpcWins: " The game is over: {npc} wins with {chips} chips. {npc} proudly declares victory.",
+            pkEndTie: " The game is over: {names} tie with {chips} chips. {npc} says something about the shared win.",
+            pkLeave: "{player} gets up and leaves the poker game before it is finished.",
+            pkStopWatching: "{player}, already out of the poker game, stops watching and gets up before the others have finished.",
+            pkState: "{npc} is playing Texas Hold'em with {others}, hand {h} of {n}. Chips: {chips}.",
+            pkStateStyle: " {npc}'s way of playing: {style}.",
+            pkStateCards: " {npc}'s own two cards are {cards}; only {npc} has seen them, keeps them secret and may bluff.",
+            pkStateFolded: " {npc} has folded this hand.",
+            pkStateOut: " {npc} is out of chips and watches the rest.",
+            pkStateBoard: " On the table: {board}. The pot is {pot}, and the bet to match is {bet}.",
+            pkStateNoBoard: " No cards are on the table yet. The pot is {pot}, and the bet to match is {bet}.",
+            pkStatePaused: " The cards are set aside for now; the game is paused.",
+            pkStateResult: "{npc} has just finished a game of Texas Hold'em with {others}. Result: {result}. Chips: {chips}.",
+            pkStateLeft: "{npc} was playing Texas Hold'em with {others}, but {player} left the table before it ended.",
+            pkNextHand: "Next hand",
         };
 
         function t(key, vars = {}) {
@@ -1950,6 +2087,7 @@
             renderDiceStatus();
             renderStbStatus();
             renderBjStatus();
+            renderPkStatus();
         }
 
         function lineDone() {
@@ -1968,6 +2106,7 @@
             renderDiceStatus();
             renderStbStatus();
             renderBjStatus();
+            renderPkStatus();
         }
 
         // Runs fn once the table is quiet.
@@ -2424,6 +2563,7 @@
             abandonReversi();
             abandonStb();
             abandonBj();
+            abandonPk();
             activeGame = "dice";
             send("mgPlayers", opps.map((o) => o.id).join(","));
             if (same) {
@@ -3037,6 +3177,7 @@
             abandonDice();
             abandonReversi();
             abandonBj();
+            abandonPk();
             activeGame = "stb";
             send("mgPlayers", opps.map((o) => o.id).join(","));
             if (same) {
@@ -3855,6 +3996,7 @@
             abandonDice();
             abandonStb();
             abandonReversi();
+            abandonPk();
             activeGame = "bj";
             send("mgPlayers", opps.map((o) => o.id).join(","));
             if (same) {
@@ -4036,6 +4178,895 @@
             $("bj-status").textContent = lines.join("\n");
         }
 
+        // ===== Texas Hold'em =====
+
+        const PK_CHIPS = 200;
+        const PK_SMALL = 5, PK_BIG = 10;
+        const pkValue = (c) => (c.r === 1 ? 14 : c.r);
+
+        // ---- hands ----
+
+        // A five-card hand as a number that sorts with the hands: the category, then the ranks
+        // that break ties (pairs before kickers).
+        function pkScore5(cards) {
+            const vals = cards.map(pkValue).sort((a, b) => b - a);
+            const flush = cards.every((c) => c.s === cards[0].s);
+            const counts = {};
+            vals.forEach((v) => { counts[v] = (counts[v] || 0) + 1; });
+            const groups = Object.keys(counts).map(Number).sort((a, b) => counts[b] - counts[a] || b - a);
+            const uniq = [...new Set(vals)];
+            let straightTop = 0;
+            if (uniq.length === 5) {
+                if (uniq[0] - uniq[4] === 4) {
+                    straightTop = uniq[0];
+                } else if (uniq[0] === 14 && uniq[1] === 5) {
+                    straightTop = 5;   // A-2-3-4-5
+                }
+            }
+            let cat, ranks;
+            if (straightTop && flush) { cat = 8; ranks = [straightTop]; }
+            else if (counts[groups[0]] === 4) { cat = 7; ranks = groups; }
+            else if (counts[groups[0]] === 3 && counts[groups[1]] === 2) { cat = 6; ranks = groups; }
+            else if (flush) { cat = 5; ranks = vals; }
+            else if (straightTop) { cat = 4; ranks = [straightTop]; }
+            else if (counts[groups[0]] === 3) { cat = 3; ranks = groups; }
+            else if (counts[groups[0]] === 2 && counts[groups[1]] === 2) { cat = 2; ranks = groups; }
+            else if (counts[groups[0]] === 2) { cat = 1; ranks = groups; }
+            else { cat = 0; ranks = vals; }
+            let score = cat;
+            for (let k = 0; k < 5; k++) {
+                score = score * 15 + (ranks[k] || 0);
+            }
+            return score;
+        }
+
+        // The ways to pick five of n cards, as index lists.
+        const PK_PICKS = {};
+        function pkPicks(n) {
+            if (!PK_PICKS[n]) {
+                const out = [];
+                const pick = (start, chosen) => {
+                    if (chosen.length === 5) {
+                        out.push(chosen.slice());
+                        return;
+                    }
+                    for (let k = start; k < n; k++) {
+                        chosen.push(k);
+                        pick(k + 1, chosen);
+                        chosen.pop();
+                    }
+                };
+                pick(0, []);
+                PK_PICKS[n] = out;
+            }
+            return PK_PICKS[n];
+        }
+
+        // The best five of five to seven cards.
+        function pkBest(cards) {
+            let best = 0;
+            for (const p of pkPicks(cards.length)) {
+                const score = pkScore5(p.map((k) => cards[k]));
+                if (score > best) best = score;
+            }
+            return best;
+        }
+
+        const PK_TOP = Math.pow(15, 5);
+        function pkHandName(score) {
+            const cat = Math.floor(score / PK_TOP);
+            if (cat === 8 && Math.floor(score / Math.pow(15, 4)) % 15 === 14) {
+                return t("pkHandRoyal");
+            }
+            return t("pkHand" + cat);
+        }
+
+        // How often these two cards win against this many unknown hands, from a few hundred
+        // deals of the cards still unseen (a tie counts for its share).
+        function pkEquity(hole, board, opponents, sims, unseen) {
+            let won = 0;
+            for (let s = 0; s < sims; s++) {
+                const d = unseen.slice();
+                let n = d.length;
+                const draw = () => {
+                    const j = Math.floor(Math.random() * n);
+                    const c = d[j];
+                    d[j] = d[--n];
+                    return c;
+                };
+                const full = board.slice();
+                while (full.length < 5) full.push(draw());
+                const mine = pkBest([...hole, ...full]);
+                let ties = 0, beaten = false;
+                for (let o = 0; o < opponents && !beaten; o++) {
+                    const theirs = pkBest([draw(), draw(), ...full]);
+                    if (theirs > mine) beaten = true;
+                    else if (theirs === mine) ties++;
+                }
+                if (!beaten) won += 1 / (ties + 1);
+            }
+            return won / sims;
+        }
+
+        // ---- opponent AI ----
+
+        // How an NPC plays, read from their character when the game starts (mgStyle).
+        const PK_LOOSE = { tight: 0, normal: 0.5, loose: 1 };
+        const PK_BOLD = { cautious: 0, normal: 0.5, bold: 1 };
+        const PK_BLUFF = { rarely: 0.03, sometimes: 0.1, often: 0.22 };
+        const PK_DEFAULT_STYLE = { hands: "normal", bets: "normal", bluff: "sometimes" };
+        // The skill (MCM): how many deals it tries, how blurry its sums are, how much it weighs
+        // the pot odds, and whether it reads the others' ways of playing.
+        const PK_LEVELS = {
+            1: { sims: 120, noise: 0.16, odds: 0.3, read: false },
+            2: { sims: 250, noise: 0.08, odds: 0.7, read: false },
+            3: { sims: 400, noise: 0.04, odds: 1, read: false },
+            4: { sims: 700, noise: 0.02, odds: 1, read: true },
+        };
+        let pkLevel = 2;
+        let pkHands = 10;
+
+        const pkRound5 = (n) => Math.max(PK_BIG, Math.round(n / 5) * 5);
+        const pkPot = () => pk.seats.reduce((n, s) => n + s.total, 0);
+        const pkInPlay = (s) => s.inHand && !s.folded;
+        const pkCanAct = (s) => s.inHand && !s.folded && !s.allIn;
+        const pkToCall = (s) => Math.min(pk.currentBet - s.bet, s.chips);
+        // The least a raise may go to, and the most (everything).
+        const pkMinRaiseTo = (s) => Math.min(pk.currentBet + pk.minRaise, s.bet + s.chips);
+        const pkMaxRaiseTo = (s) => s.bet + s.chips;
+        const pkCanRaise = (s) => s.chips > pkToCall(s);
+
+        // A bet or raise of about a share of the pot, bigger for a strong hand or a bold player.
+        function pkRaiseSize(s, eq, bold) {
+            if (eq > 0.85 && bold > 0.6 && Math.random() < 0.3) {
+                return pkMaxRaiseTo(s);
+            }
+            const size = pkRound5((pkPot() + pkToCall(s)) * (0.5 + 0.5 * bold) * (eq > 0.75 ? 1.3 : 1));
+            return Math.min(Math.max(pk.currentBet + size, pkMinRaiseTo(s)), pkMaxRaiseTo(s));
+        }
+
+        // {act: "fold" | "check" | "call" | "raise", to}
+        function pkDecide(i) {
+            const s = pk.seats[i];
+            const cfg = PK_LEVELS[pkLevel] || PK_LEVELS[2];
+            const style = s.style || PK_DEFAULT_STYLE;
+            const loose = PK_LOOSE[style.hands] ?? 0.5;
+            const bold = PK_BOLD[style.bets] ?? 0.5;
+            const bluff = PK_BLUFF[style.bluff] ?? 0.1;
+            const rivals = pk.seats.filter((x, k) => k !== i && pkInPlay(x)).length;
+            const known = new Set([...s.cards, ...pk.board]);
+            const unseen = pk.allCards.filter((c) => !known.has(c));
+            let eq = pkEquity(s.cards, pk.board, rivals, cfg.sims, unseen) + (Math.random() * 2 - 1) * cfg.noise;
+            if (cfg.read && pk.lastRaiser >= 0 && pk.lastRaiser !== i) {
+                // a raise means more from a choosy player, less from one who bluffs a lot
+                const r = pk.seats[pk.lastRaiser].style || PK_DEFAULT_STYLE;
+                eq += (r.hands === "tight" ? -0.06 : r.hands === "loose" ? 0.03 : 0) + (r.bluff === "often" ? 0.04 : 0);
+            }
+            const toCall = pkToCall(s);
+            const fair = 1 / (rivals + 1);
+            const odds = toCall > 0 ? toCall / (pkPot() + toCall) : 0;
+            // what a call needs: the pot odds (as well as this player weighs them), a little more
+            // before the flop for a choosy player, a little less for a loose one
+            const need = cfg.odds * odds + (1 - cfg.odds) * fair * 0.9 +
+                (pk.street === 0 ? fair * (0.25 - 0.4 * loose) : 0) + 0.04 - 0.1 * loose;
+            const strong = fair * (1.45 - 0.35 * bold) + 0.05;
+            if (pkCanRaise(s) && eq > strong && Math.random() < 0.35 + 0.55 * bold) {
+                return { act: "raise", to: pkRaiseSize(s, eq, bold) };
+            }
+            // a bluff: mostly into a quiet pot, more often once the cards are out
+            if (pkCanRaise(s) && toCall <= PK_BIG && Math.random() < bluff * (pk.street > 0 ? 1.2 : 0.6)) {
+                return { act: "raise", to: pkRaiseSize(s, 0.6, bold) };
+            }
+            if (toCall === 0) {
+                return { act: "check" };
+            }
+            return eq >= need ? { act: "call" } : { act: "fold" };
+        }
+
+        // ---- flow ----
+
+        const pk = {
+            gen: 0,          // bumped when a game is left or dropped: its pending steps stop
+            seats: [],       // seat 0 is the player: {id, name, human, chips, cards, bet, total, inHand, folded, allIn, acted, style, fromBio, won, score}
+            hand: 0,
+            button: 0,       // the seat dealing this hand
+            board: [],
+            deck: [],
+            allCards: [],    // this hand's whole deck, for the AI's sums
+            street: 0,       // 0 before the flop, 1 flop, 2 turn, 3 river
+            phase: "bet",    // bet | result
+            turn: 0,
+            currentBet: 0,   // the bet to match this street
+            minRaise: PK_BIG,
+            lastRaiser: -1,
+            showdown: false, // the cards of those still in are up
+            results: "",
+            playing: false,
+            over: false,
+            left: false,
+            winners: [],
+            thinking: false,
+            leaveArmed: false,
+            raiseTo: 0,      // the player's raise being set up
+            stylesReady: true,
+            fresh: null,
+        };
+
+        const pkName = (i) => pk.seats[i].name;
+        const pkOpponents = () => pk.seats.filter((s) => !s.human).map((s) => ({ id: s.id, name: s.name }));
+        const pkChipsLine = () => pk.seats.map((s) => t(s.chips > 0 ? "diceCount" : "diceCountOut", { name: s.name, n: s.chips })).join(t("listComma"));
+        const pkCardName = (c) => t("pkCardName", { rank: RANK_MARKS[c.r] ? t("bjRank" + RANK_MARKS[c.r]) : String(c.r), suit: t("pkSuit" + c.s) });
+        const pkCardsText = (cards) => cards.map(pkCardName).join(t("listComma"));
+
+        // The seat after k that passes a test, or -1.
+        function pkNext(k, test) {
+            for (let j = 1; j <= pk.seats.length; j++) {
+                const n = (k + j) % pk.seats.length;
+                if (test(pk.seats[n])) return n;
+            }
+            return -1;
+        }
+
+        // The label for an NPC's way of playing: only what is not middling.
+        function pkStyleLabel(style) {
+            if (!style) return t("pkStyleReading");
+            const parts = [];
+            if (style.bets === "bold") parts.push(t("pkStyleBold"));
+            if (style.bets === "cautious") parts.push(t("pkStyleCautious"));
+            if (style.hands === "tight") parts.push(t("pkStyleTight"));
+            if (style.hands === "loose") parts.push(t("pkStyleLoose"));
+            if (style.bluff === "often") parts.push(t("pkStyleBluffOften"));
+            if (style.bluff === "rarely") parts.push(t("pkStyleBluffRare"));
+            return parts.length ? parts.join(t("pkStyleSep")) : t("pkStyleSteady");
+        }
+
+        function newPkGame(opps) {
+            pk.gen++;
+            pk.seats = [
+                { id: "", name: playerName, human: true, chips: PK_CHIPS, cards: [], style: null },
+                ...opps.map((o) => ({ id: o.id, name: o.name, human: false, chips: PK_CHIPS, cards: [], style: null, fromBio: false })),
+            ];
+            pk.hand = 0;
+            pk.button = Math.floor(Math.random() * pk.seats.length);
+            pk.playing = true;
+            pk.over = false;
+            pk.left = false;
+            pk.winners = [];
+            pk.thinking = false;
+            pk.leaveArmed = false;
+            $("pk-log").innerHTML = "";
+            $("pk-meta").textContent = t("strength", { level: t("level" + (pkLevel >= 1 && pkLevel <= 4 ? pkLevel : 2)) });
+            pkAskStyles(opps);
+            say(opps[0].id, t("pkStart", { player: playerName, npcs: joinNames(opps.map((o) => o.name)), small: PK_SMALL, big: PK_BIG, chips: PK_CHIPS, n: pkHands }));
+            pkStartHand();
+        }
+
+        // Each NPC's way of playing comes from their character, read by SkyrimNet (mgStyles ->
+        // mgStyle). Until it comes, or for a while if it does not, the NPCs wait to act.
+        function pkAskStyles(opps) {
+            pk.stylesReady = false;
+            const gen = pk.gen;
+            const settle = () => {
+                if (gen !== pk.gen || pk.stylesReady) return;
+                pk.seats.forEach((s) => {
+                    if (!s.human && !s.style) {
+                        s.style = { ...PK_DEFAULT_STYLE };
+                        log(t("pkLogStyleDefault", { who: s.name }), "pk-log");
+                    }
+                });
+                pk.stylesReady = true;
+                reportPkState();
+                pkStep();
+            };
+            if (typeof window.mgStyles !== "function") {
+                setTimeout(settle, 0);   // a plain browser
+                return;
+            }
+            send("mgStyles", JSON.stringify(opps.map((o) => ({ id: o.id, name: o.name }))));
+            setTimeout(settle, 20000);
+        }
+
+        // An NPC's way of playing: {id, hands, bets, bluff}, or {id, failed: true}.
+        window.mgStyle = (r) => {
+            const s = r && pk.seats.find((x) => !x.human && x.id === r.id);
+            if (!s || s.style || pk.stylesReady) return;
+            const ok = !r.failed && r.hands in PK_LOOSE && r.bets in PK_BOLD && r.bluff in PK_BLUFF;
+            s.style = ok ? { hands: r.hands, bets: r.bets, bluff: r.bluff } : { ...PK_DEFAULT_STYLE };
+            s.fromBio = ok;
+            log(ok ? t("pkLogStyle", { who: s.name, style: pkStyleLabel(s.style) }) : t("pkLogStyleDefault", { who: s.name }), "pk-log");
+            if (pk.seats.every((x) => x.human || x.style)) {
+                pk.stylesReady = true;
+            }
+            reportPkState();
+            pkStep();
+        };
+
+        // Seat s puts chips in, up to all it has; returns how many.
+        function pkPut(s, amount) {
+            const a = Math.min(amount, s.chips);
+            s.chips -= a;
+            s.bet += a;
+            s.total += a;
+            if (s.chips === 0) s.allIn = true;
+            return a;
+        }
+
+        function pkStartHand() {
+            pk.hand++;
+            pk.phase = "bet";
+            pk.street = 0;
+            pk.board = [];
+            pk.allCards = newDeck();
+            pk.deck = pk.allCards.slice();
+            pk.results = "";
+            pk.showdown = false;
+            pk.lastRaiser = -1;
+            pk.leaveArmed = false;
+            pk.fresh = null;
+            for (const s of pk.seats) {
+                s.inHand = s.chips > 0;
+                s.cards = [];
+                s.bet = 0;
+                s.total = 0;
+                s.folded = !s.inHand;
+                s.allIn = false;
+                s.acted = false;
+                s.won = 0;
+                s.score = 0;
+            }
+            pk.button = pkNext(pk.button, (s) => s.inHand);
+            // heads up, the dealer posts the small blind and acts first before the flop
+            const heads = pk.seats.filter((s) => s.inHand).length === 2;
+            const sb = heads ? pk.button : pkNext(pk.button, (s) => s.inHand);
+            const bb = pkNext(sb, (s) => s.inHand);
+            pkPut(pk.seats[sb], PK_SMALL);
+            pkPut(pk.seats[bb], PK_BIG);
+            pk.currentBet = PK_BIG;
+            pk.minRaise = PK_BIG;
+            for (let pass = 0; pass < 2; pass++) {
+                for (let k = 1; k <= pk.seats.length; k++) {
+                    const s = pk.seats[(pk.button + k) % pk.seats.length];
+                    if (s.inHand) s.cards.push(pk.deck.pop());
+                }
+            }
+            log(t("pkLogHand", { h: pk.hand, n: pkHands, who: pkName(pk.button) }), "pk-log");
+            log(t("pkLogBlinds", { sb: pkName(sb), s: PK_SMALL, bb: pkName(bb), b: PK_BIG }), "pk-log");
+            pk.turn = pkNext(bb, pkCanAct);
+            pk.raiseTo = 0;
+            reportPkState();
+            const actors = pk.seats.filter(pkCanAct);
+            if (!actors.length || (actors.length === 1 && actors[0].bet >= pk.currentBet)) {
+                pkRunOut();   // the blinds put everyone all in
+                return;
+            }
+            pkStep();
+        }
+
+        // The seat to act moves: the player through the controls, an NPC once the table is
+        // quiet and the ways of playing are known.
+        function pkStep() {
+            renderPk();
+            if (!pk.playing || pk.over || pk.thinking) {
+                return;
+            }
+            const me = pk.seats[0];
+            const mine = pk.phase === "result" ? me.chips > 0 : pk.turn === 0;
+            if (mine || (pk.phase === "bet" && !pk.stylesReady)) {
+                return;
+            }
+            pk.thinking = true;
+            const gen = pk.gen;
+            renderPkStatus();
+            whenQuiet(() => {
+                if (gen !== pk.gen) return;
+                if (screen !== "pk") {
+                    // carried on when the table is back on screen
+                    pk.thinking = false;
+                    return;
+                }
+                renderPkStatus();
+                setTimeout(() => {
+                    if (gen !== pk.gen) return;
+                    pk.thinking = false;
+                    if (screen !== "pk") return;
+                    if (pk.phase === "result") {
+                        pkStartHand();
+                        return;
+                    }
+                    const move = pkDecide(pk.turn);
+                    pkAct(pk.turn, move.act, move.to);
+                }, pk.phase === "result" ? 2500 : 800 + Math.random() * 800);
+            });
+        }
+
+        // Seat i acts. to: for a raise, the seat's whole bet this street.
+        function pkAct(i, act, to) {
+            const s = pk.seats[i];
+            const before = pk.currentBet;
+            pk.leaveArmed = false;
+            let mine = null;  // the player's own line about the move, if they speak (MCM)
+            let comment = null;  // an NPC's line about a bet
+            if (act === "fold") {
+                s.folded = true;
+                log(t("pkLogFold", { who: s.name }), "pk-log");
+                mine = ["pPkFold", {}];
+            } else if (act === "check") {
+                log(t("pkLogCheck", { who: s.name }), "pk-log");
+                mine = ["pPkCheck", {}];
+            } else if (act === "call") {
+                const n = pkPut(s, pkToCall(s));
+                log(t(s.allIn ? "pkLogAllIn" : "pkLogCall", { who: s.name, n: s.allIn ? s.bet : n }), "pk-log");
+                mine = [s.allIn ? "pPkAllIn" : "pPkCall", { n: s.allIn ? s.bet : n }];
+            } else {
+                pkPut(s, Math.max(0, Math.min(to, pkMaxRaiseTo(s)) - s.bet));
+                const by = s.bet - before;
+                if (by >= pk.minRaise) {
+                    pk.minRaise = by;
+                }
+                if (s.bet > before) {
+                    pk.currentBet = s.bet;
+                    pk.lastRaiser = i;
+                    // everyone else still in has to answer it
+                    pk.seats.forEach((x, k) => {
+                        if (k !== i && pkCanAct(x)) x.acted = false;
+                    });
+                }
+                log(t(s.allIn ? "pkLogAllIn" : before === 0 ? "pkLogBet" : "pkLogRaise", { who: s.name, n: s.bet }), "pk-log");
+                mine = [s.allIn ? "pPkAllIn" : before === 0 ? "pPkBet" : "pPkRaise", { n: s.bet }];
+                // one line about it, from the one who did it or the next NPC to answer
+                const speaker = s.human ? pkSpeakerAfter(i) : s;
+                const line = s.allIn ? "pkAllInLine" : before === 0 ? "pkBetLine" : "pkRaiseLine";
+                if (speaker) comment = [speaker.id, t(line, { who: s.name, n: s.bet, pot: pkPot() })];
+            }
+            // the player says their move first (kept: it is not dropped for a newer line), then
+            // the NPC answers a bet; the NPCs' own bets are told by themselves
+            if (s.human && playerVoice && mine) {
+                say(PLAYER_ID, t(mine[0], mine[1]), true);
+            }
+            if (comment) {
+                say(comment[0], comment[1]);
+            }
+            s.acted = true;
+            pkAfterAction(i);
+        }
+
+        // The NPC who answers next after seat i, or the first still in.
+        function pkSpeakerAfter(i) {
+            const k = pkNext(i, (x) => !x.human && pkInPlay(x));
+            return k >= 0 ? pk.seats[k] : pk.seats.find((x) => !x.human);
+        }
+
+        function pkAfterAction(i) {
+            const inPlay = pk.seats.filter(pkInPlay);
+            if (inPlay.length === 1) {
+                pkFoldWin(pk.seats.indexOf(inPlay[0]));
+                return;
+            }
+            const pending = (x) => pkCanAct(x) && (!x.acted || x.bet < pk.currentBet);
+            const next = pkNext(i, pending);
+            if (next >= 0) {
+                pk.turn = next;
+                pk.raiseTo = 0;
+                reportPkState();
+                pkStep();
+                return;
+            }
+            // the street is done
+            if (pk.street === 3) {
+                pkShowdown();
+            } else if (pk.seats.filter(pkCanAct).length <= 1) {
+                pkRunOut();
+            } else {
+                pkNextStreet();
+            }
+        }
+
+        function pkDealBoard() {
+            const n = pk.street === 1 ? 3 : 1;
+            const cards = [];
+            for (let k = 0; k < n; k++) cards.push(pk.deck.pop());
+            pk.board.push(...cards);
+            log(t("pkLogBoard", { street: t(["", "pkFlop", "pkTurn", "pkRiver"][pk.street]), cards: pkCardsText(cards) }), "pk-log");
+        }
+
+        function pkNextStreet() {
+            pk.street++;
+            pk.seats.forEach((s) => {
+                s.bet = 0;
+                s.acted = false;
+            });
+            pk.currentBet = 0;
+            pk.minRaise = PK_BIG;
+            pk.lastRaiser = -1;
+            pkDealBoard();
+            pk.turn = pkNext(pk.button, pkCanAct);
+            pk.raiseTo = 0;
+            reportPkState();
+            pkStep();
+        }
+
+        // No more betting can happen: the rest of the cards come out, then the showdown.
+        function pkRunOut() {
+            while (pk.street < 3) {
+                pk.street++;
+                pkDealBoard();
+            }
+            pkShowdown();
+        }
+
+        // An uncalled bet goes back to whoever made it.
+        function pkReturnUncalled() {
+            const totals = pk.seats.map((s) => s.total).sort((a, b) => b - a);
+            const top = pk.seats.find((s) => s.total === totals[0]);
+            if (totals[0] > totals[1]) {
+                const back = totals[0] - totals[1];
+                top.total -= back;
+                top.chips += back;
+                if (top.chips > 0) top.allIn = false;
+            }
+        }
+
+        // Everyone else folded.
+        function pkFoldWin(w) {
+            pkReturnUncalled();
+            const s = pk.seats[w];
+            const pot = pkPot();
+            s.chips += pot;
+            s.won = pot;
+            pk.results = t("pkResultTake", { name: s.name, n: pot });
+            log(t("pkLogWin", { who: s.name, n: pot, hand: "" }), "pk-log");
+            const big = pot >= PK_BIG * 4;
+            pkHandOver(big ? t("pkFoldWinLine", { who: s.name, n: pot }) : "", s.human ? null : s);
+        }
+
+        // The cards of those still in come up, and each pot goes to the best hand that may win it.
+        function pkShowdown() {
+            pk.showdown = true;
+            pkReturnUncalled();
+            const contenders = pk.seats.filter(pkInPlay);
+            contenders.forEach((s) => { s.score = pkBest([...s.cards, ...pk.board]); });
+            // side pots: one for each amount an all-in player could match
+            const levels = [...new Set(contenders.map((s) => s.total))].sort((a, b) => a - b);
+            levels.forEach((level, j) => {
+                const prev = j ? levels[j - 1] : 0;
+                const cap = j === levels.length - 1 ? Infinity : level;
+                const amount = pk.seats.reduce((n, s) => n + Math.min(s.total, cap) - Math.min(s.total, prev), 0);
+                const eligible = contenders.filter((s) => s.total >= level);
+                const best = Math.max(...eligible.map((s) => s.score));
+                const winners = eligible.filter((s) => s.score === best);
+                const share = Math.floor(amount / winners.length);
+                winners.forEach((s) => { s.chips += share; s.won += share; });
+                // what does not split evenly goes to the first winner after the dealer
+                const rest = amount - share * winners.length;
+                if (rest > 0) {
+                    const first = pk.seats[pkNext(pk.button, (x) => winners.includes(x))];
+                    first.chips += rest;
+                    first.won += rest;
+                }
+            });
+            const winners = contenders.filter((s) => s.won > 0);
+            pk.results = winners.map((s) => t("pkResultWin", { name: s.name, n: s.won, hand: pkHandName(s.score) })).join(t("listComma"));
+            winners.forEach((s) => log(t("pkLogWin", { who: s.name, n: s.won, hand: " (" + pkHandName(s.score) + ")" }), "pk-log"));
+            const shows = contenders.map((s) => t("pkShows", { name: s.name, cards: pkCardsText(s.cards), hand: pkHandName(s.score) })).join(t("listComma"));
+            const npcWinner = winners.find((s) => !s.human);
+            pkHandOver(t("pkShowdownLine", { h: pk.hand, board: pkCardsText(pk.board), shows, results: pk.results }), npcWinner || null);
+        }
+
+        // The hand is over: who is out, and whether the game is.
+        function pkHandOver(text, speaker) {
+            pk.phase = "result";
+            pk.fresh = null;
+            const out = pk.seats.filter((s) => s.inHand && s.chips <= 0);
+            out.forEach((s) => log(t("logOut", { who: s.name }), "pk-log"));
+            if (out.length) {
+                text += t("pkOut", { names: joinNames(out.map((s) => s.name)) });
+            }
+            const left = pk.seats.filter((s) => s.chips > 0);
+            pk.over = left.length <= 1 || pk.hand >= pkHands;
+            const npcs = pk.seats.filter((s) => !s.human);
+            speaker = speaker || npcs.filter((s) => s.inHand).sort((a, b) => b.total - a.total)[0] || npcs[0];
+            if (pk.over) {
+                const top = Math.max(...pk.seats.map((s) => s.chips));
+                pk.winners = pk.seats.flatMap((s, k) => (s.chips === top ? [k] : []));
+                const champ = pk.winners.find((k) => k > 0);
+                if (pk.winners.length > 1) {
+                    speaker = pk.seats[champ];
+                    text += t("pkEndTie", { names: joinNames(pk.winners.map(pkName)), chips: top, npc: speaker.name });
+                } else if (pk.winners[0] === 0) {
+                    text += t("pkEndPlayerWins", { player: playerName, chips: top, npc: speaker.name });
+                } else {
+                    speaker = pk.seats[champ];
+                    text += t("pkEndNpcWins", { npc: speaker.name, chips: top });
+                }
+                log(t("stbLogEnd", { result: pkResult() }), "pk-log");
+            }
+            if (text) {
+                say(speaker.id, text.trim(), pk.over);
+            }
+            reportPkState();
+            pkStep();
+        }
+
+        function pkResult() {
+            if (pk.winners.length > 1) {
+                return t("stbTieResult", { names: joinNames(pk.winners.map(pkName)) });
+            }
+            return t("resultWin", { name: pkName(pk.winners[0]) });
+        }
+
+        // ---- the player's controls ----
+
+        // Out of chips and no longer in the hand: the player only watches.
+        const pkWatching = () => pk.seats[0].chips <= 0 && !(pk.phase === "bet" && pkInPlay(pk.seats[0]));
+        const pkMine = () => pk.playing && !pk.over && pk.phase === "bet" && pk.turn === 0 && screen === "pk";
+
+        function pkRaiseBounds() {
+            const me = pk.seats[0];
+            return { min: pkMinRaiseTo(me), max: pkMaxRaiseTo(me) };
+        }
+
+        function onPkFold() {
+            if (pkMine() && pkToCall(pk.seats[0]) > 0) pkAct(0, "fold");
+        }
+
+        function onPkCall() {
+            if (pkMine()) pkAct(0, pkToCall(pk.seats[0]) > 0 ? "call" : "check");
+        }
+
+        function onPkRaise() {
+            if (pkMine() && pkCanRaise(pk.seats[0])) pkAct(0, "raise", pk.raiseTo);
+        }
+
+        function onPkAllIn() {
+            if (!pkMine()) return;
+            const me = pk.seats[0];
+            if (pkCanRaise(me)) pkAct(0, "raise", pkMaxRaiseTo(me));
+            else pkAct(0, "call");
+        }
+
+        function adjustPkRaise(d) {
+            if (!pkMine()) return;
+            const b = pkRaiseBounds();
+            pk.raiseTo = Math.min(Math.max(pk.raiseTo + d * PK_BIG, b.min), b.max);
+            renderPk();
+        }
+
+        function onPkNext() {
+            if (pk.playing && !pk.over && pk.phase === "result" && pk.seats[0].chips > 0) pkStartHand();
+        }
+
+        function onPkLeave() {
+            if (!pk.playing || pk.over) return;
+            const watching = pkWatching();
+            if (!pk.leaveArmed && !watching) {
+                pk.leaveArmed = true;
+                renderPk();
+                return;
+            }
+            pk.gen++;
+            pk.over = true;
+            pk.left = true;
+            pk.thinking = false;
+            pk.leaveArmed = false;
+            const first = pk.seats.find((s) => !s.human && s.chips > 0) || pk.seats[1];
+            say(first.id, t(watching ? "pkStopWatching" : "pkLeave", { player: playerName }), true);
+            log(t("logLeave", { player: playerName }), "pk-log");
+            reportPkState();
+            renderPk();
+        }
+
+        function onPkAgain() {
+            newPkGame(pkOpponents());
+        }
+
+        // ---- what each NPC knows ----
+
+        // Each NPC sees its own two cards and the table, never anyone else's cards.
+        function pkStateFor(k) {
+            const s = pk.seats[k];
+            const vars = {
+                npc: s.name, player: playerName, h: pk.hand, n: pkHands, chips: pkChipsLine(),
+                others: joinNames(pk.seats.filter((x) => x !== s).map((x) => x.name)),
+            };
+            if (pk.over) {
+                if (screen !== "pk") return "";
+                return pk.left ? t("pkStateLeft", vars) : t("pkStateResult", { ...vars, result: pkResult() });
+            }
+            if (!pk.playing) return "";
+            let text = t("pkState", vars);
+            if (s.style && s.fromBio) {
+                text += t("pkStateStyle", { npc: s.name, style: pkStyleLabel(s.style) });
+            }
+            if (!s.inHand) {
+                text += t("pkStateOut", vars);
+            } else if (s.folded) {
+                text += t("pkStateFolded", vars);
+            } else if (s.cards.length) {
+                text += t("pkStateCards", { npc: s.name, cards: pkCardsText(s.cards) });
+            }
+            const table = { pot: pkPot(), bet: pk.currentBet };
+            text += pk.board.length ? t("pkStateBoard", { ...table, board: pkCardsText(pk.board) }) : t("pkStateNoBoard", table);
+            if (pk.phase === "result") {
+                text += t("bjStateRound", { results: pk.results });
+            } else if (pk.turn >= 0) {
+                text += t("dStateTurn", { who: pkName(pk.turn) });
+            }
+            if (screen !== "pk") text += t("pkStatePaused");
+            return text;
+        }
+
+        function reportPkState() {
+            if (activeGame !== "pk") return;
+            const states = {};
+            pk.seats.forEach((s, k) => {
+                if (!s.human) states[s.id] = pkStateFor(k);
+            });
+            send("rvState", JSON.stringify({ states, playing: pk.playing && !pk.over }));
+        }
+
+        // A game in progress is dropped (another game is starting).
+        function abandonPk() {
+            if (pk.playing && !pk.over) {
+                pk.playing = false;
+                pk.gen++;
+                pk.thinking = false;
+                voiceReset();
+            }
+        }
+
+        const pkUnfinishedWith = (opps) => pk.playing && !pk.over &&
+            pkOpponents().map((o) => o.id).join() === opps.map((o) => o.id).join();
+
+        // Starts or resumes Texas Hold'em against opps ([{id, name}], one to three).
+        function playPk(opps) {
+            const same = pkUnfinishedWith(opps);
+            if (!same) abandonPk();
+            abandonDice();
+            abandonStb();
+            abandonBj();
+            abandonReversi();
+            activeGame = "pk";
+            send("mgPlayers", opps.map((o) => o.id).join(","));
+            if (same) {
+                showScreen("pk");
+                log(t("logResume"), "pk-log");
+                reportPkState();
+                pkStep();
+                return;
+            }
+            snapFaces(opps.map((o) => o.id), () => {
+                showScreen("pk");
+                newPkGame(opps);
+            });
+        }
+
+        // ---- rendering ----
+
+        // A seat's cards: face down, or face up for the player and at the showdown.
+        function pkFillCards(box, s, size) {
+            box.innerHTML = "";
+            if (!s.inHand || s.folded) return;
+            const up = s.human || (pk.showdown && pkInPlay(s));
+            s.cards.forEach((c) => box.appendChild(cardEl(c, size, !up)));
+            if (up && pk.showdown && s.score) {
+                const name = document.createElement("span");
+                name.className = "hand-total";
+                name.textContent = pkHandName(s.score);
+                box.appendChild(name);
+            }
+        }
+
+        function pkMetaText(s, k) {
+            if (!s.inHand && pk.phase !== "result") return t("diceOut");
+            if (s.chips <= 0 && pk.phase === "result" && !s.won) return t("diceOut");
+            // once the hand is over, only the chips and what was won
+            if (pk.phase === "result") {
+                return t("bjChips", { chips: s.chips }) + (s.won ? " · +" + s.won : "");
+            }
+            const parts = [s.bet ? t("bjChipsBet", { chips: s.chips, bet: s.bet }) : t("bjChips", { chips: s.chips })];
+            if (s.folded && s.inHand) parts.push(t("pkFolded"));
+            else if (s.allIn) parts.push(t("pkAllInMark"));
+            return parts.join(" · ");
+        }
+
+        function renderPk() {
+            if (!pk.seats.length) return;
+            const live = pk.playing && !pk.over;
+            const seats = $("pk-seats");
+            seats.innerHTML = "";
+            pk.seats.forEach((s, k) => {
+                if (s.human) return;
+                const card = document.createElement("div");
+                card.className = "seat" + (live && pk.phase === "bet" && pk.turn === k ? " active" : "") + (s.inHand && !s.folded ? "" : " out");
+                const name = document.createElement("div");
+                name.className = "seat-name";
+                name.textContent = s.name + (k === pk.button ? " (" + t("pkDealer") + ")" : "");
+                const style = document.createElement("div");
+                style.className = "seat-meta";
+                style.textContent = pkStyleLabel(s.style);
+                const hand = document.createElement("div");
+                hand.className = "hand small";
+                pkFillCards(hand, s, "small");
+                const meta = document.createElement("div");
+                meta.className = "seat-meta";
+                meta.textContent = pkMetaText(s, k);
+                card.append(faceEl(s.id, s.name), name, style, hand, meta);
+                seats.appendChild(card);
+            });
+
+            $("pk-label").textContent = t("pkHandLabel", { h: pk.hand, n: pkHands, pot: pkPot() });
+            const board = $("pk-board");
+            board.innerHTML = "";
+            // all five places on the table, face down until their card is dealt
+            pk.board.forEach((c) => board.appendChild(cardEl(c, "big", false)));
+            for (let k = pk.board.length; k < 5; k++) {
+                board.appendChild(cardEl(null, "big", true));
+            }
+
+            const me = pk.seats[0];
+            $("pk-mine").classList.toggle("active", live && pk.phase === "bet" && pk.turn === 0);
+            $("pk-mine-name").textContent = me.name + (pk.button === 0 ? " (" + t("pkDealer") + ")" : "");
+            pkFillCards($("pk-mine-hand"), me, "mid");
+            $("pk-mine-meta").textContent = pkMetaText(me, 0);
+
+            // controls
+            const mine = pkMine();
+            $("pk-moves").style.display = mine ? "" : "none";
+            $("pk-raise-row").style.display = mine && pkCanRaise(me) ? "" : "none";
+            if (mine) {
+                const toCall = pkToCall(me);
+                const b = pkRaiseBounds();
+                if (pk.raiseTo < b.min || pk.raiseTo > b.max) pk.raiseTo = b.min;
+                $("pk-fold").disabled = toCall === 0;
+                $("pk-call").textContent = toCall === 0 ? t("pkCheck") : t(toCall >= me.chips ? "pkCallAllIn" : "pkCall", { n: toCall });
+                $("pk-raise").textContent = t(pk.currentBet === 0 ? "pkBet" : "pkRaise", { n: pk.raiseTo });
+                $("pk-raise-down").disabled = pk.raiseTo <= b.min;
+                $("pk-raise-up").disabled = pk.raiseTo >= b.max;
+                $("pk-allin").textContent = t("pkAllIn", { n: me.bet + me.chips });
+            }
+            $("pk-next").style.display = live && pk.phase === "result" && me.chips > 0 ? "" : "none";
+            $("pk-leave").style.display = live ? "" : "none";
+            $("pk-leave").textContent = t(pkWatching() ? "stopWatching" : pk.leaveArmed ? "leaveConfirm" : "leave");
+            $("pk-again").style.display = pk.over ? "" : "none";
+            renderPkStatus();
+        }
+
+        function renderPkStatus() {
+            if (!pk.seats.length) return;
+            const lines = [];
+            const me = pk.seats[0];
+            if (pk.phase === "result" && pk.results) lines.push(pk.results);
+            if (pk.over) {
+                const top = pk.left ? 0 : pk.seats[pk.winners[0]].chips;
+                if (pk.left) {
+                    lines.length = 0;
+                    lines.push(t("diceLeftStatus"));
+                } else if (pk.winners.length > 1) {
+                    lines.push(t("bjTieStatus", { names: joinNames(pk.winners.map(pkName)), chips: top }));
+                } else if (pk.winners[0] === 0) {
+                    lines.push(t("bjYouWin", { chips: top }));
+                } else {
+                    lines.push(t("bjNpcWins", { npc: pkName(pk.winners[0]), chips: top }));
+                }
+            } else if (pk.playing) {
+                if (pkWatching()) lines.push(t("bjWatching"));
+                if (pkMine()) {
+                    const toCall = pkToCall(me);
+                    lines.push(toCall > 0 ? t("pkYourTurn", { n: toCall }) : t("pkYourTurnFree"));
+                } else if (pk.phase === "bet" && pk.turn !== 0) {
+                    if (!pk.stylesReady) {
+                        lines.push(t("pkReading"));
+                    } else if (voiceLine && voiceLine.speaker !== PLAYER_ID) {
+                        const speaker = pk.seats.find((x) => x.id === voiceLine.speaker);
+                        lines.push(t("diceListening", { npc: speaker ? speaker.name : pkName(pk.turn) }));
+                    } else if (pk.turn >= 0) {
+                        lines.push(t("thinking", { npc: pkName(pk.turn) }));
+                    }
+                }
+            }
+            $("pk-status").textContent = lines.join("\n");
+        }
+
         // ===== faces =====
 
         // A new game calls its opponents over (MCM) and takes a photo: the screen goes black
@@ -4122,10 +5153,10 @@
 
         // ===== screens =====
 
-        // "menu", "board" (Reversi), "dice", "stb", "bj", or null when the plugin has hidden the view. A
+        // "menu", "board" (Reversi), "dice", "stb", "bj", "pk", or null when the plugin has hidden the view. A
         // game counts as hidden (paused) whenever its screen is not up.
         let screen = null;
-        let activeGame = null;    // "reversi" | "dice" | "stb" | "bj": the game whose state the NPCs see
+        let activeGame = null;    // "reversi" | "dice" | "stb" | "bj" | "pk": the game whose state the NPCs see
 
         function showScreen(name) {
             screen = name;
@@ -4134,6 +5165,7 @@
             $("dice").classList.toggle("open", name === "dice");
             $("stb").classList.toggle("open", name === "stb");
             $("bj").classList.toggle("open", name === "bj");
+            $("pk").classList.toggle("open", name === "pk");
             hidden = name !== "board";
             fitPanels();
         }
@@ -4161,6 +5193,8 @@
                 reportStbState();
             } else if (activeGame === "bj") {
                 reportBjState();
+            } else if (activeGame === "pk") {
+                reportPkState();
             }
         }
 
@@ -4176,6 +5210,7 @@
             abandonDice();
             abandonStb();
             abandonBj();
+            abandonPk();
             activeGame = "reversi";
             const sameOpponent = opp.id === opponent.id;
             if (!sameOpponent && playing && !over) {
@@ -4220,6 +5255,7 @@
                     chooseDealer(chosen, (dealer) => playBj(chosen, dealer));
                 }
             } },
+            { id: "pk", title: "gamePk", desc: "gamePkDesc", opponents: 3, start: (chosen) => playPk(chosen) },
         ];
 
         let actors = [];          // nearby NPCs from the plugin: {id, name, distance, crosshair}
@@ -4247,6 +5283,9 @@
             } else if (activeGame === "bj" && bj.playing && !bj.over) {
                 const opps = bjOpponents();
                 list.appendChild(menuRow(t("resume", { game: t("gameBj"), npc: joinNames(opps.map((o) => o.name)) }), "", "", () => playBj(opps), "resume"));
+            } else if (activeGame === "pk" && pk.playing && !pk.over) {
+                const opps = pkOpponents();
+                list.appendChild(menuRow(t("resume", { game: t("gamePk"), npc: joinNames(opps.map((o) => o.name)) }), "", "", () => playPk(opps), "resume"));
             }
             for (const game of GAMES) {
                 list.appendChild(menuRow(t(game.title), t(game.desc), "", () => chooseOpponents(game)));
@@ -4359,7 +5398,7 @@
 
         // ===== called from the plugin =====
 
-        // Options every open carries: { player, level, hints, color, diceLevel, stbLevel, bjLevel, bjRounds, voice, voiceWait, strings }.
+        // Options every open carries: { player, level, hints, color, diceLevel, stbLevel, bjLevel, bjRounds, pkLevel, pkHands, voice, voiceWait, strings }.
         function applyOptions(opts) {
             applyStrings(opts.strings);
             playerName = opts.player || playerName;
@@ -4370,6 +5409,8 @@
             stbLevel = opts.stbLevel || stbLevel;
             bjLevel = opts.bjLevel || bjLevel;
             bjRounds = opts.bjRounds || bjRounds;
+            pkLevel = opts.pkLevel || pkLevel;
+            pkHands = opts.pkHands || pkHands;
             voiceOn = !!opts.voice;
             playerVoice = !!opts.playerVoice;
             gatherOn = opts.gather !== false;
@@ -4432,6 +5473,9 @@
             abandonBj();
             bj.seats = [];
             bj.over = false;
+            abandonPk();
+            pk.seats = [];
+            pk.over = false;
             activeGame = null;
             voiceReset();
         };

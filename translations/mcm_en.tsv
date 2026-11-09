@@ -32,14 +32,19 @@ $SNMG_BjDifficulty	Opponent strength
 $SNMG_BjDifficultyHelp	1 Beginner / 2 Normal / 3 Strong / 4 Master. Stronger opponents play by the book, double down, bet up when behind late in the game and, as dealer, work out whether to draw on 17 or more. Applies from the next game.
 $SNMG_BjRounds	Rounds in a game
 $SNMG_BjRoundsHelp	The game ends after this many rounds, or sooner if every player runs out of chips. You choose who deals when the game starts, and the dealer stays the same until it ends. The dealer holds no chips and can always pay. Most chips among the players wins. Applies from the next game.
+$SNMG_HeaderPoker	Texas Hold'em
+$SNMG_PkDifficulty	Opponent strength
+$SNMG_PkDifficultyHelp	1 Beginner / 2 Normal / 3 Strong / 4 Master. Stronger opponents judge their chances and the pot odds more exactly; a Master also reads how the others play. How each opponent plays (bold or cautious, tight or loose, bluffing or not) comes from their character, read by SkyrimNet when the game starts. Applies from the next game.
+$SNMG_PkHands	Hands in a game
+$SNMG_PkHandsHelp	The game ends after this many hands, or sooner when only one player has chips left. Most chips wins. Applies from the next game.
 $SNMG_HeaderSkyrimNet	SkyrimNet
 $SNMG_Commentary	Commentary
-$SNMG_CommentaryHelp	Tells SkyrimNet about the game so your opponents talk. Reversi: the start, the end (declaring victory or conceding defeat), resigning, corners, big flips, risky moves, comebacks and ordinary moves. Liar's Dice: every bid and call, each said by one person at the table, and the game waits for the line. Shut the Box: the start, a close finish and the end of each turn, and the game waits for the line. Blackjack: the start, each deal, busts, doubles and the end of each round, and the game waits for the line.
+$SNMG_CommentaryHelp	Tells SkyrimNet about the game so your opponents talk. Reversi: the start, the end (declaring victory or conceding defeat), resigning, corners, big flips, risky moves, comebacks and ordinary moves. Liar's Dice: every bid and call, each said by one person at the table, and the game waits for the line. Shut the Box: the start, a close finish and the end of each turn, and the game waits for the line. Blackjack: the start, each deal, busts, doubles and the end of each round, and the game waits for the line. Texas Hold'em: the start, bets, raises, all-ins and each hand's end, and the game waits for the line.
 $SNMG_Cooldown	Commentary interval (seconds)
-$SNMG_CooldownHelp	Reversi: at most one remark on an ordinary move per this many seconds; striking moves such as corners and comebacks wait half as long. The start, the end and resigning always go through. Lower means more talk. (Liar's Dice, Shut the Box and Blackjack pace themselves by the voice instead.)
+$SNMG_CooldownHelp	Reversi: at most one remark on an ordinary move per this many seconds; striking moves such as corners and comebacks wait half as long. The start, the end and resigning always go through. Lower means more talk. (Liar's Dice, Shut the Box, Blackjack and Texas Hold'em pace themselves by the voice instead.)
 $SNMG_Challenge	NPCs may challenge you
 $SNMG_ChallengeHelp	Lets an NPC challenge you to Reversi in conversation (the SkyrimNet action Reversi_Challenge). The board opens with the challenge, and you can accept or decline.
 $SNMG_VoiceWait	Voice wait (seconds)
-$SNMG_VoiceWaitHelp	Liar's Dice, Shut the Box and Blackjack wait for each line to be spoken before the next person acts. If nobody speaks within this many seconds, the game moves on anyway.
-$SNMG_PlayerVoice	You speak your own bids
-$SNMG_PlayerVoiceHelp	Liar's Dice: your bids and your "Liar!" calls go through SkyrimNet's Transform Dialogue, so your character says them aloud in their own words (one LLM request each). Off: only your opponents speak, and the next one mentions your bid.
+$SNMG_VoiceWaitHelp	Liar's Dice, Shut the Box, Blackjack and Texas Hold'em wait for each line to be spoken before the next person acts. If nobody speaks within this many seconds, the game moves on anyway.
+$SNMG_PlayerVoice	You speak your own moves
+$SNMG_PlayerVoiceHelp	Liar's Dice: your bids and your "Liar!" calls; Texas Hold'em: your folds, checks, calls, bets and raises. They go through SkyrimNet's Transform Dialogue, so your character says them aloud in their own words (one LLM request each). Off: only your opponents speak, and the next one mentions your move.

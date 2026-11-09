@@ -1,6 +1,6 @@
-#include "PrismaUI_API.h"
 #include "settings.h"
 #include "skyrimnet_bridge.h"
+#include "ui_host.h"
 
 #include <charconv>
 #include <format>
@@ -11,15 +11,13 @@
 
 #include <nlohmann/json.hpp>
 
-// SkyrimNet MiniGame: mini games against nearby NPCs on a Prisma UI view (Reversi, Liar's Dice, Shut the Box, Blackjack).
+// SkyrimNet MiniGame: mini games against nearby NPCs on a web view (Reversi, Liar's Dice, Shut the Box, Blackjack, Texas Hold'em),
+// drawn by Magelight UI or Prisma UI (ui_host.h), whichever is installed.
 // The hotkey (MCM, skyrimnet_MiniGamePlayerAlias) calls skyrimnet_MiniGameNative.ToggleBoard(),
 // which opens the menu: pick a game, then the opponents from the NPCs nearby. The view runs the
 // games and their AI; this plugin lists the NPCs, opens and closes the view, passes the view's
 // remarks and game state on to SkyrimNet, and tells the view when one of its players has spoken
 // (Liar's Dice waits for each line before it goes on).
-
-PRISMA_UI_API::IVPrismaUI1* PrismaUI;
-static PrismaView view;
 
 namespace
 {
@@ -129,17 +127,17 @@ namespace
 
     void Invoke(const std::string& a_script)
     {
-        PrismaUI->Invoke(view, a_script.c_str());
+        UiHost::Invoke(a_script);
     }
 
     void CloseBoard()
     {
-        if (!PrismaUI || !g_open.exchange(false)) {
+        if (!UiHost::Ready() || !g_open.exchange(false)) {
             return;
         }
         Invoke("rvHidden()");
-        PrismaUI->Unfocus(view);
-        PrismaUI->Hide(view);
+        UiHost::Unfocus();
+        UiHost::Hide();
     }
 
     // The menus up right now, for the log.
@@ -174,7 +172,7 @@ namespace
         static std::optional<clock::time_point> lostAt;
         static std::vector<clock::time_point>   retaken;
 
-        if (!PrismaUI || !g_open || PrismaUI->HasFocus(view)) {
+        if (!UiHost::Ready() || !g_open || UiHost::HasFocus()) {
             lostAt.reset();
             return;
         }
@@ -185,7 +183,7 @@ namespace
             return;
         }
         const auto now = clock::now();
-        const bool otherFocus = PrismaUI->HasAnyActiveFocus();
+        const bool otherFocus = UiHost::AnyFocus();
         if (!lostAt) {
             lostAt = now;
             logger::warn("The board lost the input focus (a view reports focus: {}; menus: {})", otherFocus, OpenMenus());
@@ -202,7 +200,7 @@ namespace
             return;
         }
         retaken.push_back(now);
-        const bool focused = PrismaUI->Focus(view, g_pause);
+        const bool focused = UiHost::Focus(g_pause);
         logger::info("The board took the input focus back: {}", focused);
     }
 
@@ -230,6 +228,8 @@ namespace
             { "stbLevel", a_settings.stbDifficulty },
             { "bjLevel", a_settings.bjDifficulty },
             { "bjRounds", a_settings.bjRounds },
+            { "pkLevel", a_settings.pokerDifficulty },
+            { "pkHands", a_settings.pokerHands },
             { "voice", SkyrimNetBridge::CanNarrate() },
             { "playerVoice", SkyrimNetBridge::CanPlayerSay() },
             { "voiceWait", a_settings.voiceWaitSeconds },
@@ -248,9 +248,9 @@ namespace
                 return;
             }
             g_pause = a_pause;
-            PrismaUI->Show(view);
+            UiHost::Show();
             Invoke(script);
-            if (!PrismaUI->Focus(view, a_pause)) {
+            if (!UiHost::Focus(a_pause)) {
                 logger::warn("Focus on the view failed");
             }
         });
@@ -283,7 +283,6 @@ namespace
     // bGather); the view clears the screen (mgUncover); the HUD is hidden for a moment and the
     // frame saved as a JPG next to the view; the view crops each face out of it (mgFaces).
 
-    constexpr const char* kViewFolder = "Data/PrismaUI/views/skyrimnet_MiniGame";
     constexpr const char* kHeadNode = "NPC Head [Head]";
 
     std::atomic<int> g_photoCount = 0;
@@ -413,11 +412,11 @@ namespace
         const auto      n = ++g_photoCount;
         const auto      name = std::format("face_{}.jpg", n);
         std::error_code ec;
-        std::filesystem::remove(std::format("{}/face_{}.jpg", kViewFolder, n - 1), ec);
+        std::filesystem::remove(std::format("{}/face_{}.jpg", UiHost::ViewFolder(), n - 1), ec);
         // the logs around the save show whether a crash at the start of a game is in it
         logger::info("saving the photo {}", name);
         RE::BSGraphics::Renderer::GetSingleton()->SaveRenderTargetToFile(RE::RENDER_TARGETS::kFRAMEBUFFER,
-            std::format("{}/{}", kViewFolder, name).c_str(), RE::BSGraphics::TextureFileFormat::kJPG);
+            std::format("{}/{}", UiHost::ViewFolder(), name).c_str(), RE::BSGraphics::TextureFileFormat::kJPG);
         logger::info("saved the photo {}", name);
         if (const auto ui = RE::UI::GetSingleton()) {
             ui->ShowMenus(true);
@@ -477,8 +476,8 @@ namespace
     // Papyrus: skyrimnet_MiniGameNative.ToggleBoard(), from the MCM hotkey.
     void ToggleBoardNative(RE::StaticFunctionTag*)
     {
-        if (!PrismaUI) {
-            logger::warn("Hotkey pressed, but Prisma UI is not available");
+        if (!UiHost::Ready()) {
+            logger::warn("Hotkey pressed, but neither Magelight UI nor Prisma UI is available");
             return;
         }
         if (g_open) {
@@ -508,7 +507,7 @@ namespace
     // SkyrimNet: may this NPC challenge the player now? Runs on SkyrimNet's threads.
     bool CanChallenge(RE::Actor* a_actor)
     {
-        if (!Settings::Get().challenge || g_open || !PrismaUI) {
+        if (!Settings::Get().challenge || g_open || !UiHost::Ready()) {
             return false;
         }
         const auto player = RE::PlayerCharacter::GetSingleton();
@@ -582,7 +581,7 @@ namespace
                 if (button && button->GetDevice() == RE::INPUT_DEVICE::kKeyboard &&
                     button->GetIDCode() == RE::BSKeyboardDevice::Key::kEscape && button->IsDown()) {
                     SKSE::GetTaskInterface()->AddUITask([]() {
-                        if (g_open && PrismaUI->HasFocus(view)) {
+                        if (g_open && UiHost::HasFocus()) {
                             Invoke("mgEscape()");
                         } else {
                             CloseBoard();  // it cannot hear the key: Esc still gets rid of it
@@ -599,31 +598,27 @@ static void SetUp()
 {
     Settings::Reload();
 
+    // The host closed the board on its own (Magelight's toggle key, a load): the board is gone
+    // from the screen, so the game state follows.
+    if (!UiHost::SetUp([]() { CloseBoard(); })) {
+        return;
+    }
+
     // last session's photos
     std::error_code ec;
-    for (const auto& entry : std::filesystem::directory_iterator(kViewFolder, ec)) {
+    for (const auto& entry : std::filesystem::directory_iterator(UiHost::ViewFolder(), ec)) {
         if (entry.path().filename().string().starts_with("face_")) {
             std::filesystem::remove(entry.path(), ec);
         }
     }
 
-    PrismaUI = static_cast<PRISMA_UI_API::IVPrismaUI1*>(PRISMA_UI_API::RequestPluginAPI(PRISMA_UI_API::InterfaceVersion::V1));
-    if (!PrismaUI) {
-        logger::critical("PrismaUI API not available. Is Prisma UI installed and enabled?");
-        return;
-    }
-
-    view = PrismaUI->CreateView("skyrimnet_MiniGame/index.html", [](PrismaView a_view) -> void {
-        logger::info("View DOM is ready {}", a_view);
-    });
-    PrismaUI->Hide(view);
-
-    PrismaUI->RegisterJSListener(view, "rvClose", [](const char*) -> void {
-        SKSE::GetTaskInterface()->AddUITask(CloseBoard);
+    // The listeners run on the host's page thread: they post game work with UiHost::Post.
+    UiHost::Listen("rvClose", [](const char*) -> void {
+        UiHost::Post(CloseBoard);
     });
     // The opponents of the game about to be played, as hex FormIDs "0001A694,..." (Reversi: one).
     // Sent before the game's first remark, so remarks go to the right NPC.
-    PrismaUI->RegisterJSListener(view, "mgPlayers", [](const char* data) -> void {
+    UiHost::Listen("mgPlayers", [](const char* data) -> void {
         std::vector<RE::FormID> players;
         for (const auto part : std::views::split(std::string_view(data ? data : ""), ',')) {
             if (const auto formID = ParseFormID(std::string_view(part.begin(), part.end()))) {
@@ -636,7 +631,7 @@ static void SetUp()
     });
     // A new game's opponents "0001A694,...", with the screen faded to black: call them over and
     // take their photo.
-    PrismaUI->RegisterJSListener(view, "mgGather", [](const char* data) -> void {
+    UiHost::Listen("mgGather", [](const char* data) -> void {
         std::vector<RE::FormID> ids;
         for (const auto part : std::views::split(std::string_view(data ? data : ""), ',')) {
             if (const auto formID = ParseFormID(std::string_view(part.begin(), part.end()))) {
@@ -647,7 +642,7 @@ static void SetUp()
     });
     // {"text": "...", "level": "important" | "notable" | "minor", "speaker": "0001A694" (optional:
     // the first opponent)}
-    PrismaUI->RegisterJSListener(view, "rvNarrate", [](const char* data) -> void {
+    UiHost::Listen("rvNarrate", [](const char* data) -> void {
         const auto json = nlohmann::json::parse(data ? data : "", nullptr, false);
         if (!json.is_object() || !json.contains("text") || !json["text"].is_string()) {
             return;
@@ -660,11 +655,27 @@ static void SetUp()
                                    SkyrimNetBridge::Level::kMinor);
     });
     // What the player means to say, said in their own words.
-    PrismaUI->RegisterJSListener(view, "mgPlayerSay", [](const char* data) -> void {
+    UiHost::Listen("mgPlayerSay", [](const char* data) -> void {
         SkyrimNetBridge::PlayerSay(data ? data : "");
     });
+    // [{"id": "0001A694", "name": ...}]: how each of these NPCs plays poker, from their character.
+    // Each answer comes back as mgStyle({"id", "hands", "bets", "bluff"} or {"id", "failed"}).
+    UiHost::Listen("mgStyles", [](const char* data) -> void {
+        const auto json = nlohmann::json::parse(data ? data : "", nullptr, false);
+        std::vector<std::pair<RE::FormID, std::string>> npcs;
+        if (json.is_array()) {
+            for (const auto& entry : json) {
+                if (entry.is_object() && entry.contains("id") && entry["id"].is_string()) {
+                    npcs.emplace_back(ParseFormID(entry["id"].get<std::string>()), entry.value("name", std::string()));
+                }
+            }
+        }
+        SkyrimNetBridge::AskPokerStyles(std::move(npcs), [](std::string a_style) {
+            SKSE::GetTaskInterface()->AddUITask([script = "mgStyle(" + a_style + ")"]() { Invoke(script); });
+        });
+    });
     // {"states": {"0001A694": "what this NPC knows of the game", ...}, "playing": bool}
-    PrismaUI->RegisterJSListener(view, "rvState", [](const char* data) -> void {
+    UiHost::Listen("rvState", [](const char* data) -> void {
         const auto json = nlohmann::json::parse(data ? data : "", nullptr, false);
         if (!json.is_object() || !json.contains("states") || !json["states"].is_object()) {
             return;

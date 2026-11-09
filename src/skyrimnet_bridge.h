@@ -3,6 +3,8 @@
 #include <functional>
 #include <string>
 #include <unordered_map>
+#include <utility>
+#include <vector>
 
 // Everything that talks to SkyrimNet. Every function is a no-op when SkyrimNet is missing.
 namespace SkyrimNetBridge
@@ -37,6 +39,12 @@ namespace SkyrimNetBridge
     // whether it is still being played (those NPCs are marked busy in SkyrimNet while it is).
     // Replaces what the last call set.
     void SetStates(std::unordered_map<RE::FormID, std::string> a_states, bool a_playing);
+
+    // How each NPC (FormID, name) plays poker, from their character profile: one LLM request each
+    // (the prompt skyrimnet_minigame_poker_style). a_reply gets, once per NPC and on any thread,
+    // {"id": "0001A694", "hands": tight|normal|loose, "bets": cautious|normal|bold,
+    // "bluff": rarely|sometimes|often} or {"id", "failed": true} as JSON text.
+    void AskPokerStyles(std::vector<std::pair<RE::FormID, std::string>> a_npcs, std::function<void(std::string)> a_reply);
 
     // Forgets every game (a save was loaded).
     void Reset();

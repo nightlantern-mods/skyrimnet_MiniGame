@@ -1,0 +1,29 @@
+[ system ]
+{# SkyrimNet MiniGame: how a character plays poker, read from their profile once when a game of
+   Texas Hold'em starts (the plugin's PublicSendCustomPromptToLLM "skyrimnet_minigame_poker_style").
+   Context: npc_formid (unsigned decimal) and npc_name. The answer is three lines that the plugin
+   parses; the game falls back to a middling way of playing if they do not come. #}
+{% set npc_uuid = formid_to_uuid(npc_formid) %}
+You decide how a Skyrim character plays poker, from who they are.
+
+# {{ npc_name }}
+{% if isValidActor(npc_uuid) %}
+{{ render_character_profile("full", npc_uuid) }}
+{% else %}
+A local of this place.
+{% endif %}
+
+# What to decide
+From {{ npc_name }}'s personality, temperament, background and habits, decide three things about how they play cards for money:
+- HANDS: how many hands they play. tight: only good hands, patient and choosy. loose: plays many hands, restless, curious or reckless. normal: in between.
+- BETS: how they bet. bold: presses, raises and pushes. cautious: calls and checks, avoids big risks. normal: in between.
+- BLUFF: how often they bluff. often: enjoys deceit, theatre or risk. rarely: honest, plain or timid. sometimes: in between.
+Judge from the character, not from what would win. Pick the word that fits the profile best; normal and sometimes are for a character with no clear leaning either way.
+[ end system ]
+
+[ user ]
+Answer in exactly this format and nothing else, one English word after each colon:
+HANDS: <tight, normal or loose>
+BETS: <cautious, normal or bold>
+BLUFF: <rarely, sometimes or often>
+[ end user ]

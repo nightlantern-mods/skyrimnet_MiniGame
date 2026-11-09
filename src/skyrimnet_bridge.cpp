@@ -6,6 +6,7 @@
 #include <chrono>
 #include <mutex>
 #include <set>
+#include <sstream>
 #include <thread>
 
 #include <nlohmann/json.hpp>
@@ -71,7 +72,7 @@ namespace SkyrimNetBridge
 
         // {{ minigame_state(actorUUID) }}: the game this actor is playing with the player, or "".
         if (PublicRegisterDecorator) {
-            PublicRegisterDecorator("minigame_state", "The mini game (Reversi, Liar's Dice, Shut the Box, Blackjack...) this actor is playing with the player right now (empty if none)",
+            PublicRegisterDecorator("minigame_state", "The mini game (Reversi, Liar's Dice, Shut the Box, Blackjack, Texas Hold'em...) this actor is playing with the player right now (empty if none)",
                 [](RE::Actor* a_actor) -> std::string {
                     if (!a_actor) {
                         return {};
@@ -198,5 +199,78 @@ namespace SkyrimNetBridge
     void Reset()
     {
         SetStates({}, false);
+    }
+
+    namespace
+    {
+        constexpr const char* kPokerStylePrompt = "skyrimnet_minigame_poker_style";
+
+        // "HANDS: tight" / "BETS: bold" / "BLUFF: often", one per line, in any order and case.
+        nlohmann::json ParsePokerStyle(const std::string& a_text)
+        {
+            static const std::unordered_map<std::string, std::pair<const char*, std::vector<std::string>>> kKeys = {
+                { "HANDS", { "hands", { "tight", "normal", "loose" } } },
+                { "BETS", { "bets", { "cautious", "normal", "bold" } } },
+                { "BLUFF", { "bluff", { "rarely", "sometimes", "often" } } },
+            };
+            auto style = nlohmann::json::object();
+            std::istringstream lines(a_text);
+            std::string        line;
+            while (std::getline(lines, line)) {
+                const auto colon = line.find(':');
+                if (colon == std::string::npos) {
+                    continue;
+                }
+                std::string key, value;
+                for (const char c : line.substr(0, colon)) {
+                    if (std::isalpha(static_cast<unsigned char>(c))) key += static_cast<char>(std::toupper(static_cast<unsigned char>(c)));
+                }
+                for (const char c : line.substr(colon + 1)) {
+                    if (std::isalpha(static_cast<unsigned char>(c))) value += static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+                    else if (!value.empty()) break;
+                }
+                const auto it = kKeys.find(key);
+                if (it != kKeys.end() && std::ranges::find(it->second.second, value) != it->second.second.end()) {
+                    style[it->second.first] = value;
+                }
+            }
+            return style.size() == 3 ? style : nlohmann::json();
+        }
+    }
+
+    void AskPokerStyles(std::vector<std::pair<RE::FormID, std::string>> a_npcs, std::function<void(std::string)> a_reply)
+    {
+        for (const auto& [actor, name] : a_npcs) {
+            const auto id = std::format("{:08X}", actor);
+            const auto failed = [a_reply, id](std::string_view a_why) {
+                logger::info("poker style of {}: {}", id, a_why);
+                a_reply(nlohmann::json{ { "id", id }, { "failed", true } }.dump());
+            };
+            if (!g_ready || !PublicSendCustomPromptToLLM) {
+                failed("SkyrimNet custom prompts are not available");
+                continue;
+            }
+            const nlohmann::json context = { { "npc_formid", actor }, { "npc_name", name } };
+            const bool queued = PublicSendCustomPromptToLLM(kPokerStylePrompt, "",
+                context.dump(-1, ' ', false, nlohmann::json::error_handler_t::replace).c_str(),
+                [a_reply, id, failed](const char* a_response, int a_success) {
+                    const std::string text = a_response ? a_response : "";
+                    if (!a_success) {
+                        failed("the request failed: " + text.substr(0, 200));
+                        return;
+                    }
+                    auto style = ParsePokerStyle(text);
+                    if (style.is_null()) {
+                        failed("no style in the answer: " + text.substr(0, 200));
+                        return;
+                    }
+                    style["id"] = id;
+                    logger::info("poker style of {}: {}", id, style.dump());
+                    a_reply(style.dump());
+                });
+            if (!queued) {
+                failed("the request was not queued");
+            }
+        }
     }
 }

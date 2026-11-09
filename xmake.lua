@@ -5,7 +5,7 @@ set_xmakever("3.0.0")
 includes(os.getenv("COMMONLIB_SSE_NG") or "C:/Modding/MotionCommander/lib/commonlibsse-ng")
 
 local PLUGIN_NAME = "skyrimnet_MiniGame"
-local PLUGIN_VERSION = "0.1.2"
+local PLUGIN_VERSION = "0.2.0"
 
 local VIEW_NAME = "skyrimnet_MiniGame"
 
@@ -32,7 +32,7 @@ target(PLUGIN_NAME)
     add_rules("commonlibsse-ng.plugin", {
        name = PLUGIN_NAME,
        author = "nightlantern-mods",
-       description = "Play Reversi and Liar's Dice with nearby NPCs on a Prisma UI board, with SkyrimNet commentary"
+       description = "Table games with nearby NPCs on a Magelight UI or Prisma UI board, with SkyrimNet commentary"
     })
 
     add_files("src/**.cpp")
@@ -41,17 +41,22 @@ target(PLUGIN_NAME)
     set_pcxxheader("src/pch.h")
     add_cxflags("/utf-8")
 
-    -- dist/ holds the DLL and the view, laid out as they go into the mod
+    -- dist/ holds the DLL and the view, laid out as they go into the mod. The same page goes
+    -- where each UI host looks for it: Prisma UI under PrismaUI/views, Magelight UI under
+    -- Magelight/<mod>/views.
     after_build(function (target)
         local distdir = path.join(os.projectdir(), "dist")
-        local viewdir = path.join(distdir, "PrismaUI", "views", VIEW_NAME)
+        local prismadir = path.join(distdir, "PrismaUI", "views", VIEW_NAME)
+        local magelightdir = path.join(distdir, "Magelight", VIEW_NAME, "views")
         local plugindir = path.join(distdir, "SKSE", "Plugins")
 
         os.tryrm(distdir)
-        os.mkdir(viewdir)
+        os.mkdir(prismadir)
+        os.mkdir(magelightdir)
         os.mkdir(plugindir)
 
-        os.cp(path.join(os.projectdir(), "view", "*"), viewdir)
+        os.cp(path.join(os.projectdir(), "view", "*"), prismadir)
+        os.cp(path.join(os.projectdir(), "view", "*"), magelightdir)
         os.cp(target:targetfile(), plugindir)
 
         cprint("${bright green}distribution folder: ${clear}dist")
