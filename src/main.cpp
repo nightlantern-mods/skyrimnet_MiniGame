@@ -1,3 +1,4 @@
+#include "phantasm_faces.h"
 #include "settings.h"
 #include "skyrimnet_bridge.h"
 #include "ui_host.h"
@@ -234,7 +235,7 @@ namespace
             { "playerVoice", SkyrimNetBridge::CanPlayerSay() },
             { "voiceWait", a_settings.voiceWaitSeconds },
             { "gather", a_settings.gather },
-            { "facePhoto", a_settings.facePhoto && !g_photoUnsafe },
+            { "facePhoto", a_settings.facePhoto && (PhantasmFaces::Ready() || !g_photoUnsafe) },
             { "strings", LoadViewStrings() },
         };
     }
@@ -433,6 +434,29 @@ namespace
         SKSE::GetTaskInterface()->AddUITask([script = "mgFaces(" + photo.dump() + ")"]() { Invoke(script); });
     }
 
+    // Phantasm draws each opponent on their own, no screenshot: the board comes up at once
+    // (mgFaces with nothing), and the faces fill in as they are drawn.
+    void DrawFaces(const std::vector<RE::FormID>& a_ids)
+    {
+        const auto      n = ++g_photoCount;
+        std::error_code ec;
+        for (const auto& entry : std::filesystem::directory_iterator(UiHost::ViewFolder(), ec)) {
+            if (entry.path().filename().string().starts_with(std::format("face_{}_", n - 1))) {
+                std::filesystem::remove(entry.path(), ec);
+            }
+        }
+        logger::info("Phantasm draws {} faces", a_ids.size());
+        SKSE::GetTaskInterface()->AddUITask([]() { Invoke("mgFaces({})"); });
+        PhantasmFaces::Draw(a_ids, UiHost::ViewFolder(), std::to_string(n), [](std::uint32_t a_id, std::string a_file) {
+            if (a_file.empty()) {
+                return;  // the frame keeps its initial
+            }
+            // the whole picture is the face: no crop
+            const nlohmann::json photo = { { "faces", { { std::format("{:08X}", a_id), { { "file", a_file }, { "x", 0 }, { "y", 0 }, { "w", 1 }, { "h", 1 } } } } } };
+            SKSE::GetTaskInterface()->AddUITask([script = "mgFaces(" + photo.dump() + ")"]() { Invoke(script); });
+        });
+    }
+
     // From the view: a new game's opponents, once the screen is black.
     void OnGather(std::vector<RE::FormID> a_ids)
     {
@@ -449,8 +473,17 @@ namespace
                 SKSE::GetTaskInterface()->AddTask([ids]() { GatherOpponents(LookUpActors(ids)); });
                 std::this_thread::sleep_for(700ms);  // they land and turn
             }
-            if (!Settings::Get().facePhoto || g_photoUnsafe) {
-                logger::info("no photo ({})", g_photoUnsafe ? "a graphics mod that crashes it" : "MCM");
+            if (!Settings::Get().facePhoto) {
+                logger::info("no faces (MCM)");
+                SKSE::GetTaskInterface()->AddUITask([]() { Invoke("mgFaces({})"); });
+                return;
+            }
+            if (PhantasmFaces::Ready()) {
+                DrawFaces(ids);
+                return;
+            }
+            if (g_photoUnsafe) {
+                logger::info("no photo (a graphics mod that crashes it)");
                 SKSE::GetTaskInterface()->AddUITask([]() { Invoke("mgFaces({})"); });
                 return;
             }
@@ -718,7 +751,9 @@ static void SetUp()
     const bool enb = d3d11 && GetProcAddress(d3d11, "ENBGetSDKVersion");
     const bool upscaler = GetModuleHandleW(L"SkyrimUpscaler.dll") != nullptr;
     g_photoUnsafe = enb || upscaler;
-    logger::info("ENB: {}, Skyrim Upscaler: {}; face photos {}", enb, upscaler, g_photoUnsafe ? "off" : "on");
+    const bool phantasm = PhantasmFaces::SetUp();
+    logger::info("ENB: {}, Skyrim Upscaler: {}; faces {}", enb, upscaler,
+        phantasm ? std::format("drawn by Phantasm {}", PhantasmFaces::Version()) : g_photoUnsafe ? "off (no screenshot with these)" : "by screenshot");
 
     logger::info("Board ready");
 }

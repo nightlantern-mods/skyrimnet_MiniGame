@@ -17,8 +17,8 @@ $SNMG_Hints	Show legal moves
 $SNMG_HintsHelp	On your turn, marks the squares where you can play.
 $SNMG_Gather	Call opponents over
 $SNMG_GatherHelp	When a game starts, the screen fades to black and your opponents come to stand in front of you, facing you, for the photo in their face frames. Off: nobody moves, and only faces already on screen are shown.
-$SNMG_FacePhoto	Face photos
-$SNMG_FacePhotoHelp	When a game starts, takes a screenshot of the game for the face frames on the board. Off: no screenshot, and the frames show initials. Turn this off if the game crashes or freezes when a mini game starts. With ENB or Skyrim Upscaler there is never a photo, since saving it crashes the game.
+$SNMG_FacePhoto	Face pictures
+$SNMG_FacePhotoHelp	When a game starts, pictures of your opponents for the face frames on the board. With Phantasm installed (it comes with SeverActions) they are drawn by it, without a screenshot; otherwise a screenshot of the game is taken. Off: no pictures, and the frames show initials. Turn this off if the game crashes or freezes when a mini game starts. Without Phantasm, with ENB or Skyrim Upscaler there is never a photo, since saving it crashes the game.
 $SNMG_PauseGame	Pause the game while playing
 $SNMG_PauseGameHelp	The game stops while the board is open. NPCs cannot speak while it is stopped, so leave this off to hear SkyrimNet commentary.
 $SNMG_HeaderLiarsDice	Liar's Dice

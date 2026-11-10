@@ -1,4 +1,4 @@
-# SkyrimNet MiniGame 0.2.0
+# SkyrimNet MiniGame 0.3.0
 
 Play table games with the people around you. Open the menu, pick a game and your opponents
 from the NPCs nearby, and play on a board drawn over the game. SkyrimNet gives your opponents
@@ -15,8 +15,9 @@ Five games so far:
 - **Texas Hold'em** against one to three NPCs. No-limit poker, and each opponent plays in a way that
   fits who they are.
 
-When a game starts, your opponents come over to stand in front of you, and their faces are
-photographed for the frames on the board.
+When a game starts, your opponents come over to stand in front of you, and their faces are shown
+in frames on the board: drawn by [Phantasm](https://github.com/Severause/Phantasm) when it is
+installed, else cropped out of a screenshot.
 
 ## Requirements
 
@@ -27,6 +28,7 @@ photographed for the frames on the board.
 | [Address Library for SKSE Plugins](https://www.nexusmods.com/skyrimspecialedition/mods/32444) | |
 | [Magelight UI](https://www.nexusmods.com/skyrimspecialedition/mods/193303) 1.0 or later, **or** [Prisma UI](https://www.nexusmods.com/skyrimspecialedition/mods/148718) | Draws the board. One of the two is enough; with both installed, Magelight UI is used. Tested on Magelight UI 1.7.1 and Prisma UI 1.5.1. The log says which one is in use. |
 | [SkyrimNet](https://github.com/MinLL/SkyrimNet-GamePlugin) | Beta 28 or later. The games also run without it, but then nobody talks. |
+| [Phantasm](https://github.com/Severause/Phantasm) 0.2.0 or later (optional) | Draws the opponents' faces for the frames, with no screenshot; it comes with SeverActions 4.7 or later. Without it, the faces are cropped out of a screenshot. |
 | [SkyUI](https://www.nexusmods.com/skyrimspecialedition/mods/12604) | |
 | [MCM Helper](https://www.nexusmods.com/skyrimspecialedition/mods/53000) | The settings menu and the hotkey. |
 
@@ -140,7 +142,7 @@ game waits for each one.
 | Open / close the menu | K | The hotkey. |
 | Opponent search range | 1500 | How far away people can be to appear in the opponent list, in game units (70 is about a metre). |
 | Call opponents over | On | Opponents come to stand in front of you for the photo in their face frames. Off: nobody moves, and only faces already on screen are shown. |
-| Face photos | On | A screenshot for the face frames when a game starts. Off: no screenshot, and the frames show initials. Turn this off if the game crashes or freezes when a mini game starts. With ENB or Skyrim Upscaler there is never a photo, since saving it crashes the game. |
+| Face pictures | On | Pictures of the opponents for the face frames when a game starts: drawn by Phantasm when it is installed, else a screenshot of the game. Off: no pictures, and the frames show initials. Turn this off if the game crashes or freezes when a mini game starts. Without Phantasm, with ENB or Skyrim Upscaler there is never a photo, since saving it crashes the game. |
 | Pause the game while playing | Off | NPCs cannot speak while the game is paused, so leave this off to hear them. |
 | Reversi: opponent strength | 2 | 1 Beginner, 2 Normal, 3 Strong, 4 Master. |
 | Reversi: your color | Black | Black, White, Random or Alternate. Black moves first. |
@@ -161,16 +163,19 @@ game waits for each one.
 
 - **Liar's Dice takes its time.** Every bid is spoken before the next one, so a game of four
   players can last a while, longer still once you are out and only NPCs play.
-- **The face photo** is a screenshot of the game: the board steps aside for a moment and the HUD
-  is hidden. It is saved next to the board's page under Data (`Magelight/skyrimnet_MiniGame/views/face_N.jpg`
-  or `PrismaUI/views/skyrimnet_MiniGame/face_N.jpg`; in Mod Organizer, in the overwrite folder)
-  and deleted when the next one is taken or Skyrim starts. An opponent whose face cannot be seen (behind someone, off screen) gets their
-  initial instead.
+- **The face pictures.** With Phantasm installed, each opponent is drawn on their own, head and
+  shoulders, and the board comes up at once while the faces fill in; they need not be on screen.
+  Without it, the picture is a screenshot of the game: the board steps aside for a moment and the
+  HUD is hidden, and an opponent whose face cannot be seen (behind someone, off screen) gets their
+  initial instead. The files are saved next to the board's page under Data
+  (`Magelight/skyrimnet_MiniGame/views/face_*` or `PrismaUI/views/skyrimnet_MiniGame/face_*`; in
+  Mod Organizer, in the overwrite folder) and deleted when the next game starts or Skyrim starts.
 - **Other mods' views.** If another mod's web view takes the input from the board, the board
   takes it back within a few seconds, and Esc closes it. A game in progress waits in the menu.
   On Magelight UI, its toggle key (Page Up by default) closes the board as well.
-- **ENB and Skyrim Upscaler.** With either of them installed, saving the photo crashes the game,
-  so there is no photo: the frames show initials. The log says so at startup.
+- **ENB and Skyrim Upscaler.** With either of them installed, saving the screenshot crashes the
+  game, so without Phantasm there is no photo: the frames show initials. With Phantasm the faces
+  are drawn as usual. The log says at startup how the faces are made.
 - **Seated NPCs** get up to come over, and go back to what they were doing after the game.
 - If your character's lines leave the table waiting for the full *Voice wait* each time, turn
   *You speak your own moves* off and report it.
@@ -206,9 +211,9 @@ texts, into the mod project.
 
 ## Files
 
-- `skyrimnet_MiniGame_0.2.0.zip`: the mod (English, usable with any game language), with
+- `skyrimnet_MiniGame_0.3.0.zip`: the mod (English, usable with any game language), with
   `THIRD_PARTY_NOTICES.txt` and `COPYING.txt` (see License).
-- `skyrimnet_MiniGame_0.2.0_Japanese.zip`: Japanese translation; install after the mod and let
+- `skyrimnet_MiniGame_0.3.0_Japanese.zip`: Japanese translation; install after the mod and let
   it overwrite.
 
 ## License
@@ -230,6 +235,7 @@ Third-party code, with the full license texts in [THIRD_PARTY_NOTICES.txt](THIRD
 - The SkyrimNet API headers in `src/skyrimnet/`: MIT, Fateless.Ai (see the LICENSE there).
 - `src/PrismaUI_API.h`: the Prisma UI modder API header, which modders may copy into their
   projects.
-- `src/MagelightUI_API.h`: the Magelight UI API header, MIT, Severause.
+- `src/MagelightUI_API.h` and `src/Phantasm_API.h`: the Magelight UI and Phantasm API headers,
+  MIT, Severause.
 - nlohmann/json 3.12.0, spdlog 1.16.0, DirectXMath, DirectX Tool Kit and rapidcsv: MIT, or
   BSD-3-Clause for rapidcsv.

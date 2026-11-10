@@ -16,8 +16,8 @@ How this mod is licensed
   https://www.gnu.org/licenses/gpl-3.0.txt.
 
 - Corresponding Source of the DLL:
-    * this mod's source, version 0.2.0:
-      https://github.com/nightlantern-mods/skyrimnet_MiniGame (tag v0.2.0 and the main branch);
+    * this mod's source, version 0.3.0:
+      https://github.com/nightlantern-mods/skyrimnet_MiniGame (tag v0.3.0 and the main branch);
     * CommonLibSSE NG 7.5.4, built from source with this mod:
       https://github.com/alandtse/CommonLibSSE-NG/tree/v7.5.4;
     * the other libraries listed below, at the versions given (pinned in xmake-requires.lock in
@@ -140,8 +140,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 
-4. Prisma UI and Magelight UI API headers
------------------------------------------
+4. Prisma UI, Magelight UI and Phantasm API headers
+---------------------------------------------------
 
 src/PrismaUI_API.h, the modder API header of Prisma UI
 (https://www.nexusmods.com/skyrimspecialedition/mods/148718). The header carries no license
@@ -152,8 +152,10 @@ text; its only terms, as written at its top, are:
 Prisma UI itself is a separate mod and is not included.
 
 src/MagelightUI_API.h, the API header of Magelight UI
-(https://github.com/Severause/MagelightUI, https://www.nexusmods.com/skyrimspecialedition/mods/193303).
-Magelight UI itself is a separate mod and is not included.
+(https://github.com/Severause/MagelightUI, https://www.nexusmods.com/skyrimspecialedition/mods/193303),
+and src/Phantasm_API.h, the API header of Phantasm (https://github.com/Severause/Phantasm). Both
+are by the same author under the license below. Magelight UI and Phantasm themselves are separate
+mods and are not included.
 
 MIT License
 
