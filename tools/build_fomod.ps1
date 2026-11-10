@@ -67,13 +67,15 @@ foreach ($l in $languages) {
 
 # ---- the installer ----
 # Vortex re-encodes the XML as UTF-16 and only strips an encoding written in double quotes: a
-# single-quoted one fails at line 1. No BOM either.
+# single-quoted one fails at line 1. No BOM either. The mod managers name the installed mod after
+# info.xml's Name, so it stays "skyrimnet_MiniGame", the name the plain archives of earlier
+# versions got from their file name: updating replaces the old mod instead of adding a second one.
 $utf8 = New-Object System.Text.UTF8Encoding($false)
 $esc = { param($s) [System.Security.SecurityElement]::Escape($s) }
 $info = @"
 <?xml version="1.0" encoding="UTF-8"?>
 <fomod>
-  <Name>SkyrimNet MiniGame</Name>
+  <Name>skyrimnet_MiniGame</Name>
   <Author>nightlantern-mods</Author>
   <Version>$Version</Version>
   <Website>https://github.com/nightlantern-mods/skyrimnet_MiniGame</Website>
@@ -165,6 +167,8 @@ try {
     [xml]$xml = [System.Text.Encoding]::UTF8.GetString((& $read 'fomod/ModuleConfig.xml'))
     $group = $xml.config.installSteps.installStep.optionalFileGroups.group
     if ($group.type -ne 'SelectExactlyOne') { $problems.Add("group type $($group.type)") }
+    [xml]$infoXml = [System.Text.Encoding]::UTF8.GetString((& $read 'fomod/info.xml'))
+    if ($infoXml.fomod.Name -ne $name) { $problems.Add("info.xml Name is '$($infoXml.fomod.Name)', not $name : the mod managers would install a differently named mod") }
     $flags = @($group.plugins.plugin | ForEach-Object { $_.conditionFlags.flag.'#text' })
     if ($flags.Count -ne $languages.Count) { $problems.Add("$($flags.Count) choices, $($languages.Count) languages") }
     $sets = @{}
