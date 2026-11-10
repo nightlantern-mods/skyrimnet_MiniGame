@@ -1,0 +1,50 @@
+$SNMG_ModName	SkyrimNet MiniGame
+$SNMG_HeaderGeneral	Allgemein
+$SNMG_HeaderReversi	Reversi
+$SNMG_OpenKey	Menü öffnen / schließen
+$SNMG_OpenKeyHelp	Öffnet das Minispiel-Menü: Wähle ein Spiel und dann deinen Gegner aus den Leuten in der Nähe (wer unter deinem Fadenkreuz steht, ist zu Beginn ausgewählt). Erneut drücken oder Esc schließt es. Ein unbeendetes Spiel wird oben im Menü zum Weiterspielen angeboten.
+$SNMG_ScanRadius	Suchreichweite für Gegner
+$SNMG_ScanRadiusHelp	Wie weit Leute entfernt sein dürfen, um in der Gegnerliste zu erscheinen, in Spieleinheiten (70 Einheiten sind etwa 1 Meter).
+$SNMG_Difficulty	Gegnerstärke
+$SNMG_DifficultyHelp	1 Anfänger / 2 Normal / 3 Stark / 4 Meister. Gilt ab dem nächsten Spiel.
+$SNMG_Color	Deine Farbe
+$SNMG_ColorHelp	Schwarz zieht zuerst. „Abwechselnd“ tauscht Schwarz und Weiß in jedem Spiel.
+$SNMG_ColorBlack	Schwarz (zuerst)
+$SNMG_ColorWhite	Weiß (als Zweiter)
+$SNMG_ColorRandom	Zufällig
+$SNMG_ColorAlternate	Abwechselnd
+$SNMG_Hints	Gültige Züge anzeigen
+$SNMG_HintsHelp	Markiert in deinem Zug die Felder, auf die du setzen kannst.
+$SNMG_Gather	Gegner herbeirufen
+$SNMG_GatherHelp	Zu Spielbeginn wird der Bildschirm schwarz, und deine Gegner stellen sich dir zugewandt vor dich, für das Bild in ihren Gesichtsrahmen. Aus: Niemand bewegt sich, und nur Gesichter, die schon auf dem Bildschirm sind, werden gezeigt.
+$SNMG_FacePhoto	Gesichtsbilder
+$SNMG_FacePhotoHelp	Zu Spielbeginn Bilder deiner Gegner für die Gesichtsrahmen auf dem Brett. Ist Phantasm installiert (es kommt mit SeverActions), zeichnet es sie ohne Bildschirmfoto; andernfalls wird ein Bildschirmfoto des Spiels gemacht. Aus: keine Bilder, die Rahmen zeigen Initialen. Schalte dies aus, wenn das Spiel beim Start eines Minispiels abstürzt oder einfriert. Ohne Phantasm gibt es mit ENB oder Skyrim Upscaler nie ein Foto, da das Speichern das Spiel zum Absturz bringt.
+$SNMG_PauseGame	Spiel während des Spielens pausieren
+$SNMG_PauseGameHelp	Das Spiel hält an, solange das Brett offen ist. Angehalten können NPCs nicht sprechen, also lass dies aus, um die Kommentare von SkyrimNet zu hören.
+$SNMG_HeaderLiarsDice	Lügenwürfeln
+$SNMG_DiceDifficulty	Gegnerstärke
+$SNMG_DiceDifficultyHelp	1 Anfänger / 2 Normal / 3 Stark / 4 Meister. Stärkere Gegner rechnen die Chancen besser aus und lesen deine Gebote. Gilt ab dem nächsten Spiel.
+$SNMG_HeaderShutTheBox	Shut the Box
+$SNMG_StbDifficulty	Gegnerstärke
+$SNMG_StbDifficultyHelp	1 Anfänger / 2 Normal / 3 Stark / 4 Meister. Stärkere Gegner wählen die Plättchen, die die besten Chancen lassen; ein Meister spielt außerdem darauf, die bisher niedrigste Punktzahl zu schlagen. Gilt ab dem nächsten Spiel.
+$SNMG_HeaderBlackjack	Blackjack
+$SNMG_BjDifficulty	Gegnerstärke
+$SNMG_BjDifficultyHelp	1 Anfänger / 2 Normal / 3 Stark / 4 Meister. Stärkere Gegner spielen nach Lehrbuch, verdoppeln, setzen spät im Spiel höher, wenn sie zurückliegen, und überlegen als Geber, ob sie bei 17 oder mehr ziehen. Gilt ab dem nächsten Spiel.
+$SNMG_BjRounds	Runden pro Spiel
+$SNMG_BjRoundsHelp	Das Spiel endet nach so vielen Runden, oder früher, wenn allen Spielern die Chips ausgehen. Zu Spielbeginn wählst du, wer gibt, und der Geber bleibt bis zum Ende derselbe. Der Geber hält keine Chips und kann immer zahlen. Die meisten Chips unter den Spielern gewinnen. Gilt ab dem nächsten Spiel.
+$SNMG_HeaderPoker	Texas Hold'em
+$SNMG_PkDifficulty	Gegnerstärke
+$SNMG_PkDifficultyHelp	1 Anfänger / 2 Normal / 3 Stark / 4 Meister. Stärkere Gegner schätzen ihre Chancen und die Pot Odds genauer ein; ein Meister liest außerdem, wie die anderen spielen. Wie jeder Gegner spielt (mutig oder vorsichtig, tight oder loose, bluffend oder nicht), ergibt sich aus seinem Charakter, den SkyrimNet zu Spielbeginn liest. Gilt ab dem nächsten Spiel.
+$SNMG_PkHands	Hände pro Spiel
+$SNMG_PkHandsHelp	Das Spiel endet nach so vielen Händen, oder früher, wenn nur noch ein Spieler Chips hat. Die meisten Chips gewinnen. Gilt ab dem nächsten Spiel.
+$SNMG_HeaderSkyrimNet	SkyrimNet
+$SNMG_Commentary	Kommentare
+$SNMG_CommentaryHelp	Teilt SkyrimNet den Spielverlauf mit, damit deine Gegner reden. Reversi: Anfang, Ende (Sieg verkünden oder Niederlage eingestehen), Aufgabe, Ecken, große Umdrehungen, riskante Züge, Aufholjagden und gewöhnliche Züge. Lügenwürfeln: jedes Gebot und jeder Ruf, jeweils von einer Person am Tisch gesagt, und das Spiel wartet auf die Zeile. Shut the Box: Anfang, ein knapper Abschluss und das Ende jedes Zugs, und das Spiel wartet auf die Zeile. Blackjack: Anfang, jedes Geben, Überkaufen, Verdoppeln und das Ende jeder Runde, und das Spiel wartet auf die Zeile. Texas Hold'em: Anfang, Einsätze, Erhöhungen, All-ins und das Ende jeder Hand, und das Spiel wartet auf die Zeile.
+$SNMG_Cooldown	Kommentarabstand (Sekunden)
+$SNMG_CooldownHelp	Reversi: höchstens eine Bemerkung zu einem gewöhnlichen Zug pro so viele Sekunden; auffällige Züge wie Ecken und Aufholjagden warten halb so lang. Anfang, Ende und Aufgabe kommen immer durch. Weniger heißt mehr Gerede. (Lügenwürfeln, Shut the Box, Blackjack und Texas Hold'em richten ihr Tempo stattdessen nach der Stimme.)
+$SNMG_Challenge	NPCs dürfen dich herausfordern
+$SNMG_ChallengeHelp	Erlaubt einem NPC, dich im Gespräch zu Reversi herauszufordern (die SkyrimNet-Aktion Reversi_Challenge). Das Brett öffnet sich mit der Herausforderung, und du kannst annehmen oder ablehnen.
+$SNMG_VoiceWait	Warten auf die Stimme (Sekunden)
+$SNMG_VoiceWaitHelp	Lügenwürfeln, Shut the Box, Blackjack und Texas Hold'em warten, bis jede Zeile gesprochen ist, bevor die nächste Person handelt. Spricht innerhalb so vieler Sekunden niemand, geht das Spiel trotzdem weiter.
+$SNMG_PlayerVoice	Du sprichst deine eigenen Züge
+$SNMG_PlayerVoiceHelp	Lügenwürfeln: deine Gebote und deine „Lüge!“-Rufe; Texas Hold'em: dein Passen, Schieben, Mitgehen, Setzen und Erhöhen. Sie gehen durch SkyrimNets Transform Dialogue, sodass dein Charakter sie laut in eigenen Worten sagt (je eine LLM-Anfrage). Aus: Nur deine Gegner sprechen, und der nächste erwähnt deinen Zug.

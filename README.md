@@ -1,4 +1,4 @@
-# SkyrimNet MiniGame 0.3.0
+# SkyrimNet MiniGame 0.4.0
 
 Play table games with the people around you. Open the menu, pick a game and your opponents
 from the NPCs nearby, and play on a board drawn over the game. SkyrimNet gives your opponents
@@ -34,11 +34,18 @@ installed, else cropped out of a screenshot.
 
 ## Installation
 
-Install with your mod manager and enable `skyrimnet_MiniGame.esp`. It is ESL-flagged and needs
-no load-order slot. It can be added to an existing save.
+Install the archive with your mod manager (Mod Organizer 2 or Vortex) and pick the language of the
+board and the settings menu in the installer: English, Japanese, Russian, German or Simplified
+Chinese. The choice is independent of the game's language. Enable `skyrimnet_MiniGame.esp`; it is
+ESL-flagged and needs no load-order slot, and the mod can be added to an existing save.
 
-Japanese players: also install the separate Japanese translation archive and let it overwrite
-this one. In any other game language the menus and the board are in English.
+Installing by hand: copy the contents of `core/<language>/` from the archive (`en`, `ja`, `ru`,
+`de` or `zh`) into the game's `Data` folder.
+
+The Japanese, Russian, German and Chinese texts are machine-translated and checked by the author
+only for completeness; corrections are welcome (see Translating). The settings menu uses the
+game's own font, so a Chinese menu in a game that is not Chinese may show boxes instead of
+characters; the board itself draws every script.
 
 ## How to play
 
@@ -186,10 +193,19 @@ Close the board, save, and remove the mod.
 
 ## Translating
 
-- Board, commentary and messages: `SKSE/Plugins/skyrimnet_MiniGame/strings.json` (UTF-8). A
-  missing key falls back to English.
-- MCM: `Interface/Translations/skyrimnet_MiniGame_<LANGUAGE>.txt` (UTF-16 LE with BOM). The mod
-  ships the English texts under every language name.
+Each language lives in `translations/<code>/` in the repository: `strings.json` (the board,
+the commentary and the messages; a missing key falls back to the English built into the view) and
+`mcm_<code>.tsv` (the settings menu, `$key<TAB>text`). The English originals are the `STRINGS`
+object in `view/index.html` and `translations/mcm_en.tsv`.
+
+To fix or add a language, edit or copy one of those folders and run
+`node tools/check_translation.js . translations/<code>`, which checks the keys and the
+`{placeholders}` against the English. The installer is built from these folders
+(`tools/build_fomod.ps1`): each language gets the whole mod with its texts, and the MCM texts are
+written under every game language's file name, so the choice works with any game language.
+
+Installed, the texts are `SKSE/Plugins/skyrimnet_MiniGame/strings.json` (UTF-8) and
+`Interface/Translations/skyrimnet_MiniGame_<LANGUAGE>.txt` (UTF-16 LE with BOM).
 
 ## Building
 
@@ -199,8 +215,8 @@ The repository holds the source; the release archives hold the built mod.
 |---|---|
 | `src/` | The SKSE plugin (C++23, [CommonLibSSE-NG](https://github.com/alandtse/CommonLibVR/tree/ng)). |
 | `view/` | The board's web page: the menu, the games and their AI (one HTML file). The build copies it to where Magelight UI and Prisma UI each look for it. |
-| `translations/` | The English MCM texts (`mcm_en.tsv`). |
-| `tools/` | Node scripts that export the view's texts to `strings.json`, write the MCM translation files and check a translation against the English keys. |
+| `translations/` | The English MCM texts (`mcm_en.tsv`) and the translations, one folder per language (`ja`, `ru`, `de`, `zh`). |
+| `tools/` | Node scripts that export the view's texts to `strings.json`, write the MCM translation files and check a translation against the English keys; `build_fomod.ps1` builds and checks the release installer. |
 | `plugin/` | `skyrimnet_MiniGame.esp` as YAML (a quest that runs the MCM and the hotkey). |
 | `assets/` | The MCM config, the Papyrus sources and the SkyrimNet prompt bundle. |
 
@@ -211,10 +227,9 @@ texts, into the mod project.
 
 ## Files
 
-- `skyrimnet_MiniGame_0.3.0.zip`: the mod (English, usable with any game language), with
-  `THIRD_PARTY_NOTICES.txt` and `COPYING.txt` (see License).
-- `skyrimnet_MiniGame_0.3.0_Japanese.zip`: Japanese translation; install after the mod and let
-  it overwrite.
+- `skyrimnet_MiniGame_0.4.0.zip`: the mod as a FOMOD installer, in English, Japanese, Russian,
+  German or Simplified Chinese, with `THIRD_PARTY_NOTICES.txt` and `COPYING.txt` (see License).
+  Without an installer, use `core/<language>/` from the archive.
 
 ## License
 

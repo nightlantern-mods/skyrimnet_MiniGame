@@ -1,0 +1,50 @@
+$SNMG_ModName	SkyrimNet MiniGame
+$SNMG_HeaderGeneral	常规
+$SNMG_HeaderReversi	黑白棋
+$SNMG_OpenKey	打开 / 关闭菜单
+$SNMG_OpenKeyHelp	打开小游戏菜单：先选择游戏，再从附近的人中选择对手（准星指向的人会被预先选中）。再按一次或按 Esc 关闭。未完成的对局会显示在菜单顶部，可以继续。
+$SNMG_ScanRadius	对手搜索范围
+$SNMG_ScanRadiusHelp	多远以内的人会出现在对手列表中，以游戏单位计（70 单位约为 1 米）。
+$SNMG_Difficulty	对手强度
+$SNMG_DifficultyHelp	1 新手 / 2 普通 / 3 强手 / 4 大师。从下一局开始生效。
+$SNMG_Color	你的颜色
+$SNMG_ColorHelp	黑方先行。"交替"会每局交换黑白。
+$SNMG_ColorBlack	黑方（先手）
+$SNMG_ColorWhite	白方（后手）
+$SNMG_ColorRandom	随机
+$SNMG_ColorAlternate	交替
+$SNMG_Hints	显示可落子位置
+$SNMG_HintsHelp	轮到你时，标出可以落子的格子。
+$SNMG_Gather	召集对手过来
+$SNMG_GatherHelp	游戏开始时画面变黑，对手走到你面前并面向你，以便拍摄头像框用的照片。关闭：没有人移动，只显示已经在画面中的面孔。
+$SNMG_FacePhoto	头像图片
+$SNMG_FacePhotoHelp	游戏开始时为棋盘上的头像框准备对手的图片。安装了 Phantasm（随 SeverActions 附带）时由它绘制，无需截图；否则对游戏画面截图。关闭：不生成图片，头像框显示姓名首字母。如果开始小游戏时游戏崩溃或卡死，请关闭此项。没有 Phantasm 时，若安装了 ENB 或 Skyrim Upscaler 则从不截图，因为保存截图会导致游戏崩溃。
+$SNMG_PauseGame	游玩时暂停游戏
+$SNMG_PauseGameHelp	棋盘打开期间游戏暂停。暂停时 NPC 无法说话，所以若要听 SkyrimNet 的解说，请保持关闭。
+$SNMG_HeaderLiarsDice	吹牛骰子
+$SNMG_DiceDifficulty	对手强度
+$SNMG_DiceDifficultyHelp	1 新手 / 2 普通 / 3 强手 / 4 大师。更强的对手更会计算概率，也会解读你的叫数。从下一局开始生效。
+$SNMG_HeaderShutTheBox	关盒子
+$SNMG_StbDifficulty	对手强度
+$SNMG_StbDifficultyHelp	1 新手 / 2 普通 / 3 强手 / 4 大师。更强的对手会选择留下最佳概率的数字牌；大师还会以超越目前最低点数为目标。从下一局开始生效。
+$SNMG_HeaderBlackjack	二十一点
+$SNMG_BjDifficulty	对手强度
+$SNMG_BjDifficultyHelp	1 新手 / 2 普通 / 3 强手 / 4 大师。更强的对手按基本策略行事、会加倍、在后段落后时加大下注，担任庄家时还会判断 17 点及以上是否要牌。从下一局开始生效。
+$SNMG_BjRounds	每局轮数
+$SNMG_BjRoundsHelp	进行这么多轮后游戏结束，若所有玩家的筹码都用完则提前结束。游戏开始时由你选择庄家，庄家在结束前不会更换。庄家不持有筹码，总能赔付。玩家中筹码最多者获胜。从下一局开始生效。
+$SNMG_HeaderPoker	德州扑克
+$SNMG_PkDifficulty	对手强度
+$SNMG_PkDifficultyHelp	1 新手 / 2 普通 / 3 强手 / 4 大师。更强的对手对自己的胜率和底池赔率判断更准确；大师还会解读其他人的打法。每位对手的打法（大胆或谨慎、紧或松、是否诈唬）来自其性格，由 SkyrimNet 在游戏开始时读取。从下一局开始生效。
+$SNMG_PkHands	每局手数
+$SNMG_PkHandsHelp	进行这么多手后游戏结束，若只剩一名玩家有筹码则提前结束。筹码最多者获胜。从下一局开始生效。
+$SNMG_HeaderSkyrimNet	SkyrimNet
+$SNMG_Commentary	解说
+$SNMG_CommentaryHelp	把游戏进程告诉 SkyrimNet，让对手开口说话。黑白棋：开局、终局（宣告胜利或承认失败）、认输、占角、大量翻转、冒险的一手、逆转以及普通的一手。吹牛骰子：每次叫数和指认都由桌上一人说出，游戏会等待这句话说完。关盒子：开局、接近关盒以及每个回合结束，游戏会等待这句话说完。二十一点：开局、每次发牌、爆牌、加倍以及每轮结束，游戏会等待这句话说完。德州扑克：开局、下注、加注、全下以及每手结束，游戏会等待这句话说完。
+$SNMG_Cooldown	解说间隔（秒）
+$SNMG_CooldownHelp	黑白棋：每隔这么多秒最多对普通的一手评论一次；占角、逆转等精彩的一手只需等待一半时间。开局、终局和认输总会说出。数值越小说得越多。（吹牛骰子、关盒子、二十一点和德州扑克则按语音节奏进行。）
+$SNMG_Challenge	NPC 可以向你挑战
+$SNMG_ChallengeHelp	允许 NPC 在对话中向你发起黑白棋挑战（SkyrimNet 动作 Reversi_Challenge）。棋盘会随挑战一起打开，你可以接受或拒绝。
+$SNMG_VoiceWait	等待语音（秒）
+$SNMG_VoiceWaitHelp	吹牛骰子、关盒子、二十一点和德州扑克会等每句话说完后，下一个人才行动。如果在这么多秒内没有人说话，游戏仍会继续。
+$SNMG_PlayerVoice	说出你自己的行动
+$SNMG_PlayerVoiceHelp	吹牛骰子：你的叫数和"吹牛！"；德州扑克：你的弃牌、过牌、跟注、下注和加注。它们会经过 SkyrimNet 的 Transform Dialogue，让你的角色用自己的话大声说出来（每次一个 LLM 请求）。关闭：只有对手说话，由下一位对手提到你的行动。

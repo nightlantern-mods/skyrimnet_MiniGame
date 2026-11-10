@@ -1,0 +1,50 @@
+$SNMG_ModName	SkyrimNet ミニゲーム
+$SNMG_HeaderGeneral	全般
+$SNMG_HeaderReversi	リバーシ
+$SNMG_OpenKey	メニューを開く／閉じるキー
+$SNMG_OpenKeyHelp	ミニゲームのメニューを開きます。ゲームを選び、近くにいる人の一覧から対戦相手を選びます（照準を合わせている人が最初から選ばれています）。もう一度押すか Esc で閉じます。途中の対局はメニューの一番上から続きを遊べます。
+$SNMG_ScanRadius	対戦相手を探す範囲
+$SNMG_ScanRadiusHelp	対戦相手の一覧に出す人の距離の上限です（ゲーム内の単位。70 でおよそ 1m）。
+$SNMG_Difficulty	相手の強さ
+$SNMG_DifficultyHelp	1 入門 / 2 普通 / 3 強い / 4 達人。次の対局から反映されます。
+$SNMG_Color	自分の石
+$SNMG_ColorHelp	黒が先手です。「交互」は対局ごとに黒と白を入れ替えます。
+$SNMG_ColorBlack	黒（先手）
+$SNMG_ColorWhite	白（後手）
+$SNMG_ColorRandom	ランダム
+$SNMG_ColorAlternate	交互
+$SNMG_Hints	置ける場所を表示
+$SNMG_HintsHelp	自分の番に、石を置けるマスに印を表示します。
+$SNMG_Gather	対戦相手を正面に呼び寄せる
+$SNMG_GatherHelp	ゲーム開始時に画面を暗転させ、対戦相手をプレイヤーの正面に呼び寄せてこちらを向かせ、顔の枠用の写真を撮ります。オフにすると誰も動かさず、画面に映っている人の顔だけを表示します。
+$SNMG_FacePhoto	顔の画像を出す
+$SNMG_FacePhotoHelp	ゲーム開始時に、盤の顔の枠に使う対戦相手の画像を用意します。Phantasm（SeverActions に同梱）が入っていれば撮影せずに Phantasm が描き、なければ画面を撮影します。オフにすると何もせず、枠には名前の頭文字を表示します。ミニゲームの開始時にゲームが落ちたり固まったりする場合はオフにしてください。Phantasm がなく ENB や Skyrim Upscaler を使っている場合は、撮影するとゲームが落ちるため、この設定に関係なく撮影しません。
+$SNMG_PauseGame	対局中はゲームを一時停止
+$SNMG_PauseGameHelp	オンにすると盤を開いている間ゲームが止まります。止めている間は NPC がしゃべれないため、SkyrimNet の実況を聞くならオフのままにしてください。
+$SNMG_HeaderLiarsDice	嘘つきダイス
+$SNMG_DiceDifficulty	相手の強さ
+$SNMG_DiceDifficultyHelp	1 入門 / 2 普通 / 3 強い / 4 達人。強いほど確率をよく読み、こちらの宣言から手の内を推し量ります。次のゲームから反映されます。
+$SNMG_HeaderShutTheBox	シャット・ザ・ボックス
+$SNMG_StbDifficulty	相手の強さ
+$SNMG_StbDifficultyHelp	1 入門 / 2 普通 / 3 強い / 4 達人。強いほど残りの見込みがよくなる札を選び、達人はそれまでの最低得点を上回ることも狙います。次のゲームから反映されます。
+$SNMG_HeaderBlackjack	ブラックジャック
+$SNMG_BjDifficulty	相手の強さ
+$SNMG_BjDifficultyHelp	1 入門 / 2 普通 / 3 強い / 4 達人。強いほどセオリー通りに打ち、ダブルダウンも使い、終盤に負けていれば賭けを増やします。ディーラーのときは 17 以上で引くかどうかも読みます。次のゲームから反映されます。
+$SNMG_BjRounds	1 ゲームのラウンド数
+$SNMG_BjRoundsHelp	このラウンド数で終わります。ディーラー以外の全員のチップがなくなれば、そこで終わります。ディーラーは開始時に選び、ゲームが終わるまで同じ人が務めます。ディーラーはチップを持たず、支払いで困ることはありません。ディーラー以外でチップが一番多い人の勝ちです。次のゲームから反映されます。
+$SNMG_HeaderPoker	テキサス・ホールデム
+$SNMG_PkDifficulty	相手の強さ
+$SNMG_PkDifficultyHelp	1 入門 / 2 普通 / 3 強い / 4 達人。強いほど勝ち目とポットオッズを正確に読み、達人は相手の打ち方も読みます。相手それぞれの打ち方（強気か慎重か、手堅いか手広いか、はったりの多さ）は、ゲーム開始時に SkyrimNet がその人の人柄から決めます。次のゲームから反映されます。
+$SNMG_PkHands	1 ゲームのハンド数
+$SNMG_PkHandsHelp	このハンド数で終わります。チップが残っているのが 1 人になれば、そこで終わります。チップが一番多い人の勝ちです。次のゲームから反映されます。
+$SNMG_HeaderSkyrimNet	SkyrimNet
+$SNMG_Commentary	対局の実況
+$SNMG_CommentaryHelp	ゲームの様子を SkyrimNet に伝え、相手の NPC が話します。リバーシは開始・終局（勝利／敗北宣言）・投了のほか、角・大きく返す・危ない手・逆転・ふつうの手も実況します。嘘つきダイスは宣言と「嘘だ！」のたびに卓の誰か 1 人が話し、話し終わるまでゲームが待ちます。シャット・ザ・ボックスは開始・全部閉じる直前・各プレイヤーの番の終わりに話し、同じく話し終わるまで待ちます。ブラックジャックは開始・配札・バースト・ダブル・各ラウンドの終わりに話し、同じく話し終わるまで待ちます。テキサス・ホールデムは開始・ベット・レイズ・オールイン・各ハンドの終わりに話し、同じく話し終わるまで待ちます。
+$SNMG_Cooldown	実況の間隔（秒）
+$SNMG_CooldownHelp	リバーシで、ふつうの手の実況はこの秒数に 1 回まで、角や逆転などの目立つ手はその半分の間隔まで詰めます。開始・終局・投了はいつでも伝えます。小さいほどよく話します。（嘘つきダイス、シャット・ザ・ボックス、ブラックジャック、テキサス・ホールデムは声に合わせて進むので、この設定は使いません）
+$SNMG_Challenge	NPC からの対局申し込み
+$SNMG_ChallengeHelp	会話の流れで NPC がリバーシの勝負を挑めるようにします（SkyrimNet のアクション Reversi_Challenge）。申し込まれると盤が開き、受けるか断るかを選べます。
+$SNMG_VoiceWait	声を待つ時間（秒）
+$SNMG_VoiceWaitHelp	嘘つきダイス、シャット・ザ・ボックス、ブラックジャック、テキサス・ホールデムでは、NPC がセリフを話し終えてから次の人が動きます。この秒数のあいだ誰も話さなければ、待たずに先へ進みます。
+$SNMG_PlayerVoice	自分の手を声に出す
+$SNMG_PlayerVoiceHelp	嘘つきダイスではあなたの宣言と「嘘だ！」を、テキサス・ホールデムではフォールド・チェック・コール・ベット・レイズを SkyrimNet の Transform Dialogue に通し、あなたのキャラクターが自分の言葉で口にします（1 回ごとに LLM へのリクエストが 1 回）。オフにすると話すのは相手だけになり、あなたの手には次の相手が触れます。
