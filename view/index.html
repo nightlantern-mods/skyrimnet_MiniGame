@@ -837,6 +837,247 @@
         body.snapping .panel {
             visibility: hidden;
         }
+
+        /* ---- Checkers ---- */
+
+        #ck .frame {
+            display: flex;
+            align-items: center;
+        }
+
+        .ck-board {
+            display: grid;
+            grid-template-columns: repeat(8, 62px);
+            grid-template-rows: repeat(8, 62px);
+            border: 2px solid #2c1d10;
+        }
+
+        .ck-cell {
+            position: relative;
+        }
+
+        .ck-cell.light {
+            background-color: #d8c7a0;
+        }
+
+        .ck-cell.dark {
+            background-color: #6a4a2c;
+        }
+
+        .ck-cell.last {
+            box-shadow: inset 0 0 0 3px rgba(224, 184, 74, 0.55);
+        }
+
+        .ck-cell.trail {
+            box-shadow: inset 0 0 0 3px rgba(232, 226, 212, 0.5);
+        }
+
+        .ck-cell.legal {
+            cursor: pointer;
+        }
+
+        .ck-cell.legal::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 16px;
+            height: 16px;
+            margin: -8px 0 0 -8px;
+            border-radius: 50%;
+            background-color: rgba(232, 226, 212, 0.45);
+        }
+
+        .ck-cell.legal:hover::after {
+            background-color: rgba(232, 226, 212, 0.85);
+        }
+
+        .ck-piece {
+            position: absolute;
+            top: 7px;
+            left: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            font-family: "Segoe UI Symbol", "Yu Gothic UI", sans-serif;
+            font-size: 26px;
+            border-radius: 50%;
+        }
+
+        .ck-piece.black {
+            color: #d9b45a;
+            background: radial-gradient(circle at 35% 30%, #4a4a4a, #0c0c0c 70%);
+            box-shadow: 0 2px 3px rgba(0, 0, 0, 0.6), inset 0 0 0 5px rgba(255, 255, 255, 0.06);
+        }
+
+        .ck-piece.red {
+            color: #f2d27a;
+            background: radial-gradient(circle at 35% 30%, #d0453a, #6e1510 75%);
+            box-shadow: 0 2px 3px rgba(0, 0, 0, 0.6), inset 0 0 0 5px rgba(255, 255, 255, 0.08);
+        }
+
+        .ck-piece.king::after {
+            content: "♛";
+        }
+
+        .ck-piece.can {
+            cursor: pointer;
+            box-shadow: 0 0 0 3px rgba(232, 226, 212, 0.4), 0 2px 3px rgba(0, 0, 0, 0.6);
+        }
+
+        .ck-piece.can:hover {
+            box-shadow: 0 0 0 3px rgba(232, 226, 212, 0.8), 0 2px 3px rgba(0, 0, 0, 0.6);
+        }
+
+        .ck-piece.sel {
+            cursor: pointer;
+            box-shadow: 0 0 0 4px #e0b84a, 0 2px 3px rgba(0, 0, 0, 0.6);
+        }
+
+        .ck-piece.mini {
+            position: static;
+            width: 26px;
+            height: 26px;
+            font-size: 14px;
+        }
+
+        /* ---- Cribbage ---- */
+
+        .cb-seat {
+            width: 320px;
+        }
+
+        .face.cb-face {
+            width: 90px;
+            height: 90px;
+            font-size: 36px;
+            border-width: 2px;
+        }
+
+        .cb-mid {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 26px;
+        }
+
+        .cb-slot {
+            text-align: center;
+        }
+
+        .cb-play {
+            min-width: 250px;
+            padding: 6px 8px;
+            background-color: rgba(10, 10, 10, 0.3);
+            border-radius: 4px;
+        }
+
+        #cb-pile {
+            flex-wrap: wrap;
+            min-height: 60px;
+        }
+
+        .cb-count {
+            min-height: 22px;
+            font-size: 16px;
+            color: #e8e2d4;
+        }
+
+        .cb-mine-hand {
+            min-height: 96px;
+        }
+
+        .card.can {
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .card.can:hover {
+            transform: translateY(-5px);
+        }
+
+        .card.picked {
+            cursor: pointer;
+            transform: translateY(-12px);
+            box-shadow: 0 0 0 2px #e0b84a, 0 4px 6px rgba(0, 0, 0, 0.6);
+        }
+
+        .card.dim {
+            opacity: 0.45;
+        }
+
+        .cb-scores {
+            margin: 10px 0 2px;
+        }
+
+        .cb-score-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 6px;
+            font-size: 14px;
+        }
+
+        .cb-score-name {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .cb-score {
+            font-size: 16px;
+            color: #e8e2d4;
+        }
+
+        .cb-bar {
+            height: 6px;
+            margin-top: 3px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+
+        .cb-bar > div {
+            width: 0;
+            height: 100%;
+            background-color: #c9b98f;
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+
+        #cb-crib-button,
+        #cb-next {
+            margin-top: 6px;
+        }
+
+        /* ---- strength steps (Checkers and Cribbage) ---- */
+        .level-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .level-steps {
+            display: flex;
+            gap: 3px;
+        }
+
+        .level-steps div {
+            width: 26px;
+            height: 10px;
+            border: 1px solid #8a7a58;
+            border-radius: 2px;
+            background-color: #2a2a2a;
+            cursor: pointer;
+        }
+
+        .level-steps div:hover {
+            border-color: #c9b98f;
+        }
+
+        .level-steps div.on {
+            background-color: #c9b98f;
+        }
     </style>
 </head>
 <body>
@@ -1064,6 +1305,98 @@
         </div>
     </div>
 
+    <div class="panel" id="ck">
+        <div class="frame">
+            <div class="ck-board" id="ck-board"></div>
+        </div>
+
+        <div class="side">
+            <h1 data-s="ckTitle">Checkers</h1>
+            <div class="face" id="ck-face"></div>
+            <div class="player" id="ck-row-npc">
+                <span class="icon" id="ck-icon-npc"></span>
+                <span class="name" id="ck-name-npc"></span>
+                <span class="count" id="ck-count-npc"></span>
+            </div>
+            <div class="player" id="ck-row-human">
+                <span class="icon" id="ck-icon-human"></span>
+                <span class="name" id="ck-name-human"></span>
+                <span class="count" id="ck-count-human"></span>
+            </div>
+            <div class="meta" data-s="ckRules"></div>
+            <div class="meta level-row"><span id="ck-meta"></span>
+                <div class="level-steps" id="ck-level"><div onclick="onCkLevel(1)"></div><div onclick="onCkLevel(2)"></div><div onclick="onCkLevel(3)"></div><div onclick="onCkLevel(4)"></div></div>
+            </div>
+            <div class="status" id="ck-status"></div>
+            <div class="log" id="ck-log"></div>
+            <div class="toolbar">
+                <button id="ck-leave" class="danger" onclick="onCkLeave()">Leave</button>
+                <button id="ck-again" class="primary" onclick="onCkAgain()" style="display: none;" data-s="again">Play again</button>
+                <button onclick="requestClose()" data-s="close">Close (Esc)</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel" id="cb">
+        <div class="table">
+            <div class="seats">
+                <div class="seat cb-seat" id="cb-npc-seat">
+                    <div class="face cb-face" id="cb-face"></div>
+                    <div class="seat-name" id="cb-npc-name"></div>
+                    <div class="hand" id="cb-npc-hand"></div>
+                </div>
+            </div>
+            <div class="cb-mid">
+                <div class="cb-slot">
+                    <div class="bid-label" data-s="cbStarter">Starter</div>
+                    <div class="hand" id="cb-starter"></div>
+                </div>
+                <div class="cb-slot cb-play">
+                    <div class="hand" id="cb-pile"></div>
+                    <div class="cb-count" id="cb-count"></div>
+                </div>
+                <div class="cb-slot">
+                    <div class="bid-label" id="cb-crib-label"></div>
+                    <div class="hand small" id="cb-crib"></div>
+                </div>
+            </div>
+            <div class="mine" id="cb-mine">
+                <div class="seat-name" id="cb-mine-name"></div>
+                <div class="hand cb-mine-hand" id="cb-mine-hand"></div>
+            </div>
+        </div>
+
+        <div class="side">
+            <h1 data-s="cbTitle">Cribbage</h1>
+            <div class="meta" data-s="cbRules"></div>
+            <div class="meta level-row"><span id="cb-meta"></span>
+                <div class="level-steps" id="cb-level"><div onclick="onCbLevel(1)"></div><div onclick="onCbLevel(2)"></div><div onclick="onCbLevel(3)"></div><div onclick="onCbLevel(4)"></div></div>
+            </div>
+            <div class="cb-scores">
+                <div class="bid-label" data-s="cbScores">Score (to 121)</div>
+                <div class="cb-score-row">
+                    <span class="cb-score-name" id="cb-score-npc-name"></span>
+                    <span class="cb-score" id="cb-score-npc">0</span>
+                </div>
+                <div class="cb-bar"><div id="cb-bar-npc"></div></div>
+                <div class="cb-score-row">
+                    <span class="cb-score-name" id="cb-score-me-name"></span>
+                    <span class="cb-score" id="cb-score-me">0</span>
+                </div>
+                <div class="cb-bar"><div id="cb-bar-me"></div></div>
+            </div>
+            <div class="status" id="cb-status"></div>
+            <button class="primary" id="cb-crib-button" onclick="onCbCrib()" data-s="cbCribButton">To the crib</button>
+            <button class="primary" id="cb-next" onclick="onCbNext()" data-s="cbNextHand">Next hand</button>
+            <div class="log" id="cb-log"></div>
+            <div class="toolbar">
+                <button id="cb-leave" class="danger" onclick="onCbLeave()">Leave</button>
+                <button id="cb-again" class="primary" onclick="onCbAgain()" style="display: none;" data-s="again">Play again</button>
+                <button onclick="requestClose()" data-s="close">Close (Esc)</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // ===== text =====
 
@@ -1095,6 +1428,10 @@
             gameBjDesc: "Up to three opponents. Choose who deals, you or one of them, for the whole game. Closest to 21 wins.",
             gamePk: "Texas Hold'em",
             gamePkDesc: "Up to three opponents. No-limit poker: each opponent plays in their own way, read from who they are.",
+            gameCk: "Checkers",
+            gameCkDesc: "One opponent. Jump your opponent's pieces; a capture must be taken. Reach the far row to crown a king.",
+            gameCb: "Cribbage",
+            gameCbDesc: "One opponent. Make fifteens, pairs and runs in the play and the show; first to 121 pegs out.",
             listComma: ", ",
             listAnd: " and ",
 
@@ -1435,6 +1772,110 @@
             pkStateResult: "{npc} has just finished a game of Texas Hold'em with {others}. Result: {result}. Chips: {chips}.",
             pkStateLeft: "{npc} was playing Texas Hold'em with {others}, but {player} left the table before it ended.",
             pkNextHand: "Next hand",
+
+            // checkers
+            ckTitle: "Checkers",
+            ckRules: "Black moves first. Men move forward; kings either way. A capture must be taken, and a jump carries on to the end. No move left loses.",
+            ckBlack: "black",
+            ckRed: "red",
+            ckCountKings: "{n} ({k}♛)",
+            ckYourMove: "Your move. Pick a piece, then where it goes.",
+            ckYourJump: "Your move. A capture must be taken.",
+            ckYourJumpOn: "Keep jumping: pick the next square.",
+            ckYouWin: "You win!",
+            ckNpcWins: "{npc} wins.",
+            ckDrawStatus: "A draw: forty moves each with no capture.",
+            ckDrawResult: "a draw",
+            ckLogStart: "Black: {black} · Red: {red}",
+            ckLogMove: "{who}: {move}",
+            ckLogEnd: "Game over: {result}",
+
+            ckSayStart: "{player} sits down with {npc} for a game of checkers. {npc} plays {npcColor}, {player} plays {playerColor}, and {first} moves first. Pieces move diagonally and jump the opponent's pieces to capture them; a piece that reaches the far row is crowned a king.",
+            ckSayMultiNpc: "In the checkers game, {npc} jumps {n} of {player}'s pieces in one move.",
+            ckSayMultiPlayer: "In the checkers game, {player} jumps {n} of {npc}'s pieces in one move.",
+            ckSayCrownNpc: "In the checkers game, {npc} reaches the far row and crowns a king.",
+            ckSayCrownPlayer: "In the checkers game, {player} reaches the far row and crowns a king.",
+            ckSayStanding: " {npc} has {n} pieces left, {player} {h}.",
+            ckSayPlayerWins: "The checkers game is over: {player} wins, and {npc} has no move left. {npc} admits defeat and concedes the game to {player}.",
+            ckSayNpcWins: "The checkers game is over: {npc} wins, and {player} has no move left. {npc} proudly declares victory.",
+            ckSayDraw: "The checkers game between {npc} and {player} ends in a draw: neither could make progress. {npc} says something about the stalemate.",
+            ckSayLeave: "{player} gets up and leaves the checkers game with {npc} before it is finished.",
+
+            ckState: "{npc} is playing checkers with {player}. {npc} has the {npcColor} pieces, {n} left ({nk} of them kings); {player} has {playerColor}, {h} left ({hk} kings).",
+            ckStateTurn: " It is {who}'s move.",
+            ckStatePaused: " The board is set aside for now; the game is paused.",
+            ckStateResult: "{npc} has just finished a game of checkers with {player}. Result: {result}.",
+            ckStateLeft: "{npc} was playing checkers with {player}, but {player} left before it ended.",
+
+            // cribbage
+            cbTitle: "Cribbage",
+            cbRules: "Two cards each to the dealer's crib. Play to 31: fifteens, pairs, runs and the go score. Then hands and crib are counted. First to 121.",
+            cbRanks: "ace,2,3,4,5,6,7,8,9,10,jack,queen,king",
+            cbSuits: "spades,hearts,diamonds,clubs",
+            cbCard: "{rank} of {suit}",
+            cbFifteens: "fifteen {n}",
+            cbPairs: "pairs {n}",
+            cbRuns: "runs {n}",
+            cbFlush: "flush {n}",
+            cbNobs: "one for his nobs",
+            cbNothing: "nothing",
+            cbPegFifteen: "fifteen",
+            cbPegThirtyOne: "thirty-one",
+            cbPegKind2: "a pair",
+            cbPegKind3: "three of a kind",
+            cbPegKind4: "four of a kind",
+            cbPegRun: "a run of {n}",
+            cbStarter: "Starter",
+            cbCribOf: "{who}'s crib",
+            cbCount: "Count: {n}",
+            cbDealerMark: " (dealer)",
+            cbScores: "Score (to 121)",
+            cbCribButton: "To the crib",
+            cbNextHand: "Next hand",
+            cbYourCrib: "Pick two cards for your crib.",
+            cbTheirCrib: "Pick two cards for {npc}'s crib.",
+            cbYourPlay: "Your card. The count is {n}.",
+            cbShowStatus: "The show: {how}.",
+            cbShownHand: "{who} {n}",
+            cbShownCrib: "{who}'s crib {n}",
+            cbYouWin: "You peg out and win, {w} to {l}!",
+            cbNpcWins: "{npc} pegs out and wins, {w} to {l}.",
+            cbSkunkStatus: " A skunk!",
+            cbResult: "{name} wins, {w} to {l}",
+            cbResultSkunk: " (a skunk)",
+
+            cbLogCutDeal: "Cut for the deal: {player} {mine}, {npc} {theirs}. {dealer} deals.",
+            cbLogHandStart: "Hand {n}: {dealer} deals",
+            cbLogStarter: "Starter: {card}",
+            cbLogHeels: "Two for his heels to {who}",
+            cbLogPlay: "{who}: {card} ({count})",
+            cbLogPlayPoints: "{who}: {card} ({count}), {how} for {n}",
+            cbLogGo: "{who}: go ({count})",
+            cbLogGoPoint: "One for the go to {who}",
+            cbLogLast: "One for the last card to {who}",
+            cbLogShow: "{who}'s hand: {n} ({how})",
+            cbLogCrib: "{who}'s crib: {n} ({how})",
+            cbLogEnd: "Game over: {result}",
+
+            cbSayStart: "{player} sits down with {npc} for a game of cribbage, first to 121. They cut for the deal, and {dealer} deals first.",
+            cbSayHeels: "In the cribbage game, {npc} cuts a jack as the starter and pegs two for his heels.",
+            cbSayBigPegNpc: "In the cribbage game, {npc} lays the {card} and pegs {n} for {how}.",
+            cbSayBigPegPlayer: "In the cribbage game, {player} lays the {card} and pegs {n} for {how}.",
+            cbSayShow: "In the cribbage game, the hands are counted: {npc}'s hand is worth {n}, {player}'s {h}, and {dealer}'s crib {c}. The score is now {npc} {ns}, {player} {hs}, of 121.",
+            cbSayPlayerWins: "The cribbage game is over: {player} pegs out and wins, {hs} to {ns}. {npc} admits defeat and concedes the game to {player}.",
+            cbSayNpcWins: "The cribbage game is over: {npc} pegs out and wins, {ns} to {hs}. {npc} proudly declares victory.",
+            cbSaySkunk: " {loser} did not even reach 91: a skunk.",
+            cbSayLeave: "{player} gets up and leaves the cribbage game with {npc} before it is finished.",
+
+            cbState: "{npc} is playing cribbage with {player}, first to 121. Score: {npc} {ns}, {player} {hs}. {dealer} deals this hand, so the crib is theirs.",
+            cbStateDiscard: " {npc} has put two cards in the crib and kept the {cards}.",
+            cbStatePeg: " The starter is the {starter}. In the play the count is {count}. {npc} still holds: {cards}.",
+            cbNoCards: "nothing",
+            cbStateTurn: " It is {who}'s card.",
+            cbStateShow: " The hands were just counted: {how}.",
+            cbStatePaused: " The cards are set aside for now; the game is paused.",
+            cbStateResult: "{npc} has just finished a game of cribbage with {player}. Result: {result}.",
+            cbStateLeft: "{npc} was playing cribbage with {player}, but {player} left before it ended.",
         };
 
         function t(key, vars = {}) {
@@ -2088,6 +2529,8 @@
             renderStbStatus();
             renderBjStatus();
             renderPkStatus();
+            renderCkStatus();
+            renderCbStatus();
         }
 
         function lineDone() {
@@ -2107,6 +2550,8 @@
             renderStbStatus();
             renderBjStatus();
             renderPkStatus();
+            renderCkStatus();
+            renderCbStatus();
         }
 
         // Runs fn once the table is quiet.
@@ -2565,6 +3010,7 @@
             abandonBj();
             abandonPk();
             activeGame = "dice";
+            abandonCheckersAndCribbage();
             send("mgPlayers", opps.map((o) => o.id).join(","));
             if (same) {
                 showScreen("dice");
@@ -3179,6 +3625,7 @@
             abandonBj();
             abandonPk();
             activeGame = "stb";
+            abandonCheckersAndCribbage();
             send("mgPlayers", opps.map((o) => o.id).join(","));
             if (same) {
                 showScreen("stb");
@@ -3998,6 +4445,7 @@
             abandonReversi();
             abandonPk();
             activeGame = "bj";
+            abandonCheckersAndCribbage();
             send("mgPlayers", opps.map((o) => o.id).join(","));
             if (same) {
                 showScreen("bj");
@@ -4926,6 +5374,7 @@
             abandonBj();
             abandonReversi();
             activeGame = "pk";
+            abandonCheckersAndCribbage();
             send("mgPlayers", opps.map((o) => o.id).join(","));
             if (same) {
                 showScreen("pk");
@@ -5067,6 +5516,1392 @@
             $("pk-status").textContent = lines.join("\n");
         }
 
+        // ===== Checkers and Cribbage: shared =====
+
+        // Checkers and Cribbage step aside when one of the original games starts.
+        function abandonCheckersAndCribbage() {
+            abandonCheckers();
+            abandonCribbage();
+        }
+
+        // The strength control on both panels: four steps, lit up to the level. Plain elements, not
+        // <input type="range">: Ultralight, which draws the page in game, paints no form controls.
+        function renderLevelSteps(id, lvl) {
+            [...$(id).children].forEach((el, i) => el.classList.toggle("on", i < lvl));
+        }
+
+        // ===== Checkers =====
+
+        // American checkers on an 8×8 board, against one opponent. Men step and capture diagonally
+        // forward, kings one square either way. A capture must be taken, and a jump goes on while
+        // it can; a man crowned on a jump stops there. Black moves first. A side with no move left
+        // loses. 40 moves each with no capture and no man moved is a draw.
+        //
+        // The board: 64 squares, row * 8 + col, row 0 at the top. Only (row + col) odd is played.
+        // The player's pieces always start at the bottom (rows 5 to 7).
+        const CK_BLACK = 1, CK_RED = 2, CK_KING = 4, CK_DEAD = 8;   // a square: colour | CK_KING
+        const CK_QUIET_LIMIT = 80;      // half moves with no capture and no man moved: a draw
+        const CK_WIN = 100000;
+
+        const CK_UP = [[-1, -1], [-1, 1]];
+        const CK_DOWN = [[1, -1], [1, 1]];
+        const CK_ALL_DIRS = [...CK_UP, ...CK_DOWN];
+
+        const ckColor = (p) => p & 3;
+        const ckIsKing = (p) => (p & CK_KING) !== 0;
+        const ckOther = (c) => 3 - c;
+        const ckFarRow = (c, bottom) => (c === bottom ? 0 : 7);
+        // Men only go forward: up the board for the side at the bottom.
+        const ckDirs = (p, bottom) => (ckIsKing(p) ? CK_ALL_DIRS : ckColor(p) === bottom ? CK_UP : CK_DOWN);
+
+        // The opening position, with colour bottom at the bottom.
+        function ckStartBoard(bottom) {
+            const b = new Array(64).fill(0);
+            for (let i = 0; i < 64; i++) {
+                const r = i >> 3, k = i & 7;
+                if ((r + k) % 2 === 1) {
+                    if (r <= 2) {
+                        b[i] = ckOther(bottom);
+                    } else if (r >= 5) {
+                        b[i] = bottom;
+                    }
+                }
+            }
+            return b;
+        }
+
+        // Every legal move for colour c: {path: [from, ..., to], caps: [captured squares], crown}.
+        // Jumps only, when there is one.
+        function ckMoves(b, c, bottom) {
+            const jumps = [];
+            for (let i = 0; i < 64; i++) {
+                if (b[i] && ckColor(b[i]) === c) {
+                    ckJumpsFrom(b, i, bottom, jumps);
+                }
+            }
+            if (jumps.length) {
+                return jumps;
+            }
+            const steps = [];
+            for (let i = 0; i < 64; i++) {
+                const p = b[i];
+                if (!p || ckColor(p) !== c) {
+                    continue;
+                }
+                const r = i >> 3, k = i & 7;
+                for (const [dr, dc] of ckDirs(p, bottom)) {
+                    const r2 = r + dr, k2 = k + dc;
+                    if (r2 < 0 || r2 > 7 || k2 < 0 || k2 > 7 || b[r2 * 8 + k2]) {
+                        continue;
+                    }
+                    steps.push({ path: [i, r2 * 8 + k2], caps: [], crown: !ckIsKing(p) && r2 === ckFarRow(c, bottom) });
+                }
+            }
+            return steps;
+        }
+
+        // Every complete jump from square i, added to out. A captured piece stays on the board
+        // until the move is over (marked dead): it can be neither jumped again nor landed on.
+        function ckJumpsFrom(b, i, bottom, out) {
+            const p = b[i];
+            const work = b.slice();
+            work[i] = 0;
+            const walk = (at, path, caps) => {
+                const r = at >> 3, k = at & 7;
+                let further = false;
+                for (const [dr, dc] of ckDirs(p, bottom)) {
+                    const r2 = r + 2 * dr, k2 = k + 2 * dc;
+                    if (r2 < 0 || r2 > 7 || k2 < 0 || k2 > 7) {
+                        continue;
+                    }
+                    const mid = (r + dr) * 8 + (k + dc), land = r2 * 8 + k2;
+                    const q = work[mid];
+                    if (!q || q === CK_DEAD || ckColor(q) === ckColor(p) || work[land]) {
+                        continue;
+                    }
+                    further = true;
+                    work[mid] = CK_DEAD;
+                    if (!ckIsKing(p) && r2 === ckFarRow(ckColor(p), bottom)) {
+                        out.push({ path: [...path, land], caps: [...caps, mid], crown: true });
+                    } else {
+                        walk(land, [...path, land], [...caps, mid]);
+                    }
+                    work[mid] = q;
+                }
+                if (!further && caps.length) {
+                    out.push({ path, caps, crown: false });
+                }
+            };
+            walk(i, [i], []);
+        }
+
+        // The board after move m.
+        function ckApply(b, m) {
+            const nb = b.slice();
+            const p = nb[m.path[0]];
+            nb[m.path[0]] = 0;
+            for (const x of m.caps) {
+                nb[x] = 0;
+            }
+            nb[m.path[m.path.length - 1]] = m.crown ? p | CK_KING : p;
+            return nb;
+        }
+
+        function ckCount(b, c) {
+            let all = 0, kings = 0;
+            for (const p of b) {
+                if (p && ckColor(p) === c) {
+                    all++;
+                    if (ckIsKing(p)) {
+                        kings++;
+                    }
+                }
+            }
+            return { all, kings };
+        }
+
+        // ---- opponent AI ----
+
+        // How good the board is for c: material, men worth a little more as they near the crown,
+        // back-row men kept home (they stop the other side crowning), the centre, and (when ahead)
+        // fewer pieces left, since trading down wins.
+        function ckEvaluate(b, c, bottom) {
+            let score = 0, mine = 0, theirs = 0;
+            for (let i = 0; i < 64; i++) {
+                const p = b[i];
+                if (!p) {
+                    continue;
+                }
+                const r = i >> 3, k = i & 7;
+                let v;
+                if (ckIsKing(p)) {
+                    v = 160;
+                } else {
+                    const advanced = ckColor(p) === bottom ? 7 - r : r;
+                    v = 100 + advanced * 3 + (advanced === 0 ? 8 : 0);
+                }
+                if (k >= 2 && k <= 5 && r >= 2 && r <= 5) {
+                    v += 4;
+                }
+                if (ckColor(p) === c) {
+                    score += v;
+                    mine++;
+                } else {
+                    score -= v;
+                    theirs++;
+                }
+            }
+            if (mine !== theirs) {
+                score += (mine > theirs ? 1 : -1) * (24 - mine - theirs) * 3;
+            }
+            return score;
+        }
+
+        // Negamax with alpha-beta for c to move. Past depth 0 it only goes on while captures are
+        // forced (to 6 half moves more), so it never stops in the middle of an exchange. budget:
+        // {left, until}, the nodes it may still visit and the time it must be done by; once
+        // either runs out it throws the budget.
+        function ckSearch(b, c, bottom, depth, alpha, beta, budget) {
+            if (--budget.left < 0 || ((budget.left & 1023) === 0 && Date.now() > budget.until)) {
+                throw budget;
+            }
+            const moves = ckMoves(b, c, bottom);
+            if (!moves.length) {
+                return -CK_WIN - depth;    // lost: the sooner, the worse
+            }
+            if ((depth <= 0 && !moves[0].caps.length) || depth <= -6) {
+                return ckEvaluate(b, c, bottom);
+            }
+            let best = -Infinity;
+            for (const m of moves) {
+                const v = -ckSearch(ckApply(b, m), ckOther(c), bottom, depth - 1, -beta, -alpha, budget);
+                if (v > best) {
+                    best = v;
+                }
+                if (v > alpha) {
+                    alpha = v;
+                }
+                if (alpha >= beta) {
+                    break;
+                }
+            }
+            return best;
+        }
+
+        // depth: half moves looked ahead. noise: how far below the best a move may be and still
+        // be picked (some variety, and the weaker levels miss things).
+        const CK_LEVELS = {
+            1: { depth: 2, noise: 70, random: 0.3 },
+            2: { depth: 4, noise: 25, random: 0 },
+            3: { depth: 6, noise: 6, random: 0 },
+            4: { depth: 8, noise: 0, random: 0 },
+        };
+        // What one move's thinking may cost, whatever the level: the in-game browser may run
+        // scripts far slower than a desktop one, and the board must never hang.
+        const CK_NODE_BUDGET = 200000;
+        const CK_TIME_BUDGET_MS = 800;
+
+        // The move colour c plays. It searches one half move deeper each time, all on one budget;
+        // the depth that runs out is dropped and the last finished one decides.
+        function ckChoose(b, c, bottom, lvl) {
+            const moves = ckMoves(b, c, bottom);
+            if (moves.length <= 1) {
+                return moves[0];
+            }
+            const cfg = CK_LEVELS[lvl] || CK_LEVELS[2];
+            if (Math.random() < cfg.random) {
+                return moves[Math.floor(Math.random() * moves.length)];
+            }
+            let scores = moves.map(() => 0);
+            const budget = { left: CK_NODE_BUDGET, until: Date.now() + CK_TIME_BUDGET_MS };
+            for (let d = 1; d <= cfg.depth; d++) {
+                try {
+                    scores = moves.map((m) => -ckSearch(ckApply(b, m), ckOther(c), bottom, d - 1, -Infinity, Infinity, budget));
+                } catch (e) {
+                    if (e !== budget) {
+                        throw e;
+                    }
+                    break;
+                }
+            }
+            const best = Math.max(...scores);
+            const margin = Math.abs(best) > CK_WIN / 2 ? 0 : cfg.noise;
+            const fine = moves.filter((m, k) => scores[k] >= best - margin);
+            return fine[Math.floor(Math.random() * fine.length)];
+        }
+
+        // ---- flow ----
+
+        // The opponent's strength, 1 to 4: from the plugin when it passes one (ckLevel), else Normal,
+        // and set during play by the four steps on the panel. Read at every move, so a change
+        // counts from the next one.
+        let ckLevel = 2;
+
+        function onCkLevel(v) {
+            ckLevel = Math.min(4, Math.max(1, Number(v) || 2));
+            renderCk();
+        }
+
+        const ck = {
+            gen: 0,          // bumped when a game is left or dropped: its pending steps stop
+            b: [],
+            bottom: CK_BLACK,  // the player's colour (the player sits at the bottom)
+            turn: CK_BLACK,  // the colour to move
+            opp: { id: "", name: "" },
+            playing: false,
+            over: false,
+            left: false,     // the player left before the end
+            winner: 0,       // the winning colour, 0 for a draw
+            quiet: 0,        // half moves with no capture and no man moved
+            sel: [],         // the squares of the player's move so far
+            last: null,      // the last move, marked on the board
+            thinking: false, // an NPC's move is on its way
+            leaveArmed: false,
+            lastColor: 0,    // the player's colour last game, for "alternate"
+        };
+
+        const ckNpcColor = () => ckOther(ck.bottom);
+        const ckName = (c) => (c === ck.bottom ? playerName : ck.opp.name);
+        const ckColorName = (c) => t(c === CK_BLACK ? "ckBlack" : "ckRed");
+        const ckPlayerActs = () => ck.playing && !ck.over && !ck.thinking && ck.turn === ck.bottom && screen === "ck";
+        const ckSquareName = (i) => "abcdefgh"[i & 7] + (8 - (i >> 3));
+        const ckMoveText = (m) => m.path.map(ckSquareName).join(m.caps.length ? "×" : "–");
+
+        // The player's colour, from the Reversi colour setting (black moves first).
+        function ckPickColor() {
+            switch (colorSetting) {
+                case "white":
+                    return CK_RED;
+                case "random":
+                    return Math.random() < 0.5 ? CK_BLACK : CK_RED;
+                case "alternate":
+                    return ck.lastColor === CK_BLACK ? CK_RED : CK_BLACK;
+                default:
+                    return CK_BLACK;
+            }
+        }
+
+        function ckNewGame(opp) {
+            ck.gen++;
+            ck.opp = opp;
+            ck.bottom = ckPickColor();
+            ck.lastColor = ck.bottom;
+            ck.b = ckStartBoard(ck.bottom);
+            ck.turn = CK_BLACK;
+            ck.playing = true;
+            ck.over = false;
+            ck.left = false;
+            ck.winner = 0;
+            ck.quiet = 0;
+            ck.sel = [];
+            ck.last = null;
+            ck.thinking = false;
+            ck.leaveArmed = false;
+            $("ck-log").innerHTML = "";
+            log(t("ckLogStart", { black: ckName(CK_BLACK), red: ckName(CK_RED) }), "ck-log");
+            say(opp.id, t("ckSayStart", {
+                player: playerName, npc: opp.name, first: ckName(CK_BLACK),
+                npcColor: ckColorName(ckNpcColor()), playerColor: ckColorName(ck.bottom),
+            }));
+            reportCkState();
+            ckStep();
+        }
+
+        // The side to move moves: the player through the board, the NPC once the table is quiet.
+        function ckStep() {
+            renderCk();
+            if (!ck.playing || ck.over || ck.thinking || ck.turn === ck.bottom) {
+                return;
+            }
+            ck.thinking = true;
+            const gen = ck.gen;
+            renderCkStatus();
+            whenQuiet(() => {
+                if (gen !== ck.gen) {
+                    return;
+                }
+                if (screen !== "ck") {
+                    // carried on when the board is back on screen
+                    ck.thinking = false;
+                    return;
+                }
+                renderCkStatus();
+                setTimeout(() => {
+                    if (gen !== ck.gen) {
+                        return;
+                    }
+                    ck.thinking = false;
+                    if (screen !== "ck") {
+                        return;
+                    }
+                    ckPlay(ckChoose(ck.b, ck.turn, ck.bottom, ckLevel));
+                }, 600 + Math.random() * 500);
+            });
+        }
+
+        function ckPlay(m) {
+            const mover = ck.turn;
+            const man = !ckIsKing(ck.b[m.path[0]]);
+            ck.b = ckApply(ck.b, m);
+            ck.last = m;
+            ck.sel = [];
+            ck.leaveArmed = false;
+            ck.quiet = m.caps.length || man ? 0 : ck.quiet + 1;
+            log(t("ckLogMove", { who: ckName(mover), move: ckMoveText(m) + (m.crown ? " ♛" : "") }), "ck-log");
+            ck.turn = ckOther(mover);
+
+            if (!ckMoves(ck.b, ck.turn, ck.bottom).length) {
+                ckEnd(mover);
+                return;
+            }
+            if (ck.quiet >= CK_QUIET_LIMIT) {
+                ckEnd(0);
+                return;
+            }
+
+            // a crown, or two or more taken at once, is worth a word
+            const byNpc = mover !== ck.bottom;
+            const v = { npc: ck.opp.name, player: playerName, n: m.caps.length };
+            let text = "";
+            if (m.caps.length >= 2) {
+                text += t(byNpc ? "ckSayMultiNpc" : "ckSayMultiPlayer", v);
+            }
+            if (m.crown) {
+                text += (text ? " " : "") + t(byNpc ? "ckSayCrownNpc" : "ckSayCrownPlayer", v);
+            }
+            if (text) {
+                const n = ckCount(ck.b, ckNpcColor()), h = ckCount(ck.b, ck.bottom);
+                say(ck.opp.id, text + t("ckSayStanding", { ...v, n: n.all, h: h.all }));
+            }
+            reportCkState();
+            ckStep();
+        }
+
+        // winner: the colour that won, 0 for a draw.
+        function ckEnd(winner) {
+            ck.over = true;
+            ck.winner = winner;
+            ck.thinking = false;
+            ck.sel = [];
+            log(t("ckLogEnd", { result: ckResult() }), "ck-log");
+            const v = { npc: ck.opp.name, player: playerName };
+            say(ck.opp.id, t(winner === 0 ? "ckSayDraw" : winner === ck.bottom ? "ckSayPlayerWins" : "ckSayNpcWins", v), true);
+            reportCkState();
+            renderCk();
+        }
+
+        function ckResult() {
+            return ck.winner === 0 ? t("ckDrawResult") : t("resultWin", { name: ckName(ck.winner) });
+        }
+
+        // ---- the player's moves ----
+
+        // A click picks one of the player's pieces that can move, then the squares it lands on,
+        // one jump at a time; the move is made once the squares picked are a whole move.
+        function onCkSquare(i) {
+            if (!ckPlayerActs()) {
+                return;
+            }
+            const moves = ckMoves(ck.b, ck.bottom, ck.bottom);
+            const p = ck.b[i];
+            if (p && ckColor(p) === ck.bottom && ck.sel.length <= 1) {
+                ck.sel = ck.sel[0] === i || !moves.some((m) => m.path[0] === i) ? [] : [i];
+                renderCk();
+                return;
+            }
+            if (!ck.sel.length) {
+                return;
+            }
+            const want = [...ck.sel, i];
+            const fits = moves.filter((m) => want.every((x, k) => m.path[k] === x));
+            if (!fits.length) {
+                return;
+            }
+            const whole = fits.find((m) => m.path.length === want.length);
+            if (whole) {
+                ckPlay(whole);
+                return;
+            }
+            ck.sel = want;
+            renderCk();
+        }
+
+        function onCkLeave() {
+            if (!ck.playing || ck.over) {
+                return;
+            }
+            if (!ck.leaveArmed) {
+                ck.leaveArmed = true;
+                renderCk();
+                return;
+            }
+            ck.gen++;
+            ck.over = true;
+            ck.left = true;
+            ck.thinking = false;
+            ck.leaveArmed = false;
+            ck.sel = [];
+            say(ck.opp.id, t("ckSayLeave", { player: playerName, npc: ck.opp.name }), true);
+            log(t("logLeave", { player: playerName }), "ck-log");
+            reportCkState();
+            renderCk();
+        }
+
+        function onCkAgain() {
+            ckNewGame(ck.opp);
+        }
+
+        // ---- what the NPC knows ----
+
+        function ckStateFor() {
+            const v = { npc: ck.opp.name, player: playerName };
+            if (ck.over) {
+                if (screen !== "ck") {
+                    return "";
+                }
+                return ck.left ? t("ckStateLeft", v) : t("ckStateResult", { ...v, result: ckResult() });
+            }
+            if (!ck.playing) {
+                return "";
+            }
+            const n = ckCount(ck.b, ckNpcColor()), h = ckCount(ck.b, ck.bottom);
+            let text = t("ckState", {
+                ...v, npcColor: ckColorName(ckNpcColor()), playerColor: ckColorName(ck.bottom),
+                n: n.all, nk: n.kings, h: h.all, hk: h.kings,
+            });
+            text += t("ckStateTurn", { who: ckName(ck.turn) });
+            if (screen !== "ck") {
+                text += t("ckStatePaused");
+            }
+            return text;
+        }
+
+        function reportCkState() {
+            if (activeGame !== "ck") {
+                return;
+            }
+            send("rvState", JSON.stringify({ states: { [ck.opp.id]: ckStateFor() }, playing: ck.playing && !ck.over }));
+        }
+
+        // A game in progress is dropped (another game is starting).
+        function abandonCheckers() {
+            if (ck.playing && !ck.over) {
+                ck.playing = false;
+                ck.gen++;
+                ck.thinking = false;
+                voiceReset();
+            }
+        }
+
+        // Starts or resumes checkers against opp ({id, name}).
+        function playCheckers(opp) {
+            const same = ck.playing && !ck.over && ck.opp.id === opp.id;
+            if (!same) {
+                abandonCheckers();
+            }
+            abandonReversi();
+            abandonDice();
+            abandonStb();
+            abandonBj();
+            abandonPk();
+            abandonCribbage();
+            activeGame = "ck";
+            send("mgPlayers", opp.id);
+            if (same) {
+                showScreen("ck");
+                log(t("logResume"), "ck-log");
+                reportCkState();
+                ckStep();
+                return;
+            }
+            snapFaces([opp.id], () => {
+                showScreen("ck");
+                ckNewGame(opp);
+            });
+        }
+
+        // ---- rendering ----
+
+        function ckBuildBoard() {
+            const box = $("ck-board");
+            box.innerHTML = "";
+            for (let i = 0; i < 64; i++) {
+                const cell = document.createElement("div");
+                cell.className = "ck-cell " + (((i >> 3) + (i & 7)) % 2 ? "dark" : "light");
+                cell.onclick = () => onCkSquare(i);
+                box.appendChild(cell);
+            }
+        }
+
+        function ckPieceEl(p, cls = "") {
+            const el = document.createElement("div");
+            el.className = "ck-piece " + (ckColor(p) === CK_BLACK ? "black" : "red") + (ckIsKing(p) ? " king" : "") + (cls ? " " + cls : "");
+            return el;
+        }
+
+        function renderCk() {
+            if (!ck.b.length) {
+                return;
+            }
+            const box = $("ck-board");
+            if (box.children.length !== 64) {
+                ckBuildBoard();
+            }
+            const acts = ckPlayerActs();
+            const moves = acts ? ckMoves(ck.b, ck.bottom, ck.bottom) : [];
+            const starts = new Set(moves.map((m) => m.path[0]));
+            const along = ck.sel.length ? moves.filter((m) => ck.sel.every((x, k) => m.path[k] === x)) : [];
+            const next = new Set(along.map((m) => m.path[ck.sel.length]));
+            const last = new Set(ck.last ? ck.last.path : []);
+            for (let i = 0; i < 64; i++) {
+                const cell = box.children[i];
+                cell.classList.toggle("last", last.has(i));
+                cell.classList.toggle("legal", next.has(i));
+                cell.classList.toggle("trail", ck.sel.length > 1 && ck.sel.includes(i));
+                cell.innerHTML = "";
+                if (ck.b[i]) {
+                    const cls = ck.sel[0] === i ? "sel" : showHints && !ck.sel.length && starts.has(i) ? "can" : "";
+                    cell.appendChild(ckPieceEl(ck.b[i], cls));
+                }
+            }
+
+            const live = ck.playing && !ck.over;
+            $("ck-face").dataset.face = ck.opp.id;
+            paintFace($("ck-face"), ck.opp.id, ck.opp.name);
+            const rows = [["npc", ckNpcColor(), ck.opp.name], ["human", ck.bottom, playerName]];
+            for (const [who, c, name] of rows) {
+                const n = ckCount(ck.b, c);
+                $("ck-name-" + who).textContent = name;
+                const icon = $("ck-icon-" + who);
+                icon.innerHTML = "";
+                icon.appendChild(ckPieceEl(c, "mini"));
+                $("ck-count-" + who).textContent = n.kings ? t("ckCountKings", { n: n.all, k: n.kings }) : String(n.all);
+                $("ck-row-" + who).classList.toggle("active", live && ck.turn === c);
+            }
+            $("ck-meta").textContent = t("strength", { level: t("level" + ckLevel) });
+            renderLevelSteps("ck-level", ckLevel);
+            $("ck-leave").style.display = live ? "" : "none";
+            $("ck-leave").textContent = t(ck.leaveArmed ? "leaveConfirm" : "leave");
+            $("ck-again").style.display = ck.over ? "" : "none";
+            renderCkStatus();
+        }
+
+        function renderCkStatus() {
+            if (!ck.b.length) {
+                return;
+            }
+            let text = "";
+            if (ck.over) {
+                if (ck.left) {
+                    text = t("diceLeftStatus");
+                } else if (ck.winner === 0) {
+                    text = t("ckDrawStatus");
+                } else if (ck.winner === ck.bottom) {
+                    text = t("ckYouWin");
+                } else {
+                    text = t("ckNpcWins", { npc: ck.opp.name });
+                }
+            } else if (ck.playing) {
+                if (ck.turn === ck.bottom && !ck.thinking) {
+                    const forced = ckMoves(ck.b, ck.bottom, ck.bottom)[0];
+                    text = ck.sel.length > 1 ? t("ckYourJumpOn") : forced && forced.caps.length ? t("ckYourJump") : t("ckYourMove");
+                } else if (voiceLine && voiceLine.speaker !== PLAYER_ID) {
+                    text = t("diceListening", { npc: ck.opp.name });
+                } else {
+                    text = t("thinking", { npc: ck.opp.name });
+                }
+            }
+            $("ck-status").textContent = text;
+        }
+
+        // ===== Cribbage =====
+
+        // Two-handed cribbage to 121. Six cards each, two from each to the dealer's crib, then the
+        // starter is cut (a jack: two for his heels, to the dealer). In the play, each card adds to
+        // the count, up to 31: fifteen and thirty-one are two, a pair two, three and four of a kind
+        // six and twelve, a run a point a card. Whoever cannot play says go; the last to play pegs
+        // one (thirty-one already pegged two). Then the hands are shown: the pone's, the dealer's,
+        // the crib. Whoever reaches 121 first wins at once.
+        const CB_TARGET = 121;
+        const CB_SKUNK = 91;      // the loser short of this has been skunked
+
+        const cbValue = (c) => Math.min(c.r, 10);
+        const cbSum = (cards) => cards.reduce((a, c) => a + cbValue(c), 0);
+
+        // What 4 cards and the starter show: {total, fifteens, pairs, runs, flush, nobs}. crib: a
+        // flush needs the starter too. starter null: what the 4 cards hold by themselves.
+        function cbScore(hand, starter, crib) {
+            const all = starter ? [...hand, starter] : hand.slice();
+            const n = all.length;
+            let fifteens = 0;
+            for (let mask = 1; mask < (1 << n); mask++) {
+                let s = 0;
+                for (let k = 0; k < n; k++) {
+                    if (mask & (1 << k)) {
+                        s += cbValue(all[k]);
+                    }
+                }
+                if (s === 15) {
+                    fifteens += 2;
+                }
+            }
+            let pairs = 0;
+            for (let a = 0; a < n; a++) {
+                for (let b = a + 1; b < n; b++) {
+                    if (all[a].r === all[b].r) {
+                        pairs += 2;
+                    }
+                }
+            }
+            // runs: each longest stretch of ranks of three or more, once for every way to make it
+            const counts = new Array(15).fill(0);
+            for (const c of all) {
+                counts[c.r]++;
+            }
+            let runs = 0;
+            for (let r = 1; r <= 13;) {
+                if (!counts[r]) {
+                    r++;
+                    continue;
+                }
+                let len = 0, ways = 1;
+                while (r + len <= 13 && counts[r + len]) {
+                    ways *= counts[r + len];
+                    len++;
+                }
+                if (len >= 3) {
+                    runs += len * ways;
+                }
+                r += len;
+            }
+            let flush = 0;
+            if (hand.length === 4 && hand.every((c) => c.s === hand[0].s)) {
+                if (starter && starter.s === hand[0].s) {
+                    flush = 5;
+                } else if (!crib) {
+                    flush = 4;
+                }
+            }
+            const nobs = starter && hand.some((c) => c.r === 11 && c.s === starter.s) ? 1 : 0;
+            return { total: fifteens + pairs + runs + flush + nobs, fifteens, pairs, runs, flush, nobs };
+        }
+
+        // What laying the last card of pile (the cards since the count was 0) pegs:
+        // {points, count, fifteen, thirtyOne, kind (how many of a kind, 1 = none), run (its length, 0 = none)}.
+        function cbPegPoints(pile) {
+            const count = cbSum(pile);
+            const last = pile[pile.length - 1];
+            let kind = 1;
+            for (let k = pile.length - 2; k >= 0 && pile[k].r === last.r; k--) {
+                kind++;
+            }
+            let run = 0;
+            for (let len = pile.length; len >= 3; len--) {
+                const ranks = pile.slice(-len).map((c) => c.r).sort((a, b) => a - b);
+                if (ranks.every((r, k) => k === 0 || r === ranks[k - 1] + 1)) {
+                    run = len;
+                    break;
+                }
+            }
+            const fifteen = count === 15, thirtyOne = count === 31;
+            const points = (fifteen ? 2 : 0) + (thirtyOne ? 2 : 0) + [0, 0, 2, 6, 12][kind] + run;
+            return { points, count, fifteen, thirtyOne, kind, run };
+        }
+
+        // ---- opponent AI ----
+
+        // A rough worth of two cards in a crib: what they make together, and the cards that make
+        // fifteens and runs with most others.
+        function cbCribGuess(toss) {
+            const [a, b] = toss;
+            let v = 0;
+            if (a.r === b.r) {
+                v += 2;
+            }
+            if (cbValue(a) + cbValue(b) === 15) {
+                v += 2;
+            }
+            v += (a.r === 5 ? 1.5 : 0) + (b.r === 5 ? 1.5 : 0);
+            const gap = Math.abs(a.r - b.r);
+            v += gap === 1 ? 1 : gap === 2 ? 0.5 : 0;
+            if (a.s === b.s) {
+                v += 0.25;
+            }
+            return v;
+        }
+
+        // The two of these six cards that go to the crib. dealer: the crib is this seat's.
+        // 1: any two. 2: keep the best four as they stand. 3 and 4: keep the four best on average
+        // over every starter, the crib reckoned in (4 also keeps fewer cards that give the
+        // opponent's crib fives).
+        function cbChooseDiscard(six, dealer, lvl) {
+            const options = [];
+            for (let a = 0; a < 6; a++) {
+                for (let b = a + 1; b < 6; b++) {
+                    options.push({ keep: six.filter((_, k) => k !== a && k !== b), toss: [six[a], six[b]] });
+                }
+            }
+            if (lvl <= 1) {
+                return options[Math.floor(Math.random() * options.length)].toss;
+            }
+            const rest = [];
+            if (lvl >= 3) {
+                for (let s = 0; s < 4; s++) {
+                    for (let r = 1; r <= 13; r++) {
+                        if (!six.some((c) => c.r === r && c.s === s)) {
+                            rest.push({ r, s });
+                        }
+                    }
+                }
+            }
+            const worth = (o) => {
+                const hand = lvl >= 3
+                    ? rest.reduce((a, s) => a + cbScore(o.keep, s, false).total, 0) / rest.length
+                    : cbScore(o.keep, null, false).total;
+                let crib = cbCribGuess(o.toss);
+                if (lvl >= 4 && !dealer) {
+                    crib += o.toss.filter((c) => c.r === 5).length;
+                }
+                return hand + (dealer ? crib : -crib) + (lvl === 2 ? Math.random() * 1.5 : 0);
+            };
+            const scored = options.map((o) => ({ o, v: worth(o) }));
+            return scored.reduce((a, x) => (x.v > a.v ? x : a)).o.toss;
+        }
+
+        // The card to lay from hand with these cards in the count. 1: any that fits. Above: what
+        // it pegs now, less what it leaves the other side (a count of 5 or 21 invites a ten-card,
+        // a lead of 5 the same), leading low, and from 3 on, spending high cards while the count
+        // is low so the low ones are left for the go.
+        function cbChoosePlay(hand, pile, lvl) {
+            const count = cbSum(pile);
+            const playable = hand.filter((c) => count + cbValue(c) <= 31);
+            if (playable.length <= 1) {
+                return playable[0];
+            }
+            if (lvl <= 1) {
+                return playable[Math.floor(Math.random() * playable.length)];
+            }
+            const rate = (c) => {
+                const after = count + cbValue(c);
+                let v = cbPegPoints([...pile, c]).points * 10;
+                if (after === 5 || after === 21) {
+                    v -= 4;
+                }
+                if (!pile.length) {
+                    v += cbValue(c) < 5 ? 2 : 0;
+                    v -= c.r === 5 ? 3 : 0;
+                }
+                if (lvl >= 3 && after < 21) {
+                    v += cbValue(c) * 0.15;
+                }
+                if (lvl >= 4 && pile.length && pile[pile.length - 1].r === c.r && after + cbValue(c) <= 31) {
+                    v -= 2;    // a pair invites three of a kind
+                }
+                return v + (lvl === 2 ? Math.random() * 3 : 0);
+            };
+            const scored = playable.map((c) => ({ c, v: rate(c) }));
+            return scored.reduce((a, x) => (x.v > a.v ? x : a)).c;
+        }
+
+        // ---- text ----
+
+        function cbCardText(c) {
+            const ranks = t("cbRanks").split(",");
+            const suits = t("cbSuits").split(",");
+            return t("cbCard", { rank: (ranks[c.r - 1] || String(c.r)).trim(), suit: (suits[c.s] || "").trim() });
+        }
+
+        const cbCardsText = (cards) => cards.map(cbCardText).join(t("listComma"));
+
+        function cbPartsText(sc) {
+            const parts = [];
+            if (sc.fifteens) parts.push(t("cbFifteens", { n: sc.fifteens }));
+            if (sc.pairs) parts.push(t("cbPairs", { n: sc.pairs }));
+            if (sc.runs) parts.push(t("cbRuns", { n: sc.runs }));
+            if (sc.flush) parts.push(t("cbFlush", { n: sc.flush }));
+            if (sc.nobs) parts.push(t("cbNobs"));
+            return parts.length ? parts.join(t("listComma")) : t("cbNothing");
+        }
+
+        function cbPegText(p) {
+            const parts = [];
+            if (p.fifteen) parts.push(t("cbPegFifteen"));
+            if (p.thirtyOne) parts.push(t("cbPegThirtyOne"));
+            if (p.kind >= 2) parts.push(t("cbPegKind" + p.kind));
+            if (p.run) parts.push(t("cbPegRun", { n: p.run }));
+            return parts.join(t("listComma"));
+        }
+
+        // ---- flow ----
+
+        // The opponent's strength, 1 to 4: from the plugin when it passes one (cbLevel), else Normal,
+        // and set during play by the four steps on the panel. Read at every decision, so a change
+        // counts from the next one.
+        let cbLevel = 2;
+
+        function onCbLevel(v) {
+            cbLevel = Math.min(4, Math.max(1, Number(v) || 2));
+            renderCb();
+        }
+
+        const cb = {
+            gen: 0,          // bumped when a game is left or dropped: its pending steps stop
+            seats: [],       // 0 the player, 1 the NPC: {id, name, human, score, hand (kept four), peg (still to lay)}
+            dealer: 0,
+            phase: "discard", // discard | peg | show
+            deck: [],
+            crib: [],
+            starter: null,
+            pile: [],        // the cards in the count now
+            count: 0,
+            turn: 0,         // whose card it is
+            lastPlayer: -1,  // who laid the last card
+            said: [false, false],  // said go in this count
+            picked: [],      // the player's picks for the crib
+            show: [],        // the hands counted: {seat, crib, cards, score}
+            handNo: 0,
+            playing: false,
+            over: false,
+            left: false,     // the player left before the end
+            winner: -1,
+            thinking: false, // an NPC's card is on its way
+            leaveArmed: false,
+        };
+
+        const cbName = (k) => cb.seats[k].name;
+        const cbNpc = () => cb.seats[1];
+        const cbPlayable = (k) => cb.seats[k].peg.filter((c) => cb.count + cbValue(c) <= 31);
+        const cbPlayerActs = () => cb.playing && !cb.over && !cb.thinking && screen === "cb";
+
+        function cbNewGame(opp) {
+            cb.gen++;
+            cb.seats = [
+                { id: "", name: playerName, human: true, score: 0, hand: [], peg: [] },
+                { id: opp.id, name: opp.name, human: false, score: 0, hand: [], peg: [] },
+            ];
+            cb.playing = true;
+            cb.over = false;
+            cb.left = false;
+            cb.winner = -1;
+            cb.handNo = 0;
+            cb.thinking = false;
+            cb.leaveArmed = false;
+            $("cb-log").innerHTML = "";
+            // cut for the deal: the lower card deals
+            let mine, theirs;
+            do {
+                const deck = newDeck();
+                mine = deck[0];
+                theirs = deck[1];
+            } while (mine.r === theirs.r);
+            cb.dealer = mine.r < theirs.r ? 0 : 1;
+            log(t("cbLogCutDeal", { player: playerName, mine: cbCardText(mine), npc: opp.name, theirs: cbCardText(theirs), dealer: cbName(cb.dealer) }), "cb-log");
+            say(opp.id, t("cbSayStart", { player: playerName, npc: opp.name, dealer: cbName(cb.dealer) }));
+            cbDeal();
+        }
+
+        function cbDeal() {
+            cb.handNo++;
+            cb.deck = newDeck();
+            cb.crib = [];
+            cb.starter = null;
+            cb.pile = [];
+            cb.count = 0;
+            cb.lastPlayer = -1;
+            cb.said = [false, false];
+            cb.picked = [];
+            cb.show = [];
+            cb.phase = "discard";
+            cb.leaveArmed = false;
+            for (const s of cb.seats) {
+                s.hand = cb.deck.splice(0, 6);
+                s.peg = [];
+            }
+            log(t("cbLogHandStart", { n: cb.handNo, dealer: cbName(cb.dealer) }), "cb-log");
+            // the NPC picks at once; their two lie face down until the crib is shown
+            const npc = cbNpc();
+            const toss = cbChooseDiscard(npc.hand, cb.dealer === 1, cbLevel);
+            npc.hand = npc.hand.filter((c) => !toss.includes(c));
+            cb.crib.push(...toss);
+            reportCbState();
+            renderCb();
+        }
+
+        // seat k pegs n; true if that wins the game (which is then over).
+        function cbAward(k, n) {
+            const s = cb.seats[k];
+            s.score = Math.min(CB_TARGET, s.score + n);
+            if (s.score >= CB_TARGET) {
+                cbEnd(k);
+                return true;
+            }
+            return false;
+        }
+
+        // Both cribs are in: the starter is cut, and the play begins with the pone.
+        function cbCut() {
+            cb.starter = cb.deck.pop();
+            log(t("cbLogStarter", { card: cbCardText(cb.starter) }), "cb-log");
+            if (cb.starter.r === 11) {
+                log(t("cbLogHeels", { who: cbName(cb.dealer) }), "cb-log");
+                if (cb.dealer === 1) {
+                    say(cbNpc().id, t("cbSayHeels", { npc: cbNpc().name, player: playerName }));
+                }
+                if (cbAward(cb.dealer, 2)) {
+                    return;
+                }
+            }
+            cb.phase = "peg";
+            for (const s of cb.seats) {
+                s.peg = s.hand.slice();
+            }
+            cb.turn = 1 - cb.dealer;
+            reportCbState();
+            cbPegStep();
+        }
+
+        function cbNewCount() {
+            cb.count = 0;
+            cb.pile = [];
+            cb.said = [false, false];
+            cb.turn = 1 - cb.lastPlayer;
+        }
+
+        // The play goes on: a go, the go point and a new count, the show, or someone's card.
+        function cbPegStep() {
+            renderCb();
+            if (!cb.playing || cb.over || cb.phase !== "peg" || cb.thinking) {
+                return;
+            }
+            if (!cb.seats[0].peg.length && !cb.seats[1].peg.length) {
+                if (cb.count > 0 && cb.count < 31) {
+                    log(t("cbLogLast", { who: cbName(cb.lastPlayer) }), "cb-log");
+                    if (cbAward(cb.lastPlayer, 1)) {
+                        return;
+                    }
+                }
+                cbShow();
+                return;
+            }
+            const k = cb.turn, o = 1 - k;
+            if (!cbPlayable(k).length) {
+                if (!cb.said[k] && cb.seats[k].peg.length) {
+                    cb.said[k] = true;
+                    log(t("cbLogGo", { who: cbName(k), count: cb.count }), "cb-log");
+                }
+                if (cbPlayable(o).length) {
+                    cb.turn = o;
+                    cbPegStep();
+                    return;
+                }
+                // nobody can lay a card: the last to play pegs one, and the count starts again
+                if (cb.count > 0 && cb.count < 31) {
+                    log(t("cbLogGoPoint", { who: cbName(cb.lastPlayer) }), "cb-log");
+                    if (cbAward(cb.lastPlayer, 1)) {
+                        return;
+                    }
+                }
+                cbNewCount();
+                cbPegStep();
+                return;
+            }
+            if (cb.seats[k].human) {
+                reportCbState();
+                return;    // the player lays a card from the board
+            }
+            cb.thinking = true;
+            const gen = cb.gen;
+            renderCbStatus();
+            whenQuiet(() => {
+                if (gen !== cb.gen) {
+                    return;
+                }
+                if (screen !== "cb") {
+                    cb.thinking = false;
+                    return;
+                }
+                renderCbStatus();
+                setTimeout(() => {
+                    if (gen !== cb.gen) {
+                        return;
+                    }
+                    cb.thinking = false;
+                    if (screen !== "cb") {
+                        return;
+                    }
+                    cbPlay(1, cbChoosePlay(cbNpc().peg, cb.pile, cbLevel));
+                }, 700 + Math.random() * 500);
+            });
+        }
+
+        // Seat k lays card c.
+        function cbPlay(k, c) {
+            const s = cb.seats[k];
+            s.peg = s.peg.filter((x) => x !== c);
+            cb.pile.push(c);
+            cb.count += cbValue(c);
+            cb.lastPlayer = k;
+            cb.leaveArmed = false;
+            const p = cbPegPoints(cb.pile);
+            log(t(p.points ? "cbLogPlayPoints" : "cbLogPlay", { who: s.name, card: cbCardText(c), count: cb.count, how: cbPegText(p), n: p.points }), "cb-log");
+            if (p.points >= 6 || (p.points >= 4 && p.run)) {
+                const v = { who: s.name, npc: cbNpc().name, player: playerName, card: cbCardText(c), how: cbPegText(p), n: p.points };
+                say(cbNpc().id, t(s.human ? "cbSayBigPegPlayer" : "cbSayBigPegNpc", v));
+            }
+            if (p.points && cbAward(k, p.points)) {
+                return;
+            }
+            if (cb.count === 31) {
+                cbNewCount();
+            } else {
+                cb.turn = 1 - k;
+            }
+            reportCbState();
+            cbPegStep();
+        }
+
+        // The hands are counted: the pone's, the dealer's, then the crib.
+        function cbShow() {
+            cb.phase = "show";
+            const pone = 1 - cb.dealer;
+            const order = [
+                { seat: pone, crib: false, cards: cb.seats[pone].hand },
+                { seat: cb.dealer, crib: false, cards: cb.seats[cb.dealer].hand },
+                { seat: cb.dealer, crib: true, cards: cb.crib },
+            ];
+            cb.show = [];
+            for (const o of order) {
+                const score = cbScore(o.cards, cb.starter, o.crib);
+                cb.show.push({ ...o, score });
+                log(t(o.crib ? "cbLogCrib" : "cbLogShow", { who: cbName(o.seat), n: score.total, how: cbPartsText(score) }), "cb-log");
+                if (score.total && cbAward(o.seat, score.total)) {
+                    return;
+                }
+            }
+            const npc = cbNpc();
+            const shown = (seat, crib) => cb.show.find((x) => x.seat === seat && x.crib === crib).score.total;
+            say(npc.id, t("cbSayShow", {
+                npc: npc.name, player: playerName, dealer: cbName(cb.dealer),
+                n: shown(1, false), h: shown(0, false), c: shown(cb.dealer, true),
+                ns: npc.score, hs: cb.seats[0].score,
+            }));
+            reportCbState();
+            renderCb();
+        }
+
+        // k won (reached 121).
+        function cbEnd(k) {
+            cb.over = true;
+            cb.winner = k;
+            cb.thinking = false;
+            const loser = cb.seats[1 - k];
+            const skunk = loser.score < CB_SKUNK;
+            log(t("cbLogEnd", { result: cbResult() }), "cb-log");
+            const v = { npc: cbNpc().name, player: playerName, ns: cbNpc().score, hs: cb.seats[0].score, loser: loser.name };
+            say(cbNpc().id, t(k === 0 ? "cbSayPlayerWins" : "cbSayNpcWins", v) + (skunk ? t("cbSaySkunk", v) : ""), true);
+            reportCbState();
+            renderCb();
+        }
+
+        function cbResult() {
+            const w = cb.seats[cb.winner], l = cb.seats[1 - cb.winner];
+            return t("cbResult", { name: w.name, w: w.score, l: l.score }) + (l.score < CB_SKUNK ? t("cbResultSkunk") : "");
+        }
+
+        // ---- the player's moves ----
+
+        function onCbCard(c) {
+            if (!cbPlayerActs()) {
+                return;
+            }
+            if (cb.phase === "discard" && cb.seats[0].hand.length === 6) {
+                const k = cb.picked.indexOf(c);
+                if (k >= 0) {
+                    cb.picked.splice(k, 1);
+                } else if (cb.picked.length < 2) {
+                    cb.picked.push(c);
+                }
+                renderCb();
+            } else if (cb.phase === "peg" && cb.turn === 0 && cbPlayable(0).includes(c)) {
+                cbPlay(0, c);
+            }
+        }
+
+        function onCbCrib() {
+            if (!cbPlayerActs() || cb.phase !== "discard" || cb.picked.length !== 2) {
+                return;
+            }
+            const me = cb.seats[0];
+            me.hand = me.hand.filter((c) => !cb.picked.includes(c));
+            cb.crib.push(...cb.picked);
+            cb.picked = [];
+            cbCut();
+        }
+
+        function onCbNext() {
+            if (!cbPlayerActs() || cb.phase !== "show") {
+                return;
+            }
+            cb.dealer = 1 - cb.dealer;
+            cbDeal();
+        }
+
+        function onCbLeave() {
+            if (!cb.playing || cb.over) {
+                return;
+            }
+            if (!cb.leaveArmed) {
+                cb.leaveArmed = true;
+                renderCb();
+                return;
+            }
+            cb.gen++;
+            cb.over = true;
+            cb.left = true;
+            cb.thinking = false;
+            cb.leaveArmed = false;
+            say(cbNpc().id, t("cbSayLeave", { player: playerName, npc: cbNpc().name }), true);
+            log(t("logLeave", { player: playerName }), "cb-log");
+            reportCbState();
+            renderCb();
+        }
+
+        function onCbAgain() {
+            cbNewGame({ id: cbNpc().id, name: cbNpc().name });
+        }
+
+        // ---- what the NPC knows ----
+
+        function cbStateFor() {
+            const npc = cbNpc();
+            const v = { npc: npc.name, player: playerName };
+            if (cb.over) {
+                if (screen !== "cb") {
+                    return "";
+                }
+                return cb.left ? t("cbStateLeft", v) : t("cbStateResult", { ...v, result: cbResult() });
+            }
+            if (!cb.playing) {
+                return "";
+            }
+            let text = t("cbState", { ...v, ns: npc.score, hs: cb.seats[0].score, dealer: cbName(cb.dealer) });
+            if (cb.phase === "discard") {
+                text += t("cbStateDiscard", { npc: npc.name, cards: cbCardsText(npc.hand) });
+            } else if (cb.phase === "peg") {
+                text += t("cbStatePeg", { npc: npc.name, starter: cbCardText(cb.starter), count: cb.count, cards: npc.peg.length ? cbCardsText(npc.peg) : t("cbNoCards") });
+                text += t("cbStateTurn", { who: cbName(cb.turn) });
+            } else if (cb.phase === "show") {
+                text += t("cbStateShow", { how: cb.show.map((x) => t(x.crib ? "cbShownCrib" : "cbShownHand", { who: cbName(x.seat), n: x.score.total })).join(t("listComma")) });
+            }
+            if (screen !== "cb") {
+                text += t("cbStatePaused");
+            }
+            return text;
+        }
+
+        function reportCbState() {
+            if (activeGame !== "cb" || !cb.seats.length) {
+                return;
+            }
+            send("rvState", JSON.stringify({ states: { [cbNpc().id]: cbStateFor() }, playing: cb.playing && !cb.over }));
+        }
+
+        // A game in progress is dropped (another game is starting).
+        function abandonCribbage() {
+            if (cb.playing && !cb.over) {
+                cb.playing = false;
+                cb.gen++;
+                cb.thinking = false;
+                voiceReset();
+            }
+        }
+
+        // Starts or resumes cribbage against opp ({id, name}).
+        function playCribbage(opp) {
+            const same = cb.playing && !cb.over && cb.seats.length && cbNpc().id === opp.id;
+            if (!same) {
+                abandonCribbage();
+            }
+            abandonReversi();
+            abandonDice();
+            abandonStb();
+            abandonBj();
+            abandonPk();
+            abandonCheckers();
+            activeGame = "cb";
+            send("mgPlayers", opp.id);
+            if (same) {
+                showScreen("cb");
+                log(t("logResume"), "cb-log");
+                reportCbState();
+                cbPegStep();
+                return;
+            }
+            snapFaces([opp.id], () => {
+                showScreen("cb");
+                cbNewGame(opp);
+            });
+        }
+
+        // ---- rendering ----
+
+        function cbCardEl(c, size, faceDown, onClick, cls = "") {
+            const el = cardEl(c, size, faceDown);
+            if (cls) {
+                el.className += " " + cls;
+            }
+            if (onClick) {
+                el.onclick = onClick;
+            }
+            return el;
+        }
+
+        function renderCb() {
+            if (!cb.seats.length) {
+                return;
+            }
+            const live = cb.playing && !cb.over;
+            const me = cb.seats[0], npc = cbNpc();
+            const shownUp = cb.phase === "show" || cb.over;
+            const acts = cbPlayerActs();
+
+            // the NPC
+            $("cb-face").dataset.face = npc.id;
+            paintFace($("cb-face"), npc.id, npc.name);
+            $("cb-npc-name").textContent = npc.name + (cb.dealer === 1 ? t("cbDealerMark") : "");
+            const npcHand = $("cb-npc-hand");
+            npcHand.innerHTML = "";
+            const npcCards = shownUp ? npc.hand : cb.phase === "peg" ? npc.peg : npc.hand;
+            npcCards.forEach((c) => npcHand.appendChild(cbCardEl(c, "mid", !shownUp)));
+            $("cb-npc-seat").classList.toggle("active", live && cb.phase === "peg" && cb.turn === 1);
+
+            // the middle: starter, crib, the count
+            const starter = $("cb-starter");
+            starter.innerHTML = "";
+            if (cb.starter) {
+                starter.appendChild(cbCardEl(cb.starter, "mid", false));
+            } else {
+                starter.appendChild(cbCardEl({ r: 1, s: 0 }, "mid", true));
+            }
+            $("cb-crib-label").textContent = t("cbCribOf", { who: cbName(cb.dealer) });
+            const crib = $("cb-crib");
+            crib.innerHTML = "";
+            cb.crib.forEach((c) => crib.appendChild(cbCardEl(c, "small", !shownUp)));
+            const pile = $("cb-pile");
+            pile.innerHTML = "";
+            cb.pile.forEach((c) => pile.appendChild(cbCardEl(c, "mid", false)));
+            $("cb-count").textContent = cb.phase === "peg" ? t("cbCount", { n: cb.count }) : "";
+
+            // the player
+            $("cb-mine-name").textContent = me.name + (cb.dealer === 0 ? t("cbDealerMark") : "");
+            const mine = $("cb-mine-hand");
+            mine.innerHTML = "";
+            if (cb.phase === "discard" && !cb.over) {
+                me.hand.forEach((c) => {
+                    const cls = cb.picked.includes(c) ? "picked" : acts && me.hand.length === 6 ? "can" : "";
+                    mine.appendChild(cbCardEl(c, "big", false, () => onCbCard(c), cls));
+                });
+            } else if (cb.phase === "peg" && !cb.over) {
+                const playable = acts && cb.turn === 0 ? cbPlayable(0) : [];
+                me.peg.forEach((c) => {
+                    const cls = playable.includes(c) ? "can" : cb.turn === 0 && acts ? "dim" : "";
+                    mine.appendChild(cbCardEl(c, "big", false, () => onCbCard(c), cls));
+                });
+            } else {
+                me.hand.forEach((c) => mine.appendChild(cbCardEl(c, "big", false)));
+            }
+            $("cb-mine").classList.toggle("active", live && cb.phase === "peg" && cb.turn === 0);
+
+            // scores
+            for (const [k, id] of [[1, "npc"], [0, "me"]]) {
+                $("cb-score-" + id + "-name").textContent = cbName(k);
+                $("cb-score-" + id).textContent = cb.seats[k].score;
+                $("cb-bar-" + id).style.width = (cb.seats[k].score / CB_TARGET) * 100 + "%";
+            }
+
+            $("cb-meta").textContent = t("strength", { level: t("level" + cbLevel) });
+            renderLevelSteps("cb-level", cbLevel);
+            $("cb-crib-button").style.display = live && cb.phase === "discard" ? "" : "none";
+            $("cb-crib-button").disabled = !acts || cb.picked.length !== 2;
+            $("cb-next").style.display = live && cb.phase === "show" ? "" : "none";
+            $("cb-leave").style.display = live ? "" : "none";
+            $("cb-leave").textContent = t(cb.leaveArmed ? "leaveConfirm" : "leave");
+            $("cb-again").style.display = cb.over ? "" : "none";
+            renderCbStatus();
+        }
+
+        function renderCbStatus() {
+            if (!cb.seats.length) {
+                return;
+            }
+            const npc = cbNpc();
+            let text = "";
+            if (cb.over) {
+                if (cb.left) {
+                    text = t("diceLeftStatus");
+                } else {
+                    text = t(cb.winner === 0 ? "cbYouWin" : "cbNpcWins", { npc: npc.name, w: cb.seats[cb.winner].score, l: cb.seats[1 - cb.winner].score });
+                    if (cb.seats[1 - cb.winner].score < CB_SKUNK) {
+                        text += t("cbSkunkStatus");
+                    }
+                }
+            } else if (cb.playing) {
+                if (cb.phase === "discard") {
+                    text = t(cb.dealer === 0 ? "cbYourCrib" : "cbTheirCrib", { npc: npc.name });
+                } else if (cb.phase === "show") {
+                    const lines = cb.show.map((x) => t(x.crib ? "cbShownCrib" : "cbShownHand", { who: cbName(x.seat), n: x.score.total }));
+                    text = t("cbShowStatus", { how: lines.join(t("listComma")) });
+                } else if (cb.turn === 0 && !cb.thinking) {
+                    text = t("cbYourPlay", { n: cb.count });
+                } else if (voiceLine && voiceLine.speaker !== PLAYER_ID) {
+                    text = t("diceListening", { npc: npc.name });
+                } else {
+                    text = t("thinking", { npc: npc.name });
+                }
+            }
+            $("cb-status").textContent = text;
+        }
+
         // ===== faces =====
 
         // A new game calls its opponents over (MCM) and takes a photo: the screen goes black
@@ -5166,6 +7001,8 @@
             $("stb").classList.toggle("open", name === "stb");
             $("bj").classList.toggle("open", name === "bj");
             $("pk").classList.toggle("open", name === "pk");
+            $("ck").classList.toggle("open", name === "ck");
+            $("cb").classList.toggle("open", name === "cb");
             hidden = name !== "board";
             fitPanels();
         }
@@ -5195,6 +7032,10 @@
                 reportBjState();
             } else if (activeGame === "pk") {
                 reportPkState();
+            } else if (activeGame === "ck") {
+                reportCkState();
+            } else if (activeGame === "cb") {
+                reportCbState();
             }
         }
 
@@ -5212,6 +7053,7 @@
             abandonBj();
             abandonPk();
             activeGame = "reversi";
+            abandonCheckersAndCribbage();
             const sameOpponent = opp.id === opponent.id;
             if (!sameOpponent && playing && !over) {
                 // a game with someone else is left behind (reported while the plugin still has
@@ -5256,6 +7098,8 @@
                 }
             } },
             { id: "pk", title: "gamePk", desc: "gamePkDesc", opponents: 3, start: (chosen) => playPk(chosen) },
+            { id: "ck", title: "gameCk", desc: "gameCkDesc", opponents: 1, start: (chosen) => playCheckers(chosen[0]) },
+            { id: "cb", title: "gameCb", desc: "gameCbDesc", opponents: 1, start: (chosen) => playCribbage(chosen[0]) },
         ];
 
         let actors = [];          // nearby NPCs from the plugin: {id, name, distance, crosshair}
@@ -5286,6 +7130,12 @@
             } else if (activeGame === "pk" && pk.playing && !pk.over) {
                 const opps = pkOpponents();
                 list.appendChild(menuRow(t("resume", { game: t("gamePk"), npc: joinNames(opps.map((o) => o.name)) }), "", "", () => playPk(opps), "resume"));
+            }
+            if (activeGame === "ck" && ck.playing && !ck.over) {
+                list.appendChild(menuRow(t("resume", { game: t("gameCk"), npc: ck.opp.name }), "", "", () => playCheckers(ck.opp), "resume"));
+            } else if (activeGame === "cb" && cb.playing && !cb.over) {
+                const opp = { id: cbNpc().id, name: cbNpc().name };
+                list.appendChild(menuRow(t("resume", { game: t("gameCb"), npc: opp.name }), "", "", () => playCribbage(opp), "resume"));
             }
             for (const game of GAMES) {
                 list.appendChild(menuRow(t(game.title), t(game.desc), "", () => chooseOpponents(game)));
@@ -5398,7 +7248,7 @@
 
         // ===== called from the plugin =====
 
-        // Options every open carries: { player, level, hints, color, diceLevel, stbLevel, bjLevel, bjRounds, pkLevel, pkHands, voice, voiceWait, strings }.
+        // Options every open carries: { player, level, hints, color, diceLevel, stbLevel, bjLevel, bjRounds, pkLevel, pkHands, ckLevel, cbLevel, voice, voiceWait, strings }.
         function applyOptions(opts) {
             applyStrings(opts.strings);
             playerName = opts.player || playerName;
@@ -5411,6 +7261,8 @@
             bjRounds = opts.bjRounds || bjRounds;
             pkLevel = opts.pkLevel || pkLevel;
             pkHands = opts.pkHands || pkHands;
+            ckLevel = opts.ckLevel || ckLevel;
+            cbLevel = opts.cbLevel || cbLevel;
             voiceOn = !!opts.voice;
             playerVoice = !!opts.playerVoice;
             gatherOn = opts.gather !== false;
@@ -5476,6 +7328,12 @@
             abandonPk();
             pk.seats = [];
             pk.over = false;
+            abandonCheckers();
+            ck.b = [];
+            ck.over = false;
+            abandonCribbage();
+            cb.seats = [];
+            cb.over = false;
             activeGame = null;
             voiceReset();
         };
