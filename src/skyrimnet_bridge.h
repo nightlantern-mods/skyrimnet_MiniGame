@@ -46,6 +46,11 @@ namespace SkyrimNetBridge
     // "bluff": rarely|sometimes|often} or {"id", "failed": true} as JSON text.
     void AskPokerStyles(std::vector<std::pair<RE::FormID, std::string>> a_npcs, std::function<void(std::string)> a_reply);
 
+    // What minigame_style tells the prompt of an NPC at the table about the length of their lines,
+    // for the MCM's "a few words", "short" and "longer" (the texts of the installed language; an
+    // empty one keeps the built-in English). "SkyrimNet's own" says nothing.
+    void SetLineStyles(std::string a_brief, std::string a_short, std::string a_long);
+
     // Forgets every game (a save was loaded).
     void Reset();
 }

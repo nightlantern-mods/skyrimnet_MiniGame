@@ -3,6 +3,7 @@
 #include "settings.h"
 #include "skyrimnet/PublicAPI.h"
 
+#include <array>
 #include <chrono>
 #include <mutex>
 #include <set>
@@ -19,6 +20,13 @@ namespace SkyrimNetBridge
 
         std::mutex                                 g_lock;
         std::unordered_map<RE::FormID, std::string> g_states;  // what each NPC's prompts see of the game
+        // minigame_style, by the MCM's iLineLength (2: no instruction)
+        std::array<std::string, 4> g_lineStyles = {
+            "Remarks about the game are a single short line: a few words, one sentence at most.",
+            "Remarks about the game stay short, like table talk: one or two sentences.",
+            "",
+            "Remarks about the game may run longer: two to four sentences, with what they feel and see at the table.",
+        };
         std::set<RE::FormID>                       g_busy;    // marked busy in SkyrimNet while playing
         std::chrono::steady_clock::time_point      g_lastNarration{};
 
@@ -80,6 +88,17 @@ namespace SkyrimNetBridge
                     std::scoped_lock lock(g_lock);
                     const auto       it = g_states.find(a_actor->GetFormID());
                     return it != g_states.end() ? it->second : std::string();
+                });
+            // {{ minigame_style(actorUUID) }}: how long this actor's lines about the game should be
+            // (MCM), while they are at the table; "" otherwise and for "SkyrimNet's own".
+            PublicRegisterDecorator("minigame_style", "How long this actor's remarks about the mini game they are playing should be, as the player set it (empty if none)",
+                [](RE::Actor* a_actor) -> std::string {
+                    if (!a_actor) {
+                        return {};
+                    }
+                    const auto       length = static_cast<std::size_t>(Settings::Get().lineLength);
+                    std::scoped_lock lock(g_lock);
+                    return g_states.contains(a_actor->GetFormID()) ? g_lineStyles[length] : std::string();
                 });
         }
 
@@ -147,6 +166,14 @@ namespace SkyrimNetBridge
                 RE::PlayerCharacter::GetSingleton()->GetFormID(), nullptr, 0);
             logger::info("narration {} ({:08X}): {}", id, a_speaker, text);
         });
+    }
+
+    void SetLineStyles(std::string a_brief, std::string a_short, std::string a_long)
+    {
+        std::scoped_lock lock(g_lock);
+        if (!a_brief.empty()) g_lineStyles[0] = std::move(a_brief);
+        if (!a_short.empty()) g_lineStyles[1] = std::move(a_short);
+        if (!a_long.empty()) g_lineStyles[3] = std::move(a_long);
     }
 
     bool CanPlayerSay()

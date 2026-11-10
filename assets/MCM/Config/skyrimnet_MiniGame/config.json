@@ -189,6 +189,40 @@
 		},
 		{
 			"type": "header",
+			"text": "$SNMG_HeaderCheckers"
+		},
+		{
+			"id": "iDifficulty:Checkers",
+			"type": "slider",
+			"text": "$SNMG_CkDifficulty",
+			"help": "$SNMG_CkDifficultyHelp",
+			"valueOptions": {
+				"min": 1,
+				"max": 4,
+				"step": 1,
+				"formatString": "{0}",
+				"sourceType": "ModSettingInt"
+			}
+		},
+		{
+			"type": "header",
+			"text": "$SNMG_HeaderCribbage"
+		},
+		{
+			"id": "iDifficulty:Cribbage",
+			"type": "slider",
+			"text": "$SNMG_CbDifficulty",
+			"help": "$SNMG_CbDifficultyHelp",
+			"valueOptions": {
+				"min": 1,
+				"max": 4,
+				"step": 1,
+				"formatString": "{0}",
+				"sourceType": "ModSettingInt"
+			}
+		},
+		{
+			"type": "header",
 			"text": "$SNMG_HeaderSkyrimNet"
 		},
 		{
@@ -233,6 +267,16 @@
 			"help": "$SNMG_PlayerVoiceHelp",
 			"valueOptions": {
 				"sourceType": "ModSettingBool"
+			}
+		},
+		{
+			"id": "iLineLength:SkyrimNet",
+			"type": "enum",
+			"text": "$SNMG_LineLength",
+			"help": "$SNMG_LineLengthHelp",
+			"valueOptions": {
+				"options": ["$SNMG_LineBrief", "$SNMG_LineShort", "$SNMG_LineNormal", "$SNMG_LineLong"],
+				"sourceType": "ModSettingInt"
 			}
 		},
 		{

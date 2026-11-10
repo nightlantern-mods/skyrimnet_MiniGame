@@ -48,3 +48,15 @@ $SNMG_VoiceWait	Voice wait (seconds)
 $SNMG_VoiceWaitHelp	Liar's Dice, Shut the Box, Blackjack and Texas Hold'em wait for each line to be spoken before the next person acts. If nobody speaks within this many seconds, the game moves on anyway.
 $SNMG_PlayerVoice	You speak your own moves
 $SNMG_PlayerVoiceHelp	Liar's Dice: your bids and your "Liar!" calls; Texas Hold'em: your folds, checks, calls, bets and raises. They go through SkyrimNet's Transform Dialogue, so your character says them aloud in their own words (one LLM request each). Off: only your opponents speak, and the next one mentions your move.
+$SNMG_LineLength	Length of their lines
+$SNMG_LineLengthHelp	How long your opponents' remarks about the game are: a few words / short (one or two sentences) / SkyrimNet's own (no instruction from this mod) / longer (two to four sentences). It applies only to the NPCs at the table while a game is played and changes nothing in SkyrimNet's own settings. It is a request to the model, not a hard limit. Longer lines slow the games that wait for each line.
+$SNMG_LineBrief	A few words
+$SNMG_LineShort	Short
+$SNMG_LineNormal	SkyrimNet's own
+$SNMG_LineLong	Longer
+$SNMG_HeaderCribbage	Cribbage
+$SNMG_CbDifficulty	Opponent strength
+$SNMG_CbDifficultyHelp	1 Beginner / 2 Normal / 3 Strong / 4 Master. Stronger opponents work out which cards to keep over every possible starter, count the crib in, and peg with an eye on what they leave you. This is the strength each time the board opens; the steps on the table change it until then. Applies from the opponent's next choice.
+$SNMG_HeaderCheckers	Checkers
+$SNMG_CkDifficulty	Opponent strength
+$SNMG_CkDifficultyHelp	1 Beginner / 2 Normal / 3 Strong / 4 Master. Stronger opponents look further ahead. This is the strength each time the board opens; the steps on the board change it until then. Your colour comes from the Reversi setting (White plays red). Applies from the opponent's next move.

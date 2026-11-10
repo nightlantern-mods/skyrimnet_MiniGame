@@ -48,3 +48,15 @@ $SNMG_VoiceWait	Warten auf die Stimme (Sekunden)
 $SNMG_VoiceWaitHelp	Lügenwürfeln, Shut the Box, Blackjack und Texas Hold'em warten, bis jede Zeile gesprochen ist, bevor die nächste Person handelt. Spricht innerhalb so vieler Sekunden niemand, geht das Spiel trotzdem weiter.
 $SNMG_PlayerVoice	Du sprichst deine eigenen Züge
 $SNMG_PlayerVoiceHelp	Lügenwürfeln: deine Gebote und deine „Lüge!“-Rufe; Texas Hold'em: dein Passen, Schieben, Mitgehen, Setzen und Erhöhen. Sie gehen durch SkyrimNets Transform Dialogue, sodass dein Charakter sie laut in eigenen Worten sagt (je eine LLM-Anfrage). Aus: Nur deine Gegner sprechen, und der nächste erwähnt deinen Zug.
+$SNMG_LineLength	Länge ihrer Zeilen
+$SNMG_LineLengthHelp	Wie lang die Bemerkungen deiner Gegner zum Spiel sind: ein paar Worte / kurz (ein oder zwei Sätze) / wie in SkyrimNet (keine Vorgabe von dieser Mod) / länger (zwei bis vier Sätze). Gilt nur für die NPCs am Tisch, solange gespielt wird, und ändert nichts an SkyrimNets eigenen Einstellungen. Es ist eine Bitte an das Modell, keine feste Grenze. Längere Zeilen bremsen die Spiele, die auf jede Zeile warten.
+$SNMG_LineBrief	Ein paar Worte
+$SNMG_LineShort	Kurz
+$SNMG_LineNormal	Wie in SkyrimNet
+$SNMG_LineLong	Länger
+$SNMG_HeaderCribbage	Cribbage
+$SNMG_CbDifficulty	Gegnerstärke
+$SNMG_CbDifficultyHelp	1 Anfänger / 2 Normal / 3 Stark / 4 Meister. Stärkere Gegner rechnen über jede mögliche Startkarte aus, welche Karten sie behalten, zählen das Crib mit und achten beim Ausspielen darauf, was sie dir lassen. Dies ist die Stärke bei jedem Öffnen des Bretts; die Stufen am Tisch ändern sie bis dahin. Gilt ab der nächsten Entscheidung des Gegners.
+$SNMG_HeaderCheckers	Dame
+$SNMG_CkDifficulty	Gegnerstärke
+$SNMG_CkDifficultyHelp	1 Anfänger / 2 Normal / 3 Stark / 4 Meister. Stärkere Gegner rechnen weiter voraus. Dies ist die Stärke bei jedem Öffnen des Bretts; die Stufen am Brett ändern sie bis dahin. Deine Farbe kommt aus der Reversi-Einstellung (Weiß spielt Rot). Gilt ab dem nächsten Zug des Gegners.

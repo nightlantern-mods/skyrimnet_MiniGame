@@ -48,3 +48,15 @@ $SNMG_VoiceWait	声を待つ時間（秒）
 $SNMG_VoiceWaitHelp	嘘つきダイス、シャット・ザ・ボックス、ブラックジャック、テキサス・ホールデムでは、NPC がセリフを話し終えてから次の人が動きます。この秒数のあいだ誰も話さなければ、待たずに先へ進みます。
 $SNMG_PlayerVoice	自分の手を声に出す
 $SNMG_PlayerVoiceHelp	嘘つきダイスではあなたの宣言と「嘘だ！」を、テキサス・ホールデムではフォールド・チェック・コール・ベット・レイズを SkyrimNet の Transform Dialogue に通し、あなたのキャラクターが自分の言葉で口にします（1 回ごとに LLM へのリクエストが 1 回）。オフにすると話すのは相手だけになり、あなたの手には次の相手が触れます。
+$SNMG_LineLength	相手のセリフの長さ
+$SNMG_LineLengthHelp	対戦相手がゲームについて話す長さです。ひとこと（数語）／短め（1〜2 文）／SkyrimNet まかせ（この MOD からは指示しない）／長め（2〜4 文）。ゲーム中、卓についている NPC にだけ効き、SkyrimNet 本体の設定は何も変えません。モデルへのお願いなので、厳密な制限ではありません。長くすると、セリフを待つゲームはそのぶん進みが遅くなります。
+$SNMG_LineBrief	ひとこと
+$SNMG_LineShort	短め
+$SNMG_LineNormal	SkyrimNet まかせ
+$SNMG_LineLong	長め
+$SNMG_HeaderCribbage	クリベッジ
+$SNMG_CbDifficulty	相手の強さ
+$SNMG_CbDifficultyHelp	1 初心者 / 2 普通 / 3 強い / 4 達人。強い相手ほど、ありうるスターターをすべて考えて残す札を選び、クリブの点も計算に入れ、こちらに残す形を見ながら点を取ります。盤を開くたびにこの強さになり、卓の上のボタンで変えた分は次に開くまで有効です。相手の次の選択から反映されます。
+$SNMG_HeaderCheckers	チェッカー
+$SNMG_CkDifficulty	相手の強さ
+$SNMG_CkDifficultyHelp	1 初心者 / 2 普通 / 3 強い / 4 達人。強い相手ほど先まで読みます。盤を開くたびにこの強さになり、盤の上のボタンで変えた分は次に開くまで有効です。あなたの色はリバーシの設定に従います（白を選ぶと赤）。相手の次の手から反映されます。

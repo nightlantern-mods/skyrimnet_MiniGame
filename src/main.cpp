@@ -12,7 +12,7 @@
 
 #include <nlohmann/json.hpp>
 
-// SkyrimNet MiniGame: mini games against nearby NPCs on a web view (Reversi, Liar's Dice, Shut the Box, Blackjack, Texas Hold'em),
+// SkyrimNet MiniGame: mini games against nearby NPCs on a web view (Reversi, Liar's Dice, Shut the Box, Blackjack, Texas Hold'em, Checkers, Cribbage),
 // drawn by Magelight UI or Prisma UI (ui_host.h), whichever is installed.
 // The hotkey (MCM, skyrimnet_MiniGamePlayerAlias) calls skyrimnet_MiniGameNative.ToggleBoard(),
 // which opens the menu: pick a game, then the opponents from the NPCs nearby. The view runs the
@@ -219,6 +219,10 @@ namespace
     // voice: narrations reach SkyrimNet, so paced games wait for the lines (up to voiceWait s).
     nlohmann::json ViewOptions(const Settings::Values& a_settings)
     {
+        const auto strings = LoadViewStrings();
+        // the texts for the opponents' prompts go with the language of the board
+        const auto text = [&](const char* a_key) { return strings.contains(a_key) && strings[a_key].is_string() ? strings[a_key].get<std::string>() : std::string(); };
+        SkyrimNetBridge::SetLineStyles(text("lineStyleBrief"), text("lineStyleShort"), text("lineStyleLong"));
         static constexpr const char* kColors[] = { "black", "white", "random", "alternate" };
         return {
             { "player", GameText(RE::PlayerCharacter::GetSingleton()->GetDisplayFullName()) },
@@ -231,12 +235,14 @@ namespace
             { "bjRounds", a_settings.bjRounds },
             { "pkLevel", a_settings.pokerDifficulty },
             { "pkHands", a_settings.pokerHands },
+            { "ckLevel", a_settings.checkersDifficulty },
+            { "cbLevel", a_settings.cribbageDifficulty },
             { "voice", SkyrimNetBridge::CanNarrate() },
             { "playerVoice", SkyrimNetBridge::CanPlayerSay() },
             { "voiceWait", a_settings.voiceWaitSeconds },
             { "gather", a_settings.gather },
             { "facePhoto", a_settings.facePhoto && (PhantasmFaces::Ready() || !g_photoUnsafe) },
-            { "strings", LoadViewStrings() },
+            { "strings", strings },
         };
     }
 

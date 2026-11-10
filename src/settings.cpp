@@ -79,11 +79,14 @@ namespace Settings
         v.bjRounds = std::clamp(ToInt(ini, "Blackjack:iRounds", v.bjRounds), 1, 12);
         v.pokerDifficulty = std::clamp(ToInt(ini, "Poker:iDifficulty", v.pokerDifficulty), 1, 4);
         v.pokerHands = std::clamp(ToInt(ini, "Poker:iHands", v.pokerHands), 5, 50);
+        v.checkersDifficulty = std::clamp(ToInt(ini, "Checkers:iDifficulty", v.checkersDifficulty), 1, 4);
+        v.cribbageDifficulty = std::clamp(ToInt(ini, "Cribbage:iDifficulty", v.cribbageDifficulty), 1, 4);
         v.commentary = ToInt(ini, "SkyrimNet:bCommentary", v.commentary) != 0;
         v.cooldownSeconds = std::clamp(ToInt(ini, "SkyrimNet:iCooldown", v.cooldownSeconds), 0, 600);
         v.voiceWaitSeconds = std::clamp(ToInt(ini, "SkyrimNet:iVoiceWait", v.voiceWaitSeconds), 3, 60);
         v.playerVoice = ToInt(ini, "SkyrimNet:bPlayerVoice", v.playerVoice) != 0;
         v.challenge = ToInt(ini, "SkyrimNet:bChallenge", v.challenge) != 0;
+        v.lineLength = std::clamp(ToInt(ini, "SkyrimNet:iLineLength", v.lineLength), 0, 3);
 
         std::scoped_lock lock(g_lock);
         g_values = v;

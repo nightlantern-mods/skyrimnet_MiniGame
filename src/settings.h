@@ -19,11 +19,14 @@ namespace Settings
         int  bjRounds = 5;        // Blackjack: rounds in a game
         int  pokerDifficulty = 2;  // Texas Hold'em: 1 beginner .. 4 master
         int  pokerHands = 10;      // Texas Hold'em: hands in a game at most
+        int  checkersDifficulty = 2;  // Checkers: 1 beginner .. 4 master, each time the board opens
+        int  cribbageDifficulty = 2;  // Cribbage: 1 beginner .. 4 master, each time the board opens
         bool commentary = true;
         int  cooldownSeconds = 8;
         int  voiceWaitSeconds = 15;  // a paced game moves on when the speaker stays silent this long
         bool playerVoice = true;     // Liar's Dice: the player's bids go through SkyrimNet's Transform Dialogue
         bool challenge = true;
+        int  lineLength = 1;         // the opponents' lines about the game: 0 a few words, 1 short, 2 as SkyrimNet has it, 3 longer
     };
 
     // Re-reads both files. Call from any thread.

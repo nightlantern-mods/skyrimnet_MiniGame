@@ -1,4 +1,4 @@
-# SkyrimNet MiniGame 0.4.0
+# SkyrimNet MiniGame 0.4.1
 
 Play table games with the people around you. Open the menu, pick a game and your opponents
 from the NPCs nearby, and play on a board drawn over the game. SkyrimNet gives your opponents
@@ -191,10 +191,13 @@ each one.
 | Blackjack: rounds in a game | 5 | 1 to 12. |
 | Texas Hold'em: opponent strength | 2 | How well they judge their chances and the pot odds. How each one plays comes from their character. |
 | Texas Hold'em: hands in a game | 10 | 5 to 50. |
+| Checkers: opponent strength | 2 | 1 Beginner to 4 Master, each time the board opens; the steps on the board change it until then. |
+| Cribbage: opponent strength | 2 | 1 Beginner to 4 Master, each time the board opens; the steps on the table change it until then. |
 | Commentary | On | Off: the games are silent. |
 | Commentary interval | 8 s | Reversi only: at most one remark on an ordinary move per this many seconds. |
 | Voice wait | 15 s | Liar's Dice, Shut the Box, Blackjack and Texas Hold'em wait for each line to be spoken; if nobody speaks for this long, the game moves on anyway. |
 | You speak your own moves | On | Liar's Dice: your bids and calls; Texas Hold'em: your folds, checks, calls, bets and raises. They go through Transform Dialogue (one LLM request each). Off: only your opponents speak. |
+| Length of their lines | Short | How long your opponents' remarks about the game are: a few words, short (one or two sentences), SkyrimNet's own (no instruction) or longer (two to four sentences). Only for the NPCs at the table while a game is played; nothing in SkyrimNet's own settings changes. A request to the model, not a hard limit. |
 | NPCs may challenge you | On | The `Reversi_Challenge` action. |
 
 ## Notes and limits
@@ -214,9 +217,6 @@ each one.
 - **ENB and Skyrim Upscaler.** With either of them installed, saving the screenshot crashes the
   game, so without Phantasm there is no photo: the frames show initials. With Phantasm the faces
   are drawn as usual. The log says at startup how the faces are made.
-- **Checkers and Cribbage have no MCM strength setting yet.** The board reads `ckLevel` and
-  `cbLevel` (1 to 4) from the options the plugin passes when it opens, as it does `pkLevel`; until
-  the plugin sends them, each starts at Normal and is set on the board.
 - **Seated NPCs** get up to come over, and go back to what they were doing after the game.
 - If your character's lines leave the table waiting for the full *Voice wait* each time, turn
   *You speak your own moves* off and report it.
@@ -261,7 +261,7 @@ texts, into the mod project.
 
 ## Files
 
-- `skyrimnet_MiniGame_0.4.0.zip`: the mod as a FOMOD installer, in English, Japanese, Russian,
+- `skyrimnet_MiniGame_0.4.1.zip`: the mod as a FOMOD installer, in English, Japanese, Russian,
   German or Simplified Chinese, with `THIRD_PARTY_NOTICES.txt` and `COPYING.txt` (see License).
   Without an installer, use `core/<language>/` from the archive.
 
