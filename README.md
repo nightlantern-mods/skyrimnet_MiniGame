@@ -4,7 +4,7 @@ Play table games with the people around you. Open the menu, pick a game and your
 from the NPCs nearby, and play on a board drawn over the game. SkyrimNet gives your opponents
 a voice: they talk about the game as it goes, know how it stands, and remember it afterwards.
 
-Five games so far:
+Seven games so far:
 
 - **Reversi** (Othello) against one NPC, at four strengths.
 - **Liar's Dice** against one to three NPCs. Everyone hides five dice under a cup; in turn you
@@ -14,6 +14,8 @@ Five games so far:
 - **Blackjack** against one to three NPCs. You choose who deals, you or one of them, for the whole game.
 - **Texas Hold'em** against one to three NPCs. No-limit poker, and each opponent plays in a way that
   fits who they are.
+- **Checkers** (American draughts) against one NPC, at four strengths.
+- **Cribbage** against one NPC, at four strengths: fifteens, pairs and runs, first to 121.
 
 When a game starts, your opponents come over to stand in front of you, and their faces are shown
 in frames on the board: drawn by [Phantasm](https://github.com/Severause/Phantasm) when it is
@@ -126,6 +128,35 @@ and the game waits for each one.
 A line is spoken at the start, on bets, raises and all-ins, and at the end of each hand, and the
 game waits for each one.
 
+### Checkers
+
+- American checkers on an 8×8 board. Men move and capture diagonally forward, kings either way.
+  A capture must be taken, and a jump carries on while it can; a man crowned on a jump stops there.
+- Black moves first. Your colour comes from *Reversi: your color* in the MCM (White plays red).
+- A side with no move left loses. Forty moves each with no capture and no man moved is a draw.
+- **Opponent strength** is set on the board, under the rules: four steps from Beginner to Master,
+  Normal to begin with. A change counts from the opponent's next move.
+
+A line is spoken at the start, when two or more pieces are taken at once or a king is crowned, and
+at the end, and the game waits for each one.
+
+### Cribbage
+
+- Two players, first to 121. Cut for the first deal: the lower card deals. Six cards each, two
+  from each to the dealer's crib, then the starter is cut (a jack: two for his heels, to the dealer).
+- **The play:** lay cards in turn, the count up to 31. Fifteen and thirty-one score two, a pair
+  two, three and four of a kind six and twelve, a run a point a card. Whoever cannot play says go,
+  and the last to play pegs one.
+- **The show:** the non-dealer's hand, the dealer's, then the crib, each with the starter:
+  fifteens, pairs, runs, a flush and one for his nobs. Whoever reaches 121 wins at once; a loser
+  short of 91 has been skunked.
+- **Opponent strength** is set on the table, under the rules, as for Checkers. Stronger opponents
+  work out which cards to keep over every possible starter, count the crib in, and peg with an eye
+  on what they leave you.
+
+A line is spoken at the start, on big pegs, at each show and at the end, and the game waits for
+each one.
+
 ## SkyrimNet
 
 - **Commentary.** Each moment of a game is told to SkyrimNet as a narration from one opponent,
@@ -183,6 +214,9 @@ game waits for each one.
 - **ENB and Skyrim Upscaler.** With either of them installed, saving the screenshot crashes the
   game, so without Phantasm there is no photo: the frames show initials. With Phantasm the faces
   are drawn as usual. The log says at startup how the faces are made.
+- **Checkers and Cribbage have no MCM strength setting yet.** The board reads `ckLevel` and
+  `cbLevel` (1 to 4) from the options the plugin passes when it opens, as it does `pkLevel`; until
+  the plugin sends them, each starts at Normal and is set on the board.
 - **Seated NPCs** get up to come over, and go back to what they were doing after the game.
 - If your character's lines leave the table waiting for the full *Voice wait* each time, turn
   *You speak your own moves* off and report it.
