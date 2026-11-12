@@ -47,7 +47,7 @@ $SNMG_ChallengeHelp	Erlaubt einem NPC, dich im Gespräch zu Reversi herauszuford
 $SNMG_VoiceWait	Warten auf die Stimme (Sekunden)
 $SNMG_VoiceWaitHelp	Lügenwürfeln, Shut the Box, Blackjack und Texas Hold'em warten, bis jede Zeile gesprochen ist, bevor die nächste Person handelt. Spricht innerhalb so vieler Sekunden niemand, geht das Spiel trotzdem weiter.
 $SNMG_PlayerVoice	Du sprichst deine eigenen Züge
-$SNMG_PlayerVoiceHelp	Lügenwürfeln: deine Gebote und deine „Lüge!“-Rufe; Texas Hold'em: dein Passen, Schieben, Mitgehen, Setzen und Erhöhen. Sie gehen durch SkyrimNets Transform Dialogue, sodass dein Charakter sie laut in eigenen Worten sagt (je eine LLM-Anfrage). Aus: Nur deine Gegner sprechen, und der nächste erwähnt deinen Zug.
+$SNMG_PlayerVoiceHelp	Lügenwürfeln: deine Gebote und deine „Lüge!“-Rufe; Texas Hold'em: dein Passen, Schieben, Mitgehen, Setzen und Erhöhen. Dein Charakter sagt sie laut in eigenen Worten (je eine LLM-Anfrage, mit dem eigenen Prompt dieser Mod). Auf die Zeile selbst antwortet niemand; der Gegner, der als Nächster handelt, reagiert auf den Zug. Aus: Nur deine Gegner sprechen, und der nächste erwähnt deinen Zug.
 $SNMG_LineLength	Länge ihrer Zeilen
 $SNMG_LineLengthHelp	Wie lang die Bemerkungen deiner Gegner zum Spiel sind: ein paar Worte / kurz (ein oder zwei Sätze) / wie in SkyrimNet (keine Vorgabe von dieser Mod) / länger (zwei bis vier Sätze). Gilt nur für die NPCs am Tisch, solange gespielt wird, und ändert nichts an SkyrimNets eigenen Einstellungen. Es ist eine Bitte an das Modell, keine feste Grenze. Längere Zeilen bremsen die Spiele, die auf jede Zeile warten.
 $SNMG_LineBrief	Ein paar Worte
@@ -60,3 +60,9 @@ $SNMG_CbDifficultyHelp	1 Anfänger / 2 Normal / 3 Stark / 4 Meister. Stärkere G
 $SNMG_HeaderCheckers	Dame
 $SNMG_CkDifficulty	Gegnerstärke
 $SNMG_CkDifficultyHelp	1 Anfänger / 2 Normal / 3 Stark / 4 Meister. Stärkere Gegner rechnen weiter voraus. Dies ist die Stärke bei jedem Öffnen des Bretts; die Stufen am Brett ändern sie bis dahin. Deine Farbe kommt aus der Reversi-Einstellung (Weiß spielt Rot). Gilt ab dem nächsten Zug des Gegners.
+$SNMG_ChatBox	Am Tisch reden
+$SNMG_ChatBoxHelp	Zeigt ein Textfeld unter dem Protokoll jedes Spiels. Was du tippst, sagt dein Charakter zu einem deiner Gegner, der antwortet: zu dem, den du beim Namen nennst, sonst zu dem, der zuletzt gesprochen hat. Das Spiel wartet auf beide Zeilen. Enter sagt es, Esc verlässt das Feld. Für japanische, chinesische oder koreanische Eingabe wird Magelight UI benötigt.
+$SNMG_ChatMode	Wie deine getippte Zeile gesagt wird
+$SNMG_ChatModeHelp	In den Worten deines Charakters: Die Zeile wird zuerst so umgeschrieben, wie dein Charakter spricht (eine LLM-Anfrage, mit dem eigenen Prompt dieser Mod). Wie geschrieben: Dein Charakter sagt genau, was du getippt hast. In beiden Fällen geht sie an den gewählten Gegner, und nur dieser antwortet.
+$SNMG_ChatTransform	In den Worten deines Charakters
+$SNMG_ChatRaw	Wie geschrieben

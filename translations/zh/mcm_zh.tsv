@@ -47,7 +47,7 @@ $SNMG_ChallengeHelp	允许 NPC 在对话中向你发起黑白棋挑战（SkyrimN
 $SNMG_VoiceWait	等待语音（秒）
 $SNMG_VoiceWaitHelp	吹牛骰子、关盒子、二十一点和德州扑克会等每句话说完后，下一个人才行动。如果在这么多秒内没有人说话，游戏仍会继续。
 $SNMG_PlayerVoice	说出你自己的行动
-$SNMG_PlayerVoiceHelp	吹牛骰子：你的叫数和"吹牛！"；德州扑克：你的弃牌、过牌、跟注、下注和加注。它们会经过 SkyrimNet 的 Transform Dialogue，让你的角色用自己的话大声说出来（每次一个 LLM 请求）。关闭：只有对手说话，由下一位对手提到你的行动。
+$SNMG_PlayerVoiceHelp	吹牛骰子：你的叫数和"吹牛！"；德州扑克：你的弃牌、过牌、跟注、下注和加注。你的角色会用自己的话大声说出来（每次一个 LLM 请求，使用本 MOD 自带的提示词）。这句话本身没有人回应；由下一个行动的对手对你的行动作出反应。关闭：只有对手说话，由下一位对手提到你的行动。
 $SNMG_LineLength	对手台词的长度
 $SNMG_LineLengthHelp	对手谈论游戏时说多长：几个词 / 简短（一到两句）/ 按 SkyrimNet 自身（本 MOD 不作指示）/ 较长（两到四句）。只在游戏进行期间对牌桌上的 NPC 生效，不会改动 SkyrimNet 自身的任何设置。这是对模型的请求，并非硬性限制。台词越长，需要等待每句台词的游戏就越慢。
 $SNMG_LineBrief	几个词
@@ -60,3 +60,9 @@ $SNMG_CbDifficultyHelp	1 新手 / 2 普通 / 3 强手 / 4 大师。更强的对�
 $SNMG_HeaderCheckers	西洋跳棋
 $SNMG_CkDifficulty	对手强度
 $SNMG_CkDifficultyHelp	1 新手 / 2 普通 / 3 强手 / 4 大师。更强的对手算得更远。每次打开棋盘时采用这个强度；棋盘上的按钮可以在此之前临时更改。你的颜色取自黑白棋的设置（选白方则执红）。从对手的下一步开始生效。
+$SNMG_ChatBox	在牌桌上说话
+$SNMG_ChatBoxHelp	在每个游戏的记录下方显示一个输入框。你输入的内容会由你的角色对一位对手说出，对方会回应：对象是你在话中点名的人，否则是最后说话的人。游戏会等这两句话说完。按 Enter 说出，按 Esc 离开输入框。输入中文、日文或韩文需要 Magelight UI。
+$SNMG_ChatMode	输入内容的说法
+$SNMG_ChatModeHelp	用角色的话：内容会先按你的角色的说话方式改写（一次 LLM 请求，使用本 MOD 自带的提示词）。按原文：你的角色原样说出你输入的内容。两种方式都是对选定的对手说，并且只有这位对手回应。
+$SNMG_ChatTransform	用角色的话
+$SNMG_ChatRaw	按原文

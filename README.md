@@ -1,4 +1,4 @@
-# SkyrimNet MiniGame 0.4.1
+# SkyrimNet MiniGame 0.5.0
 
 Play table games with the people around you. Open the menu, pick a game and your opponents
 from the NPCs nearby, and play on a board drawn over the game. SkyrimNet gives your opponents
@@ -168,6 +168,8 @@ each one.
 - **You speak your own moves** (Liar's Dice and Texas Hold'em, MCM option). Your bids and "Liar!"
   calls, and your folds, checks, calls, bets and raises, go through SkyrimNet's Transform
   Dialogue, so your character says them aloud in their own words.
+- **Talk at the table** (MCM option). Type a line under the log and your character says it to one
+  of your opponents, in their own words or as written; that opponent answers, knowing the game.
 - **Challenges.** An NPC may challenge you to Reversi in conversation (the action
   `Reversi_Challenge`). The board opens with the challenge, and you can accept or decline.
 - Opponents are marked busy in SkyrimNet while a game is played, so they are not pulled into
@@ -196,8 +198,10 @@ each one.
 | Commentary | On | Off: the games are silent. |
 | Commentary interval | 8 s | Reversi only: at most one remark on an ordinary move per this many seconds. |
 | Voice wait | 15 s | Liar's Dice, Shut the Box, Blackjack and Texas Hold'em wait for each line to be spoken; if nobody speaks for this long, the game moves on anyway. |
-| You speak your own moves | On | Liar's Dice: your bids and calls; Texas Hold'em: your folds, checks, calls, bets and raises. They go through Transform Dialogue (one LLM request each). Off: only your opponents speak. |
+| You speak your own moves | On | Liar's Dice: your bids and calls; Texas Hold'em: your folds, checks, calls, bets and raises. Your character says them in their own words (one LLM request each, with the mod's own prompt). Nobody answers the line itself; the opponent who acts next reacts to the move. Off: only your opponents speak. |
 | Length of their lines | Short | How long your opponents' remarks about the game are: a few words, short (one or two sentences), SkyrimNet's own (no instruction) or longer (two to four sentences). Only for the NPCs at the table while a game is played; nothing in SkyrimNet's own settings changes. A request to the model, not a hard limit. |
+| Talk at the table | On | A text box under each game's log: what you type is said by your character to one opponent (the one you name, else whoever spoke last), who answers. The game waits for both lines. Enter says it, Esc leaves the box. Japanese, Chinese and Korean input needs Magelight UI. |
+| How your typed line is said | In your character's words | In your character's words: first rewritten the way your character speaks (one LLM request, with the mod's own prompt `skyrimnet_minigame_player_line`). As written: exactly what you typed. Either way it is said to the opponent chosen, and only that opponent answers. |
 | NPCs may challenge you | On | The `Reversi_Challenge` action. |
 
 ## Notes and limits
@@ -261,7 +265,7 @@ texts, into the mod project.
 
 ## Files
 
-- `skyrimnet_MiniGame_0.4.1.zip`: the mod as a FOMOD installer, in English, Japanese, Russian,
+- `skyrimnet_MiniGame_0.5.0.zip`: the mod as a FOMOD installer, in English, Japanese, Russian,
   German or Simplified Chinese, with `THIRD_PARTY_NOTICES.txt` and `COPYING.txt` (see License).
   Without an installer, use `core/<language>/` from the archive.
 

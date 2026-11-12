@@ -26,6 +26,8 @@ namespace Settings
         int  voiceWaitSeconds = 15;  // a paced game moves on when the speaker stays silent this long
         bool playerVoice = true;     // Liar's Dice: the player's bids go through SkyrimNet's Transform Dialogue
         bool challenge = true;
+        bool chatBox = true;         // a text box under each game's log: the player talks to an opponent
+        int  chatMode = 0;           // what is typed there: 0 through Transform Dialogue, 1 said as written
         int  lineLength = 1;         // the opponents' lines about the game: 0 a few words, 1 short, 2 as SkyrimNet has it, 3 longer
     };
 

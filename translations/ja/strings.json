@@ -434,6 +434,17 @@
     "cbStateShow": "手札を数え終えたところだ：{how}。",
     "cbStatePaused": "カードはいったん脇に置かれ、勝負は中断している。",
     "cbStateResult": "{npc}は{player}とのクリベッジを終えたところだ。結果：{result}。",
-    "cbStateLeft": "{npc}は{player}とクリベッジをしていたが、{player}が終わる前に席を立った。"
+    "cbStateLeft": "{npc}は{player}とクリベッジをしていたが、{player}が終わる前に席を立った。",
+    "chatPlaceholder": "卓のみんなに話しかける…",
+    "chatSend": "話す",
+    "chatLog": "{player}：「{text}」",
+    "chatFrame": "卓で{player}が{npc}に話しかけた：「{text}」 {npc}は{player}に返事をする。",
+    "pkWillFold": " {npc}はフォールドすることにした。",
+    "pkWillCall": " {npc}はコールすることにした。",
+    "pkWillRaise": " {npc}は{n}にレイズすることにした。",
+    "pkWillAllIn": " {npc}はオールインすることにした。",
+    "pkHandDone": " 第{h}ハンドは終わり、カードは集められた。",
+    "pkStateFresh": " 第{h}ハンドは新しい配り直しで、前のハンドはすべて終わっている。前のハンドのカードや賭けはもう関係ない。",
+    "pkStateNoMove": "{npc}が自分のコール・レイズ・フォールドを口にするのは、ゲームから「した」「することにした」と伝えられた手だけで、それ以外に自分の手を宣言することはない。"
   }
 }

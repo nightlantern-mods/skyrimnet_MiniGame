@@ -203,6 +203,44 @@
             color: #9a917d;
         }
 
+        /* ---- talking at the table: one bar, moved under the open game's log ---- */
+
+        #chat {
+            display: none;
+            gap: 6px;
+            margin-top: 6px;
+        }
+
+        #chat.on {
+            display: flex;
+        }
+
+        #chat-text {
+            flex: 1;
+            min-width: 0;
+            padding: 6px 8px;
+            font: inherit;
+            font-size: 13px;
+            color: #e8e0d0;
+            background-color: #161616;
+            border: 1px solid #5a4a2a;
+            border-radius: 3px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        #chat-text:focus {
+            border-color: #e0b84a;
+        }
+
+        #chat-send {
+            flex: none;
+        }
+
+        .log .said {
+            color: #e0d2a8;
+        }
+
         .log {
             flex: 1;
             min-height: 120px;
@@ -821,6 +859,9 @@
             inset: 0;
             z-index: 10;
             opacity: 0;
+            /* Out of the way by visibility, not by pointer-events alone: in game (Ultralight) the
+               invisible curtain was seen taking every click after the text box had been used. */
+            visibility: hidden;
             pointer-events: none;
             background-color: #000;
             transition: opacity 0.3s;
@@ -828,6 +869,11 @@
 
         #curtain.on {
             opacity: 1;
+        }
+
+        #curtain.on,
+        #curtain.block {
+            visibility: visible;
         }
 
         #curtain.block {
@@ -1133,6 +1179,10 @@
             <div class="status" id="status"></div>
             <div class="meta" id="meta"></div>
             <div class="log" id="log"></div>
+            <div id="chat">
+                <input id="chat-text" type="text" maxlength="200" autocomplete="off" spellcheck="false">
+                <button id="chat-send" onclick="onChatSend()" data-s="chatSend">Say</button>
+            </div>
             <div class="toolbar">
                 <button id="resign-button" class="danger" onclick="onResign()">Resign</button>
                 <button id="again-button" class="primary" onclick="onAgain()" style="display: none;" data-s="again">Play again</button>
@@ -1746,6 +1796,14 @@
             pkRaiseLine: "In the poker game, {who} raises to {n}. The pot is now {pot}.",
             pkAllInLine: "In the poker game, {who} goes all in for {n}! The pot is now {pot}.",
             // the player's own moves, said in their words (MCM: playerVoice)
+            // after the player's bet: what the next opponent has decided to do, so their line fits it
+            pkWillFold: " {npc} decides to fold.",
+            pkWillCall: " {npc} decides to call.",
+            pkWillRaise: " {npc} decides to raise to {n}.",
+            pkWillAllIn: " {npc} decides to go all in.",
+            pkHandDone: " Hand {h} is over; the cards are gathered up.",
+            pkStateNoMove: " {npc} speaks of calling, raising or folding only as a move the game has told them they made or decided on; otherwise they announce no move of their own.",
+            pkStateFresh: " Hand {h} is a fresh deal: the earlier hands are finished, and their cards and bets no longer count.",
             pPkFold: "In the poker game, I fold.",
             pPkCheck: "In the poker game, I check.",
             pPkCall: "In the poker game, I call {n}.",
@@ -1772,6 +1830,10 @@
             pkStateResult: "{npc} has just finished a game of Texas Hold'em with {others}. Result: {result}. Chips: {chips}.",
             pkStateLeft: "{npc} was playing Texas Hold'em with {others}, but {player} left the table before it ended.",
             pkNextHand: "Next hand",
+            chatPlaceholder: "Say something to the table…",
+            chatSend: "Say",
+            chatLog: "{player}: \u201c{text}\u201d",
+            chatFrame: "At the game table, {player} says to {npc}: \u201c{text}\u201d {npc} answers {player}.",
             // not shown: what the plugin tells each opponent's prompt about the length of their lines (MCM, minigame_style)
             lineStyleBrief: "Remarks about the game are a single short line: a few words, one sentence at most.",
             lineStyleShort: "Remarks about the game stay short, like table talk: one or two sentences.",
@@ -2519,16 +2581,25 @@
                 voiceQueue.push({ speaker, text, keep });
                 return;
             }
-            sendLine(speaker, text);
+            sendLine({ speaker, text });
         }
 
-        function sendLine(speaker, text) {
-            if (speaker === PLAYER_ID) {
-                send("mgPlayerSay", text);
+        // A line: {speaker, text}, and for what the player typed {chat: the NPC spoken to}; {wait}
+        // sends nothing and waits for an NPC at the table to answer.
+        function sendLine(line) {
+            const speaker = line.speaker;
+            if (line.wait) {
+                // nothing to send
+            } else if (line.chat) {
+                // frame: what the NPC spoken to is told, with {text} left for the plugin to fill in
+                // (the line as written, or as the player's character put it)
+                send("mgChat", JSON.stringify({ text: line.text, to: line.chat, name: line.name, player: playerName, frame: t("chatFrame", { player: playerName, npc: line.name, text: "{text}" }) }));
+            } else if (speaker === PLAYER_ID) {
+                send("mgPlayerSay", line.text);
             } else {
-                send("rvNarrate", JSON.stringify({ text, level: "important", speaker }));
+                send("rvNarrate", JSON.stringify({ text: line.text, level: "important", speaker }));
             }
-            voiceLine = { speaker, heard: false, timer: setTimeout(lineDone, voiceWait * 1000) };
+            voiceLine = { speaker, chat: !!line.chat, any: !!line.wait, heard: false, timer: setTimeout(lineDone, voiceWait * 1000) };
             renderDiceStatus();
             renderStbStatus();
             renderBjStatus();
@@ -2544,7 +2615,7 @@
             voiceLine = null;
             if (voiceQueue.length) {
                 const next = voiceQueue.shift();
-                sendLine(next.speaker, next.text);
+                sendLine(next);
                 return;
             }
             const waiting = voiceIdle;
@@ -5025,17 +5096,24 @@
                         pkStartHand();
                         return;
                     }
-                    const move = pkDecide(pk.turn);
-                    pkAct(pk.turn, move.act, move.to);
+                    // a move already decided, and told to this opponent, when the player bet
+                    const planned = pk.planned && pk.planned.seat === pk.turn && pk.planned.hand === pk.hand ? pk.planned.move : null;
+                    pk.planned = null;
+                    const move = planned || pkDecide(pk.turn);
+                    pkAct(pk.turn, move.act, move.to, !!planned);
                 }, pk.phase === "result" ? 2500 : 800 + Math.random() * 800);
             });
         }
 
         // Seat i acts. to: for a raise, the seat's whole bet this street.
-        function pkAct(i, act, to) {
+        // told: the seat has already spoken of this move (see pk.planned), so it is not narrated again.
+        function pkAct(i, act, to, told) {
             const s = pk.seats[i];
             const before = pk.currentBet;
             pk.leaveArmed = false;
+            if (s.human) {
+                pk.planned = null;
+            }
             let mine = null;  // the player's own line about the move, if they speak (MCM)
             let comment = null;  // an NPC's line about a bet
             if (act === "fold") {
@@ -5065,10 +5143,29 @@
                 }
                 log(t(s.allIn ? "pkLogAllIn" : before === 0 ? "pkLogBet" : "pkLogRaise", { who: s.name, n: s.bet }), "pk-log");
                 mine = [s.allIn ? "pPkAllIn" : before === 0 ? "pPkBet" : "pPkRaise", { n: s.bet }];
-                // one line about it, from the one who did it or the next NPC to answer
-                const speaker = s.human ? pkSpeakerAfter(i) : s;
+                // One line about it. An NPC tells their own bet. The player's bet is told to the
+                // opponent who answers it next, with the move that opponent has just decided on:
+                // their line then fits what they do (told before deciding, they would say "I call"
+                // and then fold).
                 const line = s.allIn ? "pkAllInLine" : before === 0 ? "pkBetLine" : "pkRaiseLine";
-                if (speaker) comment = [speaker.id, t(line, { who: s.name, n: s.bet, pot: pkPot() })];
+                let text = t(line, { who: s.name, n: s.bet, pot: pkPot() });
+                let speaker = s;
+                if (s.human) {
+                    s.acted = true;
+                    const next = pkNext(i, (x) => pkCanAct(x) && (!x.acted || x.bet < pk.currentBet));
+                    if (next > 0 && pk.seats.filter(pkInPlay).length > 1) {
+                        const move = pkDecide(next);
+                        const npc = pk.seats[next];
+                        pk.planned = { seat: next, hand: pk.hand, move };
+                        const allIn = move.act === "raise" && move.to >= pkMaxRaiseTo(npc);
+                        const key = move.act === "fold" ? "pkWillFold" : move.act === "raise" ? (allIn ? "pkWillAllIn" : "pkWillRaise") : "pkWillCall";
+                        text += t(key, { npc: npc.name, n: Math.min(move.to || 0, pkMaxRaiseTo(npc)) });
+                        speaker = npc;
+                    } else {
+                        speaker = pkSpeakerAfter(i);
+                    }
+                }
+                if (speaker && !told) comment = [speaker.id, text];
             }
             // the player says their move first (kept: it is not dropped for a newer line), then
             // the NPC answers a bet; the NPCs' own bets are told by themselves
@@ -5077,6 +5174,10 @@
             }
             if (comment) {
                 say(comment[0], comment[1]);
+            }
+            // for the plugin's log: what was done, next to what was told and said
+            if (typeof window.mgNote === "function") {
+                send("mgNote", "poker hand " + pk.hand + ": " + s.name + " " + act + (act === "raise" ? " to " + s.bet : "") + (s.allIn ? " (all in)" : "") + (told ? " [as told before speaking]" : s.human ? " [player]" : ""));
             }
             s.acted = true;
             pkAfterAction(i);
@@ -5215,6 +5316,10 @@
             }
             const left = pk.seats.filter((s) => s.chips > 0);
             pk.over = left.length <= 1 || pk.hand >= pkHands;
+            pk.planned = null;
+            if (!pk.over && text) {
+                text += t("pkHandDone", { h: pk.hand });
+            }
             const npcs = pk.seats.filter((s) => !s.human);
             speaker = speaker || npcs.filter((s) => s.inHand).sort((a, b) => b.total - a.total)[0] || npcs[0];
             if (pk.over) {
@@ -5326,6 +5431,13 @@
             }
             if (!pk.playing) return "";
             let text = t("pkState", vars);
+            if (pk.phase === "bet" && pk.hand > 1) {
+                text += t("pkStateFresh", vars);
+            }
+            if (pk.phase === "bet" && s.inHand && !s.folded) {
+                // or, told the game has begun, they say "I call" and the game then has them fold
+                text += t("pkStateNoMove", vars);
+            }
             if (s.style && s.fromBio) {
                 text += t("pkStateStyle", { npc: s.name, style: pkStyleLabel(s.style) });
             }
@@ -6990,6 +7102,102 @@
             setTimeout(refresh, ms + 50);
         }
 
+        // ===== talking at the table =====
+
+        // A line of text under the log: what the player types is said by their character (in their
+        // own words or as written, MCM) to one NPC at the table, who answers. The table waits for
+        // both lines, like any other.
+        let chatOn = false;       // MCM, and SkyrimNet is there
+        let chatRaw = false;      // MCM: the typed line is said as written
+        let lastSpoke = "";       // the NPC at the table who spoke last
+        const CHAT_LOGS = { board: "log", dice: "dice-log", stb: "stb-log", bj: "bj-log", pk: "pk-log", ck: "ck-log", cb: "cb-log" };
+
+        function tableNpcs() {
+            if (activeGame === "reversi") return opponent.id ? [opponent] : [];
+            if (activeGame === "dice") return diceOpponents();
+            if (activeGame === "stb") return stbOpponents();
+            if (activeGame === "bj") return bjOpponents();
+            if (activeGame === "pk") return pkOpponents();
+            if (activeGame === "ck") return ck.opp && ck.opp.id ? [ck.opp] : [];
+            if (activeGame === "cb") {
+                const npc = cb.seats && cb.seats.length ? cbNpc() : null;
+                return npc ? [{ id: npc.id, name: npc.name }] : [];
+            }
+            return [];
+        }
+
+        // Who the line is for: someone named in it, else whoever spoke last, else the first.
+        function chatTarget(text) {
+            const npcs = tableNpcs();
+            const low = text.toLowerCase();
+            const first = (name) => name.split(" ")[0].split("\u30fb")[0].toLowerCase();
+            const named = npcs.find((n) => n.name && (low.includes(n.name.toLowerCase()) || low.includes(first(n.name))));
+            return named || npcs.find((n) => n.id === lastSpoke) || npcs[0] || null;
+        }
+
+        function placeChat() {
+            const box = CHAT_LOGS[screen];
+            const show = chatOn && voiceOn && !!box;   // a game screen is up (its players may not be seated yet)
+            if (box) {
+                $(box).insertAdjacentElement("afterend", $("chat"));
+            }
+            $("chat").classList.toggle("on", show);
+            $("chat-text").placeholder = t("chatPlaceholder");
+            if (!show) {
+                $("chat-text").blur();
+            }
+        }
+
+        function onChatSend() {
+            const text = $("chat-text").value.trim();
+            const to = chatTarget(text);
+            if (!text || !to || !chatOn || !voiceOn || !CHAT_LOGS[screen]) {
+                return;
+            }
+            $("chat-text").value = "";
+            $("chat-text").blur();   // the keys and the mouse go back to the game on the board
+            if (chatRaw) {
+                // said as written: in the log at once (in the character's words: mgChatLine logs it)
+                log(t("chatLog", { player: playerName, text }), CHAT_LOGS[screen]);
+                $(CHAT_LOGS[screen]).lastChild.className = "said";
+            }
+            const mine = { speaker: PLAYER_ID, text, keep: true, chat: to.id, name: to.name };
+            const answer = { speaker: to.id, text: "", keep: true, wait: true };
+            if (voiceLine) {
+                voiceQueue = voiceQueue.filter((line) => line.keep).concat([mine, answer]);
+            } else {
+                voiceQueue.unshift(answer);
+                sendLine(mine);
+            }
+        }
+
+        $("chat-text").addEventListener("keydown", (e) => {
+            // Enter sends, but not the Enter that confirms an IME conversion
+            if ((e.key === "Enter" || e.keyCode === 13) && !e.isComposing && e.keyCode !== 229) {
+                e.preventDefault();
+                onChatSend();
+            }
+        });
+        // the plugin's hotkey must not close the board over a typed letter
+        let typing = false;
+        function setTyping(on) {
+            if (typing !== on) {
+                typing = on;
+                send("mgTyping", on ? "1" : "0");
+            }
+        }
+        $("chat-text").addEventListener("focus", () => setTyping(true));
+        $("chat-text").addEventListener("keydown", () => setTyping(true));   // should a focus event be missed
+        $("chat-text").addEventListener("blur", () => setTyping(false));
+
+        // The line as the player's character put it (MCM: in their own words), for the log.
+        window.mgChatLine = (text) => {
+            if (text && CHAT_LOGS[screen]) {
+                log(t("chatLog", { player: playerName, text }), CHAT_LOGS[screen]);
+                $(CHAT_LOGS[screen]).lastChild.className = "said";
+            }
+        };
+
         // ===== screens =====
 
         // "menu", "board" (Reversi), "dice", "stb", "bj", "pk", or null when the plugin has hidden the view. A
@@ -7008,6 +7216,7 @@
             $("ck").classList.toggle("open", name === "ck");
             $("cb").classList.toggle("open", name === "cb");
             hidden = name !== "board";
+            placeChat();
             fitPanels();
         }
 
@@ -7272,6 +7481,8 @@
             gatherOn = opts.gather !== false;
             photoOn = opts.facePhoto !== false;
             voiceWait = opts.voiceWait || voiceWait;
+            chatOn = !!opts.chat;
+            chatRaw = !!opts.chatRaw;
         }
 
         // The hotkey: the menu, with the NPCs nearby (opts.actors, nearest first).
@@ -7303,7 +7514,18 @@
             if (spoke && spoke.id) {
                 markSpeaking(spoke.id, speechMs(spoke.text));
             }
-            if (!voiceLine || voiceLine.heard || !spoke || spoke.id !== voiceLine.speaker) {
+            const atTable = !!spoke && spoke.id !== PLAYER_ID && tableNpcs().some((n) => n.id === spoke.id);
+            if (atTable) {
+                lastSpoke = spoke.id;
+            }
+            if (!voiceLine || voiceLine.heard || !spoke) {
+                return;
+            }
+            if (voiceLine.chat && atTable) {
+                // the answer came before the player's own line was reported: nothing more to wait for
+                const k = voiceQueue.findIndex((line) => line.wait);
+                if (k >= 0) voiceQueue.splice(k, 1);
+            } else if (voiceLine.any ? !atTable : spoke.id !== voiceLine.speaker) {
                 return;
             }
             voiceLine.heard = true;
@@ -7350,6 +7572,10 @@
                 return;
             }
             lastEscape = Date.now();
+            if (document.activeElement === $("chat-text")) {
+                $("chat-text").blur();   // Esc first leaves the text box
+                return;
+            }
             if ($("invite").classList.contains("open")) {
                 onDecline();
             } else if (($("step-opponents").classList.contains("open") || $("step-dealer").classList.contains("open")) && $("menu").classList.contains("open")) {

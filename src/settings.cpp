@@ -86,6 +86,8 @@ namespace Settings
         v.voiceWaitSeconds = std::clamp(ToInt(ini, "SkyrimNet:iVoiceWait", v.voiceWaitSeconds), 3, 60);
         v.playerVoice = ToInt(ini, "SkyrimNet:bPlayerVoice", v.playerVoice) != 0;
         v.challenge = ToInt(ini, "SkyrimNet:bChallenge", v.challenge) != 0;
+        v.chatBox = ToInt(ini, "SkyrimNet:bChatBox", v.chatBox) != 0;
+        v.chatMode = std::clamp(ToInt(ini, "SkyrimNet:iChatMode", v.chatMode), 0, 1);
         v.lineLength = std::clamp(ToInt(ini, "SkyrimNet:iLineLength", v.lineLength), 0, 3);
 
         std::scoped_lock lock(g_lock);

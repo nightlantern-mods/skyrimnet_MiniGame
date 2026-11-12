@@ -434,6 +434,17 @@
     "cbStateShow": " 刚刚计完牌：{how}。",
     "cbStatePaused": " 牌暂时搁在一旁；游戏暂停。",
     "cbStateResult": "{npc} 刚刚和 {player} 玩完一局克里比奇。结果：{result}。",
-    "cbStateLeft": "{npc} 本来在和 {player} 玩克里比奇，但 {player} 在结束前离开了。"
+    "cbStateLeft": "{npc} 本来在和 {player} 玩克里比奇，但 {player} 在结束前离开了。",
+    "chatPlaceholder": "对牌桌上的人说点什么……",
+    "chatSend": "说",
+    "chatLog": "{player}：“{text}”",
+    "chatFrame": "在牌桌上，{player} 对 {npc} 说：“{text}” {npc} 回应 {player}。",
+    "pkWillFold": " {npc} 决定弃牌。",
+    "pkWillCall": " {npc} 决定跟注。",
+    "pkWillRaise": " {npc} 决定加注到 {n}。",
+    "pkWillAllIn": " {npc} 决定全下。",
+    "pkHandDone": " 第 {h} 手结束，牌被收起。",
+    "pkStateFresh": " 第 {h} 手是重新发的牌：之前的几手都已结束，它们的牌和下注不再算数。",
+    "pkStateNoMove": " {npc} 只有在游戏告知自己已经做出或决定了某个行动时，才会说起自己的跟注、加注或弃牌；除此之外不会宣布自己的行动。"
   }
 }

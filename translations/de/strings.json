@@ -434,6 +434,17 @@
     "cbStateShow": " Die Hände wurden gerade gewertet: {how}.",
     "cbStatePaused": " Die Karten sind vorerst beiseitegelegt; das Spiel pausiert.",
     "cbStateResult": "{npc} hat gerade eine Partie Cribbage mit {player} beendet. Ergebnis: {result}.",
-    "cbStateLeft": "{npc} spielte Cribbage mit {player}, aber {player} ist vor dem Ende gegangen."
+    "cbStateLeft": "{npc} spielte Cribbage mit {player}, aber {player} ist vor dem Ende gegangen.",
+    "chatPlaceholder": "Sag etwas zum Tisch…",
+    "chatSend": "Sagen",
+    "chatLog": "{player}: „{text}“",
+    "chatFrame": "Am Spieltisch sagt {player} zu {npc}: „{text}“ {npc} antwortet {player}.",
+    "pkWillFold": " {npc} beschließt zu passen.",
+    "pkWillCall": " {npc} beschließt mitzugehen.",
+    "pkWillRaise": " {npc} beschließt, auf {n} zu erhöhen.",
+    "pkWillAllIn": " {npc} beschließt, All-in zu gehen.",
+    "pkHandDone": " Hand {h} ist vorbei; die Karten werden eingesammelt.",
+    "pkStateFresh": " Hand {h} ist ein neues Blatt: Die früheren Hände sind beendet, ihre Karten und Einsätze zählen nicht mehr.",
+    "pkStateNoMove": " {npc} spricht vom eigenen Mitgehen, Erhöhen oder Passen nur als von einem Zug, den das Spiel als gemacht oder beschlossen gemeldet hat, und kündigt sonst keinen eigenen Zug an."
   }
 }

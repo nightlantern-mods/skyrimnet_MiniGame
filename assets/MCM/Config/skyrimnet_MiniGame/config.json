@@ -280,6 +280,25 @@
 			}
 		},
 		{
+			"id": "bChatBox:SkyrimNet",
+			"type": "toggle",
+			"text": "$SNMG_ChatBox",
+			"help": "$SNMG_ChatBoxHelp",
+			"valueOptions": {
+				"sourceType": "ModSettingBool"
+			}
+		},
+		{
+			"id": "iChatMode:SkyrimNet",
+			"type": "enum",
+			"text": "$SNMG_ChatMode",
+			"help": "$SNMG_ChatModeHelp",
+			"valueOptions": {
+				"options": ["$SNMG_ChatTransform", "$SNMG_ChatRaw"],
+				"sourceType": "ModSettingInt"
+			}
+		},
+		{
 			"id": "bChallenge:SkyrimNet",
 			"type": "toggle",
 			"text": "$SNMG_Challenge",

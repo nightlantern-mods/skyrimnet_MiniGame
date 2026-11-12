@@ -168,6 +168,90 @@ namespace SkyrimNetBridge
         });
     }
 
+    namespace
+    {
+        constexpr const char* kPlayerLinePrompt = "skyrimnet_minigame_player_line";
+
+        // The LLM's line without wrapping quotes, line breaks or a runaway length.
+        std::string CleanLine(std::string a_line)
+        {
+            for (auto& c : a_line) {
+                if (c == '\r' || c == '\n') {
+                    c = ' ';
+                }
+            }
+            const auto first = a_line.find_first_not_of(" \t\"'");
+            const auto last = a_line.find_last_not_of(" \t\"'");
+            a_line = first == std::string::npos ? std::string() : a_line.substr(first, last - first + 1);
+            return a_line.size() > 600 ? a_line.substr(0, 600) : a_line;
+        }
+
+        // The player's character says a_line (their voice, if SkyrimNet voices the player), and
+        // a_listener is told so and answers: a direct narration, like every moment of a game, so
+        // nobody else takes the reply.
+        void DeliverChat(std::string a_line, RE::FormID a_listener, std::string a_frame)
+        {
+            SKSE::GetTaskInterface()->AddTask([line = std::move(a_line), a_listener, frame = std::move(a_frame)]() {
+                const auto vm = RE::BSScript::Internal::VirtualMachine::GetSingleton();
+                RE::BSTSmartPointer<RE::BSScript::IStackCallbackFunctor> none;
+                const bool voiced = vm && vm->DispatchStaticCall("SkyrimNetApi", "TriggerPlayerTTS", RE::MakeFunctionArguments(std::string(line)), none);
+                auto       told = frame;
+                if (const auto at = told.find("{text}"); at != std::string::npos) {
+                    told.replace(at, 6, line);
+                } else {
+                    told += " " + line;
+                }
+                const auto id = PublicRegisterEvent ? PublicRegisterEvent("direct_narration", told.c_str(), a_listener, RE::PlayerCharacter::GetSingleton()->GetFormID(), nullptr, 0) : 0;
+                logger::info("player chat to {:08X} (narration {}, player voice {}): {}", a_listener, id, voiced ? "asked" : "not available", told);
+            });
+        }
+    }
+
+    void PlayerChat(std::string a_text, RE::FormID a_listener, std::string a_listenerName, std::string a_playerName, std::string a_frame, bool a_asWritten,
+        std::function<void(std::string)> a_said)
+    {
+        if (!CanNarrate() || a_text.empty() || !a_listener) {
+            return;
+        }
+        if (a_asWritten || !PublicSendCustomPromptToLLM) {
+            if (!a_asWritten && a_said) {
+                a_said(a_text);
+            }
+            DeliverChat(std::move(a_text), a_listener, std::move(a_frame));
+            return;
+        }
+        const nlohmann::json context = {
+            { "player_formid", 0x14 },
+            { "player_name", a_playerName.empty() ? std::string("the player") : a_playerName },
+            { "listener_name", a_listenerName },
+            { "text", a_text },
+        };
+        const bool queued = PublicSendCustomPromptToLLM(kPlayerLinePrompt, "",
+            context.dump(-1, ' ', false, nlohmann::json::error_handler_t::replace).c_str(),
+            [a_text, a_listener, a_frame, a_said](const char* a_response, int a_success) {
+                auto line = a_success ? CleanLine(a_response ? a_response : "") : std::string();
+                if (line.empty()) {
+                    logger::info("player chat: no line in the character's words ({}); said as written", a_response ? std::string(a_response).substr(0, 200) : "");
+                    if (a_said) {
+                        a_said(a_text);
+                    }
+                    DeliverChat(a_text, a_listener, a_frame);
+                    return;
+                }
+                if (a_said) {
+                    a_said(line);
+                }
+                DeliverChat(std::move(line), a_listener, a_frame);
+            });
+        if (!queued) {
+            logger::info("player chat: the request was not queued; said as written");
+            if (a_said) {
+                a_said(a_text);
+            }
+            DeliverChat(std::move(a_text), a_listener, std::move(a_frame));
+        }
+    }
+
     void SetLineStyles(std::string a_brief, std::string a_short, std::string a_long)
     {
         std::scoped_lock lock(g_lock);
@@ -181,18 +265,47 @@ namespace SkyrimNetBridge
         return CanNarrate() && Settings::Get().playerVoice;
     }
 
-    void PlayerSay(std::string a_text)
+    namespace
+    {
+        std::string CleanLine(std::string a_line);
+    }
+
+    void PlayerSay(std::string a_text, std::string a_playerName, std::function<void(std::string)> a_said)
     {
         if (!CanPlayerSay() || a_text.empty()) {
             return;
         }
-        SKSE::GetTaskInterface()->AddTask([text = std::move(a_text)]() {
-            const auto vm = RE::BSScript::Internal::VirtualMachine::GetSingleton();
-            RE::BSTSmartPointer<RE::BSScript::IStackCallbackFunctor> none;
-            // the VM owns the arguments
-            const bool sent = vm && vm->DispatchStaticCall("SkyrimNetApi", "TransformDialogue", RE::MakeFunctionArguments(std::string(text)), none);
-            logger::info("player says{}: {}", sent ? "" : " (SkyrimNetApi.TransformDialogue not found)", text);
-        });
+        const auto deliver = [a_said](std::string a_line) {
+            if (a_said) {
+                a_said(a_line);
+            }
+            SKSE::GetTaskInterface()->AddTask([line = std::move(a_line)]() {
+                const auto vm = RE::BSScript::Internal::VirtualMachine::GetSingleton();
+                RE::BSTSmartPointer<RE::BSScript::IStackCallbackFunctor> none;
+                // the VM owns the arguments
+                const bool voiced = vm && vm->DispatchStaticCall("SkyrimNetApi", "TriggerPlayerTTS", RE::MakeFunctionArguments(std::string(line)), none);
+                logger::info("player says (player voice {}): {}", voiced ? "asked" : "not available", line);
+            });
+        };
+        if (!PublicSendCustomPromptToLLM) {
+            deliver(std::move(a_text));
+            return;
+        }
+        const nlohmann::json context = {
+            { "player_formid", 0x14 },
+            { "player_name", a_playerName.empty() ? std::string("the player") : a_playerName },
+            { "listener_name", "the other players at the table" },
+            { "text", a_text },
+        };
+        const bool queued = PublicSendCustomPromptToLLM("skyrimnet_minigame_player_line", "",
+            context.dump(-1, ' ', false, nlohmann::json::error_handler_t::replace).c_str(),
+            [a_text, deliver](const char* a_response, int a_success) {
+                auto line = a_success ? CleanLine(a_response ? a_response : "") : std::string();
+                deliver(line.empty() ? a_text : std::move(line));
+            });
+        if (!queued) {
+            deliver(std::move(a_text));
+        }
     }
 
     void SetStates(std::unordered_map<RE::FormID, std::string> a_states, bool a_playing)

@@ -32,8 +32,18 @@ namespace SkyrimNetBridge
     // Whether PlayerSay can work: narration is on and the MCM lets the player speak.
     bool CanPlayerSay();
 
-    // The player says a_text in their own words (SkyrimNet's Transform Dialogue, by Papyrus).
-    void PlayerSay(std::string a_text);
+    // The player's character says a_text (a move of theirs) in their own words: the mod's own
+    // prompt rewrites it (one LLM request) and SkyrimNet voices it. Nobody is asked to answer:
+    // SkyrimNet's Transform Dialogue let any NPC nearby reply, who then made up a move of their own.
+    // a_said gets the line as it is said, on any thread.
+    void PlayerSay(std::string a_text, std::string a_playerName, std::function<void(std::string)> a_said);
+
+    // What the player typed at the table, said by their character to a_listener, who alone answers.
+    // a_frame is what the listener is told, with "{text}" where the line goes. Unless a_asWritten,
+    // the line is first put into the character's words (one LLM request, the prompt
+    // skyrimnet_minigame_player_line); a_said then gets that line, on any thread.
+    void PlayerChat(std::string a_text, RE::FormID a_listener, std::string a_listenerName, std::string a_playerName, std::string a_frame, bool a_asWritten,
+        std::function<void(std::string)> a_said);
 
     // The game as each NPC's prompts see it (minigame_state; an NPC left out sees nothing), and
     // whether it is still being played (those NPCs are marked busy in SkyrimNet while it is).

@@ -26,11 +26,15 @@ namespace
     constexpr float kUnitsPerMetre = 70.0f;
 
     std::atomic<bool>       g_open = false;
+    std::atomic<bool>       g_typing = false;  // the text box on the board has the keys: the hotkey is a letter
     std::atomic<bool>       g_pause = false;  // the open board pauses the game (MCM)
     // Saving the frame crashes the game with some graphics mods (seen with ENB and Skyrim
     // Upscaler, inside the game's own save): no photo then.
     bool                    g_photoUnsafe = false;
     std::atomic<RE::FormID> g_opponent = 0;  // the first NPC at the table: who speaks when the view names no one
+
+    std::mutex              g_playerNameLock;
+    std::string             g_playerName;  // as the board shows it (set on the game thread at every open)
 
     std::mutex              g_playersLock;
     std::vector<RE::FormID> g_players;  // every NPC at the table
@@ -136,6 +140,7 @@ namespace
         if (!UiHost::Ready() || !g_open.exchange(false)) {
             return;
         }
+        g_typing = false;
         Invoke("rvHidden()");
         UiHost::Unfocus();
         UiHost::Hide();
@@ -219,6 +224,10 @@ namespace
     // voice: narrations reach SkyrimNet, so paced games wait for the lines (up to voiceWait s).
     nlohmann::json ViewOptions(const Settings::Values& a_settings)
     {
+        {
+            std::scoped_lock lock(g_playerNameLock);
+            g_playerName = GameText(RE::PlayerCharacter::GetSingleton()->GetDisplayFullName());
+        }
         const auto strings = LoadViewStrings();
         // the texts for the opponents' prompts go with the language of the board
         const auto text = [&](const char* a_key) { return strings.contains(a_key) && strings[a_key].is_string() ? strings[a_key].get<std::string>() : std::string(); };
@@ -237,6 +246,8 @@ namespace
             { "pkHands", a_settings.pokerHands },
             { "ckLevel", a_settings.checkersDifficulty },
             { "cbLevel", a_settings.cribbageDifficulty },
+            { "chat", a_settings.chatBox && SkyrimNetBridge::CanNarrate() },
+            { "chatRaw", a_settings.chatMode == 1 },
             { "voice", SkyrimNetBridge::CanNarrate() },
             { "playerVoice", SkyrimNetBridge::CanPlayerSay() },
             { "voiceWait", a_settings.voiceWaitSeconds },
@@ -520,6 +531,9 @@ namespace
             return;
         }
         if (g_open) {
+            if (g_typing) {
+                return;  // the key was typed into the board's text box
+            }
             SKSE::GetTaskInterface()->AddUITask(CloseBoard);
             return;
         }
@@ -695,7 +709,42 @@ static void SetUp()
     });
     // What the player means to say, said in their own words.
     UiHost::Listen("mgPlayerSay", [](const char* data) -> void {
-        SkyrimNetBridge::PlayerSay(data ? data : "");
+        std::string name;
+        {
+            std::scoped_lock lock(g_playerNameLock);
+            name = g_playerName;
+        }
+        // the board waits for the line: it is told what is said, and times it by its length
+        SkyrimNetBridge::PlayerSay(data ? data : "", name, [](std::string a_line) {
+            const nlohmann::json spoke = { { "id", "00000014" }, { "text", a_line } };
+            const auto script = "mgSpoke(" + spoke.dump(-1, ' ', false, nlohmann::json::error_handler_t::replace) + ")";
+            SKSE::GetTaskInterface()->AddUITask([script]() { Invoke(script); });
+        });
+    });
+    // {"text": what the player typed at the table, "to": "0001A694" the opponent it is for, "name": theirs,
+    // "frame": what that opponent is told, with {text} for the line}
+    UiHost::Listen("mgChat", [](const char* data) -> void {
+        const auto json = nlohmann::json::parse(data ? data : "", nullptr, false);
+        if (!json.is_object() || !json.contains("text") || !json["text"].is_string()) {
+            return;
+        }
+        const auto to = json.contains("to") && json["to"].is_string() ? ParseFormID(json["to"].get<std::string>()) : g_opponent.load();
+        if (!AtTable(to)) {
+            return;  // only someone playing answers
+        }
+        SkyrimNetBridge::PlayerChat(json["text"].get<std::string>(), to, json.value("name", std::string()), json.value("player", std::string()), json.value("frame", std::string("{text}")),
+            Settings::Get().chatMode == 1, [](std::string a_line) {
+                const auto script = "mgChatLine(" + nlohmann::json(a_line).dump(-1, ' ', false, nlohmann::json::error_handler_t::replace) + ")";
+                SKSE::GetTaskInterface()->AddUITask([script]() { Invoke(script); });
+            });
+    });
+    // what happened on the board, in the log next to what was told and said
+    UiHost::Listen("mgNote", [](const char* data) -> void {
+        logger::info("table: {}", data ? data : "");
+    });
+    // "1" while the board's text box has the keys, "0" when it lets go
+    UiHost::Listen("mgTyping", [](const char* data) -> void {
+        g_typing = data && data[0] == '1';
     });
     // [{"id": "0001A694", "name": ...}]: how each of these NPCs plays poker, from their character.
     // Each answer comes back as mgStyle({"id", "hands", "bets", "bluff"} or {"id", "failed"}).
@@ -740,6 +789,8 @@ static void SetUp()
         if (!g_open || (a_speaker != 0x14 && !AtTable(a_speaker))) {  // 0x14: the player
             return;
         }
+        // in the log next to what they were told: a line that does not fit the game shows there
+        logger::info("table line ({:08X}): {}", a_speaker, a_text);
         const nlohmann::json spoke = { { "id", std::format("{:08X}", a_speaker) }, { "text", a_text } };
         const auto script = "mgSpoke(" + spoke.dump(-1, ' ', false, nlohmann::json::error_handler_t::replace) + ")";
         SKSE::GetTaskInterface()->AddUITask([script]() { Invoke(script); });
