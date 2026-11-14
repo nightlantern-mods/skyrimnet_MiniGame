@@ -713,6 +713,89 @@
             padding: 11px 10px;
         }
 
+        /* ---- Yacht ---- */
+
+        #yt-seats .seat {
+            width: 150px;
+            padding: 6px;
+        }
+
+        #yt-seats .face {
+            width: 84px;
+            height: 84px;
+            margin-bottom: 4px;
+            font-size: 34px;
+        }
+
+        #yt-dice .die.can {
+            cursor: pointer;
+        }
+
+        .die.held {
+            box-shadow: 0 0 0 3px #e0b84a, 0 0 10px #e0b84a;
+            transform: translateY(-6px);
+        }
+
+        .yt-card {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            background-color: rgba(10, 10, 10, 0.45);
+        }
+
+        .yt-card th,
+        .yt-card td {
+            padding: 3px 8px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+        }
+
+        .yt-card th {
+            max-width: 110px;
+            overflow: hidden;
+            font-weight: normal;
+            color: #c9b98f;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .yt-card th:first-child,
+        .yt-card td:first-child {
+            width: 150px;
+            text-align: left;
+            color: #b8b0a0;
+        }
+
+        .yt-card .turn {
+            background-color: rgba(201, 185, 143, 0.12);
+        }
+
+        .yt-card td.can {
+            cursor: pointer;
+            color: #e0b84a;
+        }
+
+        .yt-card td.can:hover {
+            background-color: rgba(224, 184, 74, 0.25);
+        }
+
+        .yt-card td.fresh {
+            color: #f4dc8c;
+        }
+
+        .yt-card tr.total td {
+            color: #e8e2d4;
+            border-top: 1px solid #6b5230;
+            border-bottom: none;
+        }
+
+        #yt-roll-button {
+            flex: none;
+            width: 100%;
+            margin-top: 8px;
+            padding: 11px 10px;
+        }
+
         /* ---- Blackjack ---- */
 
         .card {
@@ -987,6 +1070,142 @@
             width: 26px;
             height: 26px;
             font-size: 14px;
+        }
+
+        /* ---- Gomoku ---- */
+
+        #gm .frame {
+            display: flex;
+            align-items: center;
+        }
+
+        .gm-board {
+            display: grid;
+            grid-template-columns: repeat(15, 34px);
+            grid-template-rows: repeat(15, 34px);
+            padding: 8px;
+            background: linear-gradient(135deg, #dcb57a, #c89a5a);
+            border: 2px solid #4a3320;
+            border-radius: 3px;
+            box-shadow: inset 0 0 12px rgba(74, 51, 32, 0.45);
+        }
+
+        .gm-cell {
+            position: relative;
+        }
+
+        /* the lines run through the middle of each point, and stop at the edge of the board */
+        .gm-cell::before,
+        .gm-cell::after {
+            content: "";
+            position: absolute;
+            background-color: #4a3320;
+        }
+
+        .gm-cell::before {
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+        }
+
+        .gm-cell::after {
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+        }
+
+        .gm-cell.l::before {
+            left: 50%;
+        }
+
+        .gm-cell.r::before {
+            right: 50%;
+        }
+
+        .gm-cell.t::after {
+            top: 50%;
+        }
+
+        .gm-cell.b::after {
+            bottom: 50%;
+        }
+
+        .gm-cell.star .gm-dot {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            z-index: 1;
+            width: 7px;
+            height: 7px;
+            margin: -3px 0 0 -3px;
+            border-radius: 50%;
+            background-color: #4a3320;
+        }
+
+        .gm-cell.can {
+            cursor: pointer;
+        }
+
+        .gm-cell.can:hover .gm-dot,
+        .gm-cell.can:hover::marker {
+            display: none;
+        }
+
+        .gm-ghost {
+            display: none;
+        }
+
+        .gm-cell.can:hover .gm-ghost {
+            display: block;
+            position: absolute;
+            inset: 3px;
+            z-index: 2;
+            border-radius: 50%;
+            opacity: 0.45;
+        }
+
+        .gm-stone {
+            position: absolute;
+            inset: 3px;
+            z-index: 2;
+            border-radius: 50%;
+        }
+
+        .gm-stone.black,
+        .gm-ghost.black {
+            background: radial-gradient(circle at 35% 30%, #5a5a5a, #0c0c0c 70%);
+            box-shadow: 0 2px 2px rgba(0, 0, 0, 0.55);
+        }
+
+        .gm-stone.white,
+        .gm-ghost.white {
+            background: radial-gradient(circle at 35% 30%, #ffffff, #cfcac0 75%);
+            box-shadow: 0 2px 2px rgba(0, 0, 0, 0.45);
+        }
+
+        .gm-stone.last::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 8px;
+            height: 8px;
+            margin: -4px 0 0 -4px;
+            border-radius: 50%;
+            background-color: #c0392b;
+        }
+
+        .gm-stone.win {
+            box-shadow: 0 0 0 3px #e0b84a, 0 0 10px #e0b84a;
+        }
+
+        .gm-stone.mini {
+            position: static;
+            display: inline-block;
+            width: 26px;
+            height: 26px;
         }
 
         /* ---- Cribbage ---- */
@@ -1276,6 +1495,31 @@
         </div>
     </div>
 
+    <div class="panel" id="yt">
+        <div class="table">
+            <div class="seats" id="yt-seats"></div>
+            <div class="bid-box">
+                <div class="bid-label" id="yt-label"></div>
+                <div class="stb-roll" id="yt-dice"></div>
+            </div>
+            <table class="yt-card" id="yt-card"></table>
+        </div>
+
+        <div class="side">
+            <h1 data-s="ytTitle">Yacht</h1>
+            <div class="meta" data-s="ytRules"></div>
+            <div class="meta" id="yt-meta"></div>
+            <div class="status" id="yt-status"></div>
+            <button class="primary" id="yt-roll-button" onclick="onYtRoll()" data-s="ytRoll">Roll the dice</button>
+            <div class="log" id="yt-log"></div>
+            <div class="toolbar">
+                <button id="yt-leave" class="danger" onclick="onYtLeave()">Leave</button>
+                <button id="yt-again" class="primary" onclick="onYtAgain()" style="display: none;" data-s="again">Play again</button>
+                <button onclick="requestClose()" data-s="close">Close (Esc)</button>
+            </div>
+        </div>
+    </div>
+
     <div class="panel" id="bj">
         <div class="table">
             <div class="seats" id="bj-seats"></div>
@@ -1387,6 +1631,36 @@
         </div>
     </div>
 
+    <div class="panel" id="gm">
+        <div class="frame">
+            <div class="gm-board" id="gm-board"></div>
+        </div>
+
+        <div class="side">
+            <h1 data-s="gmTitle">Gomoku</h1>
+            <div class="face" id="gm-face"></div>
+            <div class="player" id="gm-row-npc">
+                <span class="icon" id="gm-icon-npc"></span>
+                <span class="name" id="gm-name-npc"></span>
+                <span class="count" id="gm-count-npc"></span>
+            </div>
+            <div class="player" id="gm-row-human">
+                <span class="icon" id="gm-icon-human"></span>
+                <span class="name" id="gm-name-human"></span>
+                <span class="count" id="gm-count-human"></span>
+            </div>
+            <div class="meta" data-s="gmRules"></div>
+            <div class="meta" id="gm-meta"></div>
+            <div class="status" id="gm-status"></div>
+            <div class="log" id="gm-log"></div>
+            <div class="toolbar">
+                <button id="gm-leave" class="danger" onclick="onGmLeave()">Leave</button>
+                <button id="gm-again" class="primary" onclick="onGmAgain()" style="display: none;" data-s="again">Play again</button>
+                <button onclick="requestClose()" data-s="close">Close (Esc)</button>
+            </div>
+        </div>
+    </div>
+
     <div class="panel" id="cb">
         <div class="table">
             <div class="seats">
@@ -1480,6 +1754,10 @@
             gamePkDesc: "Up to three opponents. No-limit poker: each opponent plays in their own way, read from who they are.",
             gameCk: "Checkers",
             gameCkDesc: "One opponent. Jump your opponent's pieces; a capture must be taken. Reach the far row to crown a king.",
+            gameYt: "Yacht",
+            gameYtDesc: "Up to three opponents. Roll five dice up to three times a turn, then score them in one box of your card; the highest total after 12 rounds wins.",
+            gameGm: "Gomoku",
+            gameGmDesc: "One opponent. Take turns placing stones on a 15 \u00d7 15 board; the first to line up five in a row wins.",
             gameCb: "Cribbage",
             gameCbDesc: "One opponent. Make fifteens, pairs and runs in the play and the show; first to 121 pegs out.",
             listComma: ", ",
@@ -1830,6 +2108,80 @@
             pkStateResult: "{npc} has just finished a game of Texas Hold'em with {others}. Result: {result}. Chips: {chips}.",
             pkStateLeft: "{npc} was playing Texas Hold'em with {others}, but {player} left the table before it ended.",
             pkNextHand: "Next hand",
+            gmTitle: "Gomoku",
+            gmRules: "Black moves first. Place a stone on any empty point; five or more in a row, across, down or diagonally, wins.",
+            gmBlack: "black",
+            gmWhite: "white",
+            gmYourMove: "Your move. Click an empty point.",
+            gmYouWin: "You win!",
+            gmNpcWins: "{npc} wins.",
+            gmDrawStatus: "A draw: the board is full.",
+            gmDrawResult: "a draw",
+            gmLogStart: "Black: {black} \u00b7 White: {white}",
+            gmLogMove: "{who}: {sq}",
+            gmLogEnd: "Game over: {result}",
+            gmSayStart: "{player} sits down with {npc} for a game of gomoku on a 15 by 15 board. {npc} plays {npcColor}, {player} plays {playerColor}, and {first} moves first. In turn each places a stone on an empty point; whoever first lines up five in a row, across, down or diagonally, wins.",
+            gmSayMove: "In the gomoku game, {who} places a stone at {sq}. {n} stones are on the board.",
+            gmSayFour: "In the gomoku game, {who} lines up four in a row: unless {other} blocks it, {who} wins on the next move.",
+            gmSayDouble: "In the gomoku game, {who} makes two threats at once: {other} cannot block both, and {who} is about to win.",
+            gmSayBlock: "In the gomoku game, {who} blocks {other}'s four just in time.",
+            gmSayPlayerWins: "The gomoku game is over: {player} lines up five and wins. {npc} admits defeat and concedes the game to {player}.",
+            gmSayNpcWins: "The gomoku game is over: {npc} lines up five and wins. {npc} proudly declares victory.",
+            gmSayDraw: "The gomoku game between {npc} and {player} ends in a draw: the board is full. {npc} says something about the stalemate.",
+            gmSayLeave: "{player} gets up and leaves the gomoku game with {npc} before it is finished.",
+            gmState: "{npc} is playing gomoku with {player}. {npc} has the {npcColor} stones, {player} the {playerColor}; {n} stones are on the board.",
+            gmStateThreat: " {who} has four in a row and wins at {sq} unless it is blocked.",
+            gmStateTurn: " It is {who}'s move.",
+            gmStatePaused: " The board is set aside for now; the game is paused.",
+            gmStateResult: "{npc} has just finished a game of gomoku with {player}. Result: {result}.",
+            gmStateLeft: "{npc} was playing gomoku with {player}, but {player} left before it ended.",
+            ytTitle: "Yacht",
+            ytRules: "Up to three rolls a turn: click dice to keep them. Then score them in one empty box, zero if they do not fit. Highest total after 12 rounds wins.",
+            ytRoll: "Roll the dice",
+            ytRollAgain: "Roll again ({n} left)",
+            ytRound: "Round {r} of {n}",
+            ytTotal: "Total {n}",
+            ytCat1: "Ones",
+            ytCat2: "Twos",
+            ytCat3: "Threes",
+            ytCat4: "Fours",
+            ytCat5: "Fives",
+            ytCat6: "Sixes",
+            ytCatFh: "Full house",
+            ytCatFk: "Four of a kind",
+            ytCatLs: "Little straight",
+            ytCatBs: "Big straight",
+            ytCatCh: "Choice",
+            ytCatY: "Yacht",
+            ytCatTotal: "Total",
+            ytYourRoll: "Your turn. Roll the dice.",
+            ytYourPick: "Click dice to keep them and roll again, or pick a box to score.",
+            ytYourPickLast: "Pick a box to score.",
+            ytYouWin: "You win with {n}!",
+            ytNpcWins: "{npc} wins with {n}.",
+            ytTieStatus: "{names} tie with {n}.",
+            ytLogStart: "Order: {order}",
+            ytLogScore: "{who}: {dice} \u2192 {cat}, {n}",
+            ytLogEnd: "Game over: {result}",
+            ytStart: "{player} sits down with {npcs} for a game of Yacht. On each turn a player rolls five dice up to three times, keeping any between rolls, and scores them in one of twelve boxes: ones to sixes, full house, four of a kind, little straight, big straight, choice and yacht. A box the dice do not fit scores zero. After twelve rounds the highest total wins.",
+            ytYachtLine: "In the Yacht game, {who} rolls five of a kind: a yacht, for 50 points!",
+            ytStraightLine: "In the Yacht game, {who} rolls a {cat} for 30 points.",
+            ytBigLine: "In the Yacht game, {who} scores {n} points for {cat}.",
+            ytTurnLine: "In the Yacht game, {who} scores {n} for {cat}, for a total of {total}.",
+            ytZeroLine: "In the Yacht game, {who} has nothing for {cat} and writes a zero there; the total stays at {total}.",
+            ytStanding: "In the Yacht game, {r} of {n} rounds are done. The totals: {totals}.",
+            ytEndPlayerWins: "The Yacht game is over: {player} wins with {n} points. {npc} admits defeat and concedes the game to {player}. Final totals: {totals}.",
+            ytEndNpcWins: "The Yacht game is over: {npc} wins with {n} points and proudly declares victory. Final totals: {totals}.",
+            ytEndTie: "The Yacht game is over: {names} tie with {n} points. {npc} says something about the shared win. Final totals: {totals}.",
+            ytLeave: "{player} gets up and leaves the Yacht game before it is finished.",
+            pYt: "In our game of Yacht, I score {n} for {cat}.",
+            ytState: "{npc} is playing Yacht with {others}, round {r} of {n}. Totals: {totals}.",
+            ytStateOpen: " {npc} still has these boxes to fill: {open}.",
+            ytStateTurnStart: " It is {who}'s turn to roll.",
+            ytStateTurn: " It is {who}'s turn; after roll {k} of 3 the dice show {dice}.",
+            ytStatePaused: " The dice are set aside for now; the game is paused.",
+            ytStateResult: "{npc} has just finished a game of Yacht with {others}. Result: {result}. Totals: {totals}.",
+            ytStateLeft: "{npc} was playing Yacht with {others}, but {player} left the table before it ended.",
             chatPlaceholder: "Say something to the table…",
             chatSend: "Say",
             chatLog: "{player}: \u201c{text}\u201d",
@@ -2606,6 +2958,8 @@
             renderPkStatus();
             renderCkStatus();
             renderCbStatus();
+            renderYtStatus();
+            renderGmStatus();
         }
 
         function lineDone() {
@@ -2627,6 +2981,8 @@
             renderPkStatus();
             renderCkStatus();
             renderCbStatus();
+            renderYtStatus();
+            renderGmStatus();
         }
 
         // Runs fn once the table is quiet.
@@ -3842,6 +4198,671 @@
                 }
             }
             $("stb-status").textContent = lines.join("\n");
+        }
+
+        // ===== Yacht =====
+
+        // The classic dice game: five dice, up to three rolls a turn (any kept between rolls), then
+        // one of twelve boxes is filled, with zero when the dice do not fit it. No bonus. Twelve
+        // rounds; the highest total wins.
+        const YT_CATS = ["1", "2", "3", "4", "5", "6", "fh", "fk", "ls", "bs", "ch", "y"];
+        const YT_ROUNDS = YT_CATS.length;
+        const YT_CAT_KEYS = { 1: "ytCat1", 2: "ytCat2", 3: "ytCat3", 4: "ytCat4", 5: "ytCat5", 6: "ytCat6", fh: "ytCatFh", fk: "ytCatFk", ls: "ytCatLs", bs: "ytCatBs", ch: "ytCatCh", y: "ytCatY" };
+        const ytCatName = (c) => t(YT_CAT_KEYS[c]);
+        const NO_HOLD = () => [false, false, false, false, false];
+
+        function ytCounts(dice) {
+            const n = [0, 0, 0, 0, 0, 0, 0];
+            dice.forEach((d) => n[d]++);
+            return n;
+        }
+
+        // What these dice score in this box.
+        function ytScore(cat, dice) {
+            const n = ytCounts(dice);
+            const sum = dice.reduce((a, d) => a + d, 0);
+            switch (cat) {
+                case "fh":
+                    return n.includes(3) && n.includes(2) ? sum : 0;
+                case "fk": {
+                    const f = n.findIndex((c, k) => k > 0 && c >= 4);
+                    return f > 0 ? f * 4 : 0;
+                }
+                case "ls":
+                    return [1, 2, 3, 4, 5].every((f) => n[f] === 1) ? 30 : 0;
+                case "bs":
+                    return [2, 3, 4, 5, 6].every((f) => n[f] === 1) ? 30 : 0;
+                case "ch":
+                    return sum;
+                case "y":
+                    return n.includes(5) ? 50 : 0;
+                default: {
+                    const f = Number(cat);
+                    return f * n[f];
+                }
+            }
+        }
+
+        // ---- opponent AI ----
+
+        // About what a box brings on average when it is played for: filling it with less is a loss.
+        const YT_PAR = { 1: 2, 2: 4, 3: 6, 4: 8, 5: 10, 6: 13, fh: 8, fk: 6, ls: 8, bs: 8, ch: 22, y: 10 };
+
+        const ytOpen = (s) => YT_CATS.filter((c) => s.card[c] === undefined);
+
+        // Behind the leader by a lot with few rounds left: a master goes for the big boxes.
+        function ytChasing(s) {
+            const lead = Math.max(...yt.seats.filter((x) => x !== s).map((x) => x.total));
+            return YT_ROUNDS - yt.round < 4 && lead - s.total > 20;
+        }
+
+        // What putting the dice in a box is worth to seat s at this strength.
+        // 1: the points alone. 2: the points, minding a little what the box usually brings.
+        // 3: minding it fully. 4: the same, and chasing the big boxes when far behind late on.
+        function ytValue(cat, dice, s) {
+            const pts = ytScore(cat, dice);
+            if (ytLevel <= 1) {
+                return pts;
+            }
+            let v = pts - (ytLevel === 2 ? 0.5 : 0.8) * YT_PAR[cat];
+            if (ytLevel >= 4 && pts > 0 && (cat === "y" || cat === "ls" || cat === "bs") && ytChasing(s)) {
+                v += 8;
+            }
+            return v;
+        }
+
+        const ytBest = (dice, open, s) => open.reduce((a, c) => (ytValue(c, dice, s) > ytValue(a, dice, s) ? c : a));
+        const ytBestValue = (dice, open, s) => Math.max(...open.map((c) => ytValue(c, dice, s)));
+
+        // Seat i's next step: {hold} to keep those dice and roll the rest again, or {cat} to score.
+        function ytPlan(i) {
+            const s = yt.seats[i];
+            const open = ytOpen(s);
+            const dice = yt.dice;
+            if (yt.rollNo >= 3) {
+                return { cat: ytBest(dice, open, s) };
+            }
+            if (ytLevel <= 1) {
+                // keeps the face it has most of, unless a big box is already made
+                const best = ytBest(dice, open, s);
+                if (ytScore(best, dice) >= 30) {
+                    return { cat: best };
+                }
+                const n = ytCounts(dice);
+                let face = 6;
+                for (let f = 6; f >= 1; f--) {
+                    if (n[f] > n[face]) face = f;
+                }
+                return { hold: dice.map((d) => d === face) };
+            }
+            // every way of keeping dice, tried by rolling the rest many times
+            const sims = ytLevel === 2 ? 40 : ytLevel === 3 ? 160 : 320;
+            const seen = new Set();
+            let bestHold = null;
+            let bestEv = -Infinity;
+            for (let mask = 0; mask < 32; mask++) {
+                const hold = dice.map((d, k) => (mask & (1 << k)) !== 0);
+                const key = dice.filter((d, k) => hold[k]).sort().join("");
+                if (seen.has(key)) {
+                    continue;
+                }
+                seen.add(key);
+                let total = 0;
+                for (let r = 0; r < sims; r++) {
+                    const next = dice.map((d, k) => (hold[k] ? d : 1 + Math.floor(Math.random() * 6)));
+                    total += ytBestValue(next, open, s);
+                }
+                if (total / sims > bestEv) {
+                    bestEv = total / sims;
+                    bestHold = hold;
+                }
+            }
+            if (ytBestValue(dice, open, s) >= bestEv - 0.5 || bestHold.every((h) => h)) {
+                return { cat: ytBest(dice, open, s) };
+            }
+            return { hold: bestHold };
+        }
+
+        // ---- flow ----
+
+        let ytLevel = 2;
+
+        const yt = {
+            gen: 0,          // bumped when a game is left or dropped: its pending steps stop
+            seats: [],       // seat 0 is the player: {id, name, human, card: {box: points}, total}
+            first: 0,        // the seat that starts each round
+            turn: 0,         // the seat playing
+            round: 1,
+            rollNo: 0,       // rolls made this turn, 0 to 3
+            dice: [],
+            held: NO_HOLD(), // the dice kept for the next roll
+            rolling: false,
+            phase: "play",   // play | done: the box just filled stays in view a moment
+            lastFill: null,  // {seat, cat}: the box just filled, lit up
+            talkAt: [],      // the turns of this round (0 = the first seat's) that get a line of their own
+            roundLines: 0,   // lines said about this round's turns
+            playing: false,
+            over: false,
+            left: false,     // the player left before the end
+            winners: [],
+            thinking: false, // an NPC's move is on its way
+            leaveArmed: false,
+        };
+
+        const ytName = (i) => yt.seats[i].name;
+        const ytOpponents = () => yt.seats.filter((s) => !s.human).map((s) => ({ id: s.id, name: s.name }));
+        const ytPlayerActs = () => yt.playing && !yt.over && yt.turn === 0 && !yt.rolling && yt.phase === "play" && screen === "yt";
+        const ytTotalsText = () => yt.seats.map((x) => t("diceCount", { name: x.name, n: x.total })).join(t("listComma"));
+
+        function newYtGame(opps) {
+            yt.gen++;
+            yt.seats = [
+                { id: "", name: playerName, human: true, card: {}, total: 0 },
+                ...opps.map((o) => ({ id: o.id, name: o.name, human: false, card: {}, total: 0 })),
+            ];
+            yt.first = Math.floor(Math.random() * yt.seats.length);
+            yt.turn = yt.first;
+            yt.round = 1;
+            yt.rollNo = 0;
+            yt.dice = [];
+            yt.held = NO_HOLD();
+            yt.rolling = false;
+            yt.phase = "play";
+            yt.lastFill = null;
+            ytPlanTalk();
+            yt.playing = true;
+            yt.over = false;
+            yt.left = false;
+            yt.winners = [];
+            yt.thinking = false;
+            yt.leaveArmed = false;
+            $("yt-log").innerHTML = "";
+            $("yt-meta").textContent = t("strength", { level: t("level" + (ytLevel >= 1 && ytLevel <= 4 ? ytLevel : 2)) });
+            const order = yt.seats.map((x, k) => ytName((yt.first + k) % yt.seats.length));
+            log(t("ytLogStart", { order: order.join(t("listComma")) }), "yt-log");
+            say(opps[0].id, t("ytStart", { player: playerName, npcs: joinNames(opps.map((o) => o.name)) }));
+            reportYtState();
+            ytStep();
+        }
+
+        // One turn in each round, and half the time a second, gets a line even when nothing stands
+        // out; good rolls always get one on top.
+        function ytPlanTalk() {
+            const n = yt.seats.length;
+            const first = Math.floor(Math.random() * n);
+            yt.talkAt = [first];
+            if (n > 1 && Math.random() < 0.5) {
+                yt.talkAt.push((first + 1 + Math.floor(Math.random() * (n - 1))) % n);
+            }
+            yt.roundLines = 0;
+        }
+
+        // The seat playing moves: the player through the board, an NPC once the table is quiet.
+        function ytStep() {
+            renderYt();
+            if (!yt.playing || yt.over || yt.rolling || yt.thinking || yt.phase !== "play" || yt.seats[yt.turn].human) {
+                return;
+            }
+            yt.thinking = true;
+            const gen = yt.gen, seat = yt.turn;
+            renderYtStatus();
+            whenQuiet(() => {
+                if (gen !== yt.gen) {
+                    return;
+                }
+                if (screen !== "yt") {
+                    // carried on when the table is back on screen
+                    yt.thinking = false;
+                    return;
+                }
+                renderYtStatus();
+                setTimeout(() => {
+                    if (gen !== yt.gen) {
+                        return;
+                    }
+                    if (screen !== "yt") {
+                        yt.thinking = false;
+                        return;
+                    }
+                    if (yt.rollNo === 0) {
+                        yt.thinking = false;
+                        ytRoll();
+                        return;
+                    }
+                    const plan = ytPlan(seat);
+                    if (plan.cat) {
+                        yt.thinking = false;
+                        ytFill(seat, plan.cat);
+                        return;
+                    }
+                    // the kept dice show for a moment before the others are rolled
+                    yt.held = plan.hold;
+                    renderYt();
+                    setTimeout(() => {
+                        if (gen !== yt.gen) {
+                            return;
+                        }
+                        yt.thinking = false;
+                        if (screen === "yt") {
+                            ytRoll();
+                        }
+                    }, 550);
+                }, 650 + Math.random() * 500);
+            });
+        }
+
+        // The dice not kept tumble for a moment, then the roll stands.
+        function ytRoll() {
+            const gen = yt.gen;
+            const throwDice = () => (yt.dice.length === 5
+                ? yt.dice.map((d, k) => (yt.held[k] ? d : 1 + Math.floor(Math.random() * 6)))
+                : Array.from({ length: 5 }, () => 1 + Math.floor(Math.random() * 6)));
+            yt.rolling = true;
+            yt.dice = throwDice();
+            renderYt();
+            const tumble = setInterval(() => {
+                if (gen !== yt.gen) {
+                    clearInterval(tumble);
+                    return;
+                }
+                yt.dice = throwDice();
+                renderYtDice();
+            }, 90);
+            setTimeout(() => {
+                clearInterval(tumble);
+                if (gen !== yt.gen) {
+                    return;
+                }
+                yt.rolling = false;
+                yt.dice = throwDice();
+                yt.rollNo++;
+                if (yt.rollNo >= 3) {
+                    yt.held = NO_HOLD();
+                }
+                reportYtState();
+                ytStep();
+            }, 650);
+        }
+
+        // The NPC after seat i, to voice what happened to the player.
+        function ytNextNpc(i) {
+            for (let k = 1; k <= yt.seats.length; k++) {
+                const x = yt.seats[(i + k) % yt.seats.length];
+                if (!x.human) {
+                    return x;
+                }
+            }
+            return null;
+        }
+
+        // Seat i fills a box with the dice.
+        function ytFill(i, cat) {
+            const s = yt.seats[i];
+            const n = ytScore(cat, yt.dice);
+            s.card[cat] = n;
+            s.total += n;
+            yt.lastFill = { seat: i, cat };
+            yt.leaveArmed = false;
+            log(t("ytLogScore", { who: s.name, dice: yt.dice.join(t("listComma")), cat: ytCatName(cat), n }), "yt-log");
+            if (s.human && playerVoice) {
+                say(PLAYER_ID, t("pYt", { n, cat: ytCatName(cat) }), true);
+            }
+            // a line only for what stands out, from the one who did it or the next NPC
+            let line = null;
+            if (cat === "y" && n === 50) {
+                line = t("ytYachtLine", { who: s.name });
+            } else if ((cat === "ls" || cat === "bs") && n === 30) {
+                line = t("ytStraightLine", { who: s.name, cat: ytCatName(cat) });
+            } else if ((cat === "fk" && n >= 20) || (cat === "fh" && n >= 25)) {
+                line = t("ytBigLine", { who: s.name, n, cat: ytCatName(cat) });
+            }
+            let speaker = s.human ? ytNextNpc(i) : s;
+            const offset = (i - yt.first + yt.seats.length) % yt.seats.length;
+            if (!line && yt.talkAt.includes(offset) && yt.roundLines < 2) {
+                line = t(n > 0 ? "ytTurnLine" : "ytZeroLine", { who: s.name, n, cat: ytCatName(cat), total: s.total });
+            }
+            if (line) {
+                yt.roundLines++;
+            }
+
+            const next = (i + 1) % yt.seats.length;
+            const roundOver = next === yt.first;
+            if (roundOver && yt.round >= YT_ROUNDS) {
+                ytEnd(line);
+                return;
+            }
+            if (roundOver && (yt.round === 4 || yt.round === 8)) {
+                const standing = t("ytStanding", { r: yt.round, n: YT_ROUNDS, totals: ytTotalsText() });
+                if (!line) {
+                    speaker = yt.seats.filter((x) => !x.human).sort((a, b) => b.total - a.total)[0];
+                }
+                line = line ? line + " " + standing : standing;
+            }
+            if (line && speaker) {
+                say(speaker.id, line);
+            }
+            yt.phase = "done";
+            reportYtState();
+            renderYt();
+
+            const gen = yt.gen;
+            setTimeout(() => {
+                if (gen !== yt.gen) {
+                    return;
+                }
+                yt.phase = "play";
+                yt.turn = next;
+                if (roundOver) {
+                    yt.round++;
+                    ytPlanTalk();
+                }
+                yt.rollNo = 0;
+                yt.dice = [];
+                yt.held = NO_HOLD();
+                yt.lastFill = null;
+                reportYtState();
+                ytStep();
+            }, s.human ? 700 : 1400);
+        }
+
+        // The twelfth round is done: the highest total wins.
+        function ytEnd(line) {
+            const top = Math.max(...yt.seats.map((x) => x.total));
+            yt.winners = yt.seats.flatMap((x, k) => (x.total === top ? [k] : []));
+            yt.over = true;
+            yt.phase = "play";
+            const totals = ytTotalsText();
+            let speaker;
+            let text;
+            if (yt.winners.length > 1) {
+                speaker = yt.seats[yt.winners.find((k) => k > 0)];
+                text = t("ytEndTie", { names: joinNames(yt.winners.map(ytName)), n: top, npc: speaker.name, totals });
+            } else if (yt.winners[0] === 0) {
+                speaker = yt.seats.filter((x) => !x.human).sort((a, b) => b.total - a.total)[0];
+                text = t("ytEndPlayerWins", { player: playerName, npc: speaker.name, n: top, totals });
+            } else {
+                speaker = yt.seats[yt.winners[0]];
+                text = t("ytEndNpcWins", { npc: speaker.name, n: top, totals });
+            }
+            say(speaker.id, (line ? line + " " : "") + text, true);
+            log(t("ytLogEnd", { result: ytResult() }), "yt-log");
+            reportYtState();
+            renderYt();
+        }
+
+        function ytResult() {
+            if (yt.winners.length > 1) {
+                return t("stbTieResult", { names: joinNames(yt.winners.map(ytName)) });
+            }
+            return t("resultWin", { name: ytName(yt.winners[0]) });
+        }
+
+        // ---- the player's moves ----
+
+        function onYtRoll() {
+            if (ytPlayerActs() && yt.rollNo < 3) {
+                ytRoll();
+            }
+        }
+
+        function onYtDie(k) {
+            if (!ytPlayerActs() || yt.rollNo < 1 || yt.rollNo >= 3) {
+                return;
+            }
+            yt.held[k] = !yt.held[k];
+            renderYt();
+        }
+
+        function onYtCat(cat) {
+            if (!ytPlayerActs() || yt.rollNo < 1 || yt.seats[0].card[cat] !== undefined) {
+                return;
+            }
+            ytFill(0, cat);
+        }
+
+        function onYtLeave() {
+            if (!yt.playing || yt.over) {
+                return;
+            }
+            if (!yt.leaveArmed) {
+                yt.leaveArmed = true;
+                renderYt();
+                return;
+            }
+            yt.gen++;
+            yt.over = true;
+            yt.left = true;
+            yt.rolling = false;
+            yt.thinking = false;
+            yt.leaveArmed = false;
+            say(yt.seats[1].id, t("ytLeave", { player: playerName }), true);
+            log(t("logLeave", { player: playerName }), "yt-log");
+            reportYtState();
+            renderYt();
+        }
+
+        function onYtAgain() {
+            newYtGame(ytOpponents());
+        }
+
+        // ---- what each NPC knows ----
+
+        function ytStateFor(k) {
+            const s = yt.seats[k];
+            const vars = {
+                npc: s.name, player: playerName, r: yt.round, n: YT_ROUNDS, totals: ytTotalsText(),
+                others: joinNames(yt.seats.filter((x) => x !== s).map((x) => x.name)),
+            };
+            if (yt.over) {
+                if (screen !== "yt") {
+                    return "";
+                }
+                return yt.left ? t("ytStateLeft", vars) : t("ytStateResult", { ...vars, result: ytResult() });
+            }
+            if (!yt.playing) {
+                return "";
+            }
+            let text = t("ytState", vars);
+            text += t("ytStateOpen", { npc: s.name, open: ytOpen(s).map(ytCatName).join(t("listComma")) });
+            if (yt.phase === "play") {
+                text += yt.rollNo === 0
+                    ? t("ytStateTurnStart", { who: ytName(yt.turn) })
+                    : t("ytStateTurn", { who: ytName(yt.turn), k: yt.rollNo, dice: yt.dice.join(t("listComma")) });
+            }
+            if (screen !== "yt") {
+                text += t("ytStatePaused");
+            }
+            return text;
+        }
+
+        function reportYtState() {
+            if (activeGame !== "yt") {
+                return;
+            }
+            const states = {};
+            yt.seats.forEach((x, k) => {
+                if (!x.human) {
+                    states[x.id] = ytStateFor(k);
+                }
+            });
+            send("rvState", JSON.stringify({ states, playing: yt.playing && !yt.over }));
+        }
+
+        // A game in progress is dropped (another game is starting).
+        function abandonYacht() {
+            if (yt.playing && !yt.over) {
+                yt.playing = false;
+                yt.gen++;
+                yt.rolling = false;
+                yt.thinking = false;
+                voiceReset();
+            }
+        }
+
+        // Starts or resumes Yacht against opps ([{id, name}], one to three).
+        function playYacht(opps) {
+            const same = yt.playing && !yt.over &&
+                ytOpponents().map((o) => o.id).join() === opps.map((o) => o.id).join();
+            if (!same) {
+                abandonYacht();
+            }
+            abandonDice();
+            abandonReversi();
+            abandonStb();
+            abandonBj();
+            abandonPk();
+            abandonCheckers();
+            abandonCribbage();
+            abandonGomoku();
+            activeGame = "yt";
+            send("mgPlayers", opps.map((o) => o.id).join(","));
+            if (same) {
+                showScreen("yt");
+                log(t("logResume"), "yt-log");
+                reportYtState();
+                ytStep();
+                return;
+            }
+            snapFaces(opps.map((o) => o.id), () => {
+                showScreen("yt");
+                newYtGame(opps);
+            });
+        }
+
+        // ---- rendering ----
+
+        function renderYt() {
+            if (!yt.seats.length) {
+                return;
+            }
+            const live = yt.playing && !yt.over;
+            const seats = $("yt-seats");
+            seats.innerHTML = "";
+            yt.seats.forEach((x, k) => {
+                if (x.human) {
+                    return;
+                }
+                const card = document.createElement("div");
+                card.className = "seat" + (live && yt.turn === k ? " active" : "");
+                const name = document.createElement("div");
+                name.className = "seat-name";
+                name.textContent = x.name;
+                const meta = document.createElement("div");
+                meta.className = "seat-meta";
+                meta.textContent = t("ytTotal", { n: x.total });
+                card.append(faceEl(x.id, x.name), name, meta);
+                seats.appendChild(card);
+            });
+
+            $("yt-label").textContent = t("ytRound", { r: Math.min(yt.round, YT_ROUNDS), n: YT_ROUNDS }) + (live ? t("pkStyleSep") + ytName(yt.turn) : "");
+            renderYtDice();
+            renderYtCard();
+
+            const roll = $("yt-roll-button");
+            roll.style.display = live && yt.turn === 0 && yt.phase === "play" && yt.rollNo < 3 && !yt.rolling ? "" : "none";
+            roll.textContent = yt.rollNo === 0 ? t("ytRoll") : t("ytRollAgain", { n: 3 - yt.rollNo });
+            roll.disabled = !ytPlayerActs();
+            $("yt-leave").style.display = live ? "" : "none";
+            $("yt-leave").textContent = t(yt.leaveArmed ? "leaveConfirm" : "leave");
+            $("yt-again").style.display = yt.over ? "" : "none";
+            renderYtStatus();
+            renderGmStatus();
+        }
+
+        function renderYtDice() {
+            const box = $("yt-dice");
+            box.innerHTML = "";
+            const holding = ytPlayerActs() && yt.rollNo >= 1 && yt.rollNo < 3;
+            yt.dice.forEach((d, k) => {
+                const held = yt.held[k] && !yt.rolling;
+                const el = dieEl(d, "big" + (yt.rolling && !yt.held[k] ? " rolling" : "") + (held ? " held" : "") + (holding ? " can" : ""));
+                if (holding) {
+                    el.onclick = () => onYtDie(k);
+                }
+                box.appendChild(el);
+            });
+        }
+
+        function renderYtCard() {
+            const table = $("yt-card");
+            table.innerHTML = "";
+            const live = yt.playing && !yt.over;
+            const choosing = ytPlayerActs() && yt.rollNo >= 1;
+            const head = document.createElement("tr");
+            head.appendChild(document.createElement("th"));
+            yt.seats.forEach((x, k) => {
+                const th = document.createElement("th");
+                th.textContent = x.name;
+                if (live && yt.turn === k) th.className = "turn";
+                head.appendChild(th);
+            });
+            table.appendChild(head);
+            for (const cat of YT_CATS) {
+                const tr = document.createElement("tr");
+                const name = document.createElement("td");
+                name.textContent = ytCatName(cat);
+                tr.appendChild(name);
+                yt.seats.forEach((x, k) => {
+                    const td = document.createElement("td");
+                    const classes = [];
+                    if (live && yt.turn === k) classes.push("turn");
+                    if (x.card[cat] !== undefined) {
+                        td.textContent = x.card[cat];
+                        if (yt.lastFill && yt.lastFill.seat === k && yt.lastFill.cat === cat) classes.push("fresh");
+                    } else if (k === 0 && choosing) {
+                        // what the dice would score there: click to take it
+                        td.textContent = ytScore(cat, yt.dice);
+                        classes.push("can");
+                        td.onclick = () => onYtCat(cat);
+                    }
+                    td.className = classes.join(" ");
+                    tr.appendChild(td);
+                });
+                table.appendChild(tr);
+            }
+            const total = document.createElement("tr");
+            total.className = "total";
+            const label = document.createElement("td");
+            label.textContent = t("ytCatTotal");
+            total.appendChild(label);
+            yt.seats.forEach((x) => {
+                const td = document.createElement("td");
+                td.textContent = x.total;
+                total.appendChild(td);
+            });
+            table.appendChild(total);
+        }
+
+        function renderYtStatus() {
+            if (!yt.seats.length) {
+                return;
+            }
+            const lines = [];
+            if (yt.over) {
+                const top = yt.left ? 0 : yt.seats[yt.winners[0]].total;
+                if (yt.left) {
+                    lines.push(t("diceLeftStatus"));
+                } else if (yt.winners.length > 1) {
+                    lines.push(t("ytTieStatus", { names: joinNames(yt.winners.map(ytName)), n: top }));
+                } else if (yt.winners[0] === 0) {
+                    lines.push(t("ytYouWin", { n: top }));
+                } else {
+                    lines.push(t("ytNpcWins", { npc: ytName(yt.winners[0]), n: top }));
+                }
+            } else if (yt.playing && yt.phase === "play") {
+                const x = yt.seats[yt.turn];
+                if (x.human) {
+                    if (!yt.rolling) {
+                        lines.push(yt.rollNo === 0 ? t("ytYourRoll") : yt.rollNo < 3 ? t("ytYourPick") : t("ytYourPickLast"));
+                    }
+                } else if (voiceLine && voiceLine.speaker !== PLAYER_ID) {
+                    const speaker = yt.seats.find((y) => y.id === voiceLine.speaker);
+                    lines.push(t("diceListening", { npc: speaker ? speaker.name : x.name }));
+                } else {
+                    lines.push(t("thinking", { npc: x.name }));
+                }
+            }
+            $("yt-status").textContent = lines.join("\n");
         }
 
         // ===== Blackjack =====
@@ -5635,9 +6656,12 @@
         // ===== Checkers and Cribbage: shared =====
 
         // Checkers and Cribbage step aside when one of the original games starts.
+        // every other game starting drops these (its play function names the older ones itself)
         function abandonCheckersAndCribbage() {
             abandonCheckers();
             abandonCribbage();
+            abandonYacht();
+            abandonGomoku();
         }
 
         // The strength control on both panels: four steps, lit up to the level. Plain elements, not
@@ -6161,6 +7185,8 @@
             abandonBj();
             abandonPk();
             abandonCribbage();
+            abandonYacht();
+            abandonGomoku();
             activeGame = "ck";
             send("mgPlayers", opp.id);
             if (same) {
@@ -6268,6 +7294,518 @@
                 }
             }
             $("ck-status").textContent = text;
+        }
+
+        // ===== Gomoku =====
+
+        // Free-style gomoku on a 15×15 board, against one opponent: black moves first, and five or
+        // more stones in a row (across, down or diagonally) win. A full board is a draw.
+        // The board: 225 points, row * 15 + col, row 0 at the top; 0 empty, 1 black, 2 white.
+        const GM_N = 15;
+        const GM_SIZE = GM_N * GM_N;
+        const GM_BLACK = 1, GM_WHITE = 2;
+        const GM_DIRS = [[0, 1], [1, 0], [1, 1], [1, -1]];
+        const gmOther = (c) => 3 - c;
+        const gmSquareName = (i) => "abcdefghijklmno"[i % GM_N] + (GM_N - Math.floor(i / GM_N));
+
+        // Every run of five points in a line, and the runs each point belongs to.
+        const GM_WINDOWS = [];
+        const GM_CELL_WINDOWS = Array.from({ length: GM_SIZE }, () => []);
+        for (let r = 0; r < GM_N; r++) {
+            for (let c = 0; c < GM_N; c++) {
+                for (const [dr, dc] of GM_DIRS) {
+                    const er = r + dr * 4, ec = c + dc * 4;
+                    if (er < 0 || er >= GM_N || ec < 0 || ec >= GM_N) continue;
+                    const w = [0, 1, 2, 3, 4].map((k) => (r + dr * k) * GM_N + (c + dc * k));
+                    w.forEach((p) => GM_CELL_WINDOWS[p].push(GM_WINDOWS.length));
+                    GM_WINDOWS.push(w);
+                }
+            }
+        }
+
+        // The stones of colour c in a run, and whether the other colour is in it too.
+        function gmCount(b, w, c) {
+            let own = 0, foe = 0;
+            for (const p of w) {
+                if (b[p] === c) own++;
+                else if (b[p]) foe++;
+            }
+            return [own, foe];
+        }
+
+        // The empty points where colour c would make five.
+        function gmWinningPoints(b, c) {
+            const out = new Set();
+            for (const w of GM_WINDOWS) {
+                const [own, foe] = gmCount(b, w, c);
+                if (own === 4 && !foe) {
+                    for (const p of w) if (!b[p]) out.add(p);
+                }
+            }
+            return [...out];
+        }
+
+        // The five or more in a row through point i, or null.
+        function gmFive(b, i) {
+            const c = b[i], r = Math.floor(i / GM_N), col = i % GM_N;
+            for (const [dr, dc] of GM_DIRS) {
+                const line = [i];
+                for (const sgn of [1, -1]) {
+                    let rr = r + dr * sgn, cc = col + dc * sgn;
+                    while (rr >= 0 && rr < GM_N && cc >= 0 && cc < GM_N && b[rr * GM_N + cc] === c) {
+                        line.push(rr * GM_N + cc);
+                        rr += dr * sgn;
+                        cc += dc * sgn;
+                    }
+                }
+                if (line.length >= 5) return line;
+            }
+            return null;
+        }
+
+        // ---- opponent AI ----
+
+        // What a run is worth by how many of one colour it holds, when the other colour is not in it.
+        const GM_ATTACK = [0, 1, 12, 150, 2500, 1000000];
+        // an open three left alone becomes an open four, which cannot be stopped: it outweighs a run of
+        // one's own, though not a four (which forces an answer)
+        const GM_BLOCK = [0, 1, 15, 1000, 50000, 0];
+
+        // What playing point i is worth to colour c: the runs it builds, and the opponent's it ends.
+        function gmPointValue(b, i, c, blockWeight) {
+            let attack = 0, block = 0;
+            for (const wi of GM_CELL_WINDOWS[i]) {
+                const [own, foe] = gmCount(b, GM_WINDOWS[wi], c);
+                if (!foe) attack += GM_ATTACK[own + 1] - GM_ATTACK[own];
+                if (!own) block += GM_BLOCK[foe];
+            }
+            const r = Math.floor(i / GM_N), col = i % GM_N;
+            const centre = 14 - Math.abs(r - 7) - Math.abs(col - 7);
+            return attack + blockWeight * block + centre * 0.1;
+        }
+
+        // The empty points next to the stones (two points away at most): where a move makes sense.
+        function gmCandidates(b) {
+            const near = new Set();
+            for (let i = 0; i < GM_SIZE; i++) {
+                if (!b[i]) continue;
+                const r = Math.floor(i / GM_N), c = i % GM_N;
+                for (let dr = -2; dr <= 2; dr++) {
+                    for (let dc = -2; dc <= 2; dc++) {
+                        const rr = r + dr, cc = c + dc;
+                        if (rr >= 0 && rr < GM_N && cc >= 0 && cc < GM_N && !b[rr * GM_N + cc]) near.add(rr * GM_N + cc);
+                    }
+                }
+            }
+            return [...near];
+        }
+
+        // The points where colour c would make five if it played i.
+        function gmThreatsAfter(b, i, c) {
+            const b2 = b.slice();
+            b2[i] = c;
+            return gmWinningPoints(b2, c).length;
+        }
+
+        // The point colour c plays. 1: one of the five best-looking points, minding its own runs
+        // more than the opponent's. 2: a good point, a little loosely, taking a win and blocking a
+        // four. 3: the best point. 4: the same, but it plays a double threat when it has one, and
+        // passes over a point that leaves the opponent one.
+        function gmChoose(b, c, level) {
+            const cands = gmCandidates(b);
+            if (!cands.length) return Math.floor(GM_SIZE / 2);
+            const foe = gmOther(c);
+            if (level >= 2 || Math.random() < 0.6) {
+                const win = gmWinningPoints(b, c);
+                if (win.length) return win[0];
+            }
+            if (level >= 2) {
+                const threat = gmWinningPoints(b, foe);
+                if (threat.length) return threat[0];
+            }
+            const weight = level <= 1 ? 0.5 : level === 2 ? 0.7 : 1;
+            const noise = level <= 1 ? 40 : level === 2 ? 30 : 0.5;   // a little, so the strong ones vary their games
+            const scored = cands.map((i) => ({ i, v: gmPointValue(b, i, c, weight) + Math.random() * noise }))
+                .sort((x, y) => y.v - x.v);
+            if (level <= 1) return scored[Math.floor(Math.random() * Math.min(5, scored.length))].i;
+            if (level <= 3) return scored[0].i;
+            const top = scored.slice(0, 10);
+            for (const { i } of top) {
+                if (gmThreatsAfter(b, i, c) >= 2) return i;
+            }
+            // the first good point after which the opponent has no double threat of their own
+            for (const { i } of top) {
+                const b2 = b.slice();
+                b2[i] = c;
+                if (!gmCandidates(b2).some((j) => gmThreatsAfter(b2, j, foe) >= 2)) return i;
+            }
+            return scored[0].i;
+        }
+
+        // ---- flow ----
+
+        // The opponent's strength, 1 to 4, from the MCM (gmLevel).
+        let gmLevel = 2;
+
+        const gm = {
+            gen: 0,          // bumped when a game is left or dropped: its pending steps stop
+            b: [],
+            human: GM_BLACK, // the player's colour
+            turn: GM_BLACK,
+            opp: { id: "", name: "" },
+            moves: 0,
+            last: -1,        // the last stone placed, marked
+            fiveLine: [],    // the winning row, lit up
+            playing: false,
+            over: false,
+            left: false,
+            winner: 0,       // the winning colour, 0 for a draw
+            thinking: false,
+            leaveArmed: false,
+            lastColor: 0,    // the player's colour last game, for "alternate"
+            quiet: 0,        // moves since the last line
+            nextTalk: 6,     // moves after which an ordinary move gets a line
+        };
+
+        const gmNpcColor = () => gmOther(gm.human);
+        const gmName = (c) => (c === gm.human ? playerName : gm.opp.name);
+        const gmColorName = (c) => t(c === GM_BLACK ? "gmBlack" : "gmWhite");
+        const gmPlayerActs = () => gm.playing && !gm.over && !gm.thinking && gm.turn === gm.human && screen === "gm";
+        const gmStones = (c) => gm.b.filter((x) => x === c).length;
+
+        // The player's colour, from the Reversi colour setting (black moves first).
+        function gmPickColor() {
+            switch (colorSetting) {
+                case "white":
+                    return GM_WHITE;
+                case "random":
+                    return Math.random() < 0.5 ? GM_BLACK : GM_WHITE;
+                case "alternate":
+                    return gm.lastColor === GM_BLACK ? GM_WHITE : GM_BLACK;
+                default:
+                    return GM_BLACK;
+            }
+        }
+
+        function gmNewGame(opp) {
+            gm.gen++;
+            gm.opp = opp;
+            gm.human = gmPickColor();
+            gm.lastColor = gm.human;
+            gm.b = new Array(GM_SIZE).fill(0);
+            gm.turn = GM_BLACK;
+            gm.moves = 0;
+            gm.last = -1;
+            gm.fiveLine = [];
+            gm.playing = true;
+            gm.over = false;
+            gm.left = false;
+            gm.winner = 0;
+            gm.thinking = false;
+            gm.leaveArmed = false;
+            gm.quiet = 0;
+            gm.nextTalk = 5 + Math.floor(Math.random() * 3);
+            $("gm-log").innerHTML = "";
+            log(t("gmLogStart", { black: gmName(GM_BLACK), white: gmName(GM_WHITE) }), "gm-log");
+            say(opp.id, t("gmSayStart", {
+                player: playerName, npc: opp.name, first: gmName(GM_BLACK),
+                npcColor: gmColorName(gmNpcColor()), playerColor: gmColorName(gm.human),
+            }));
+            reportGmState();
+            gmStep();
+        }
+
+        // The side to move moves: the player through the board, the NPC once the table is quiet.
+        function gmStep() {
+            renderGm();
+            if (!gm.playing || gm.over || gm.thinking || gm.turn === gm.human) {
+                return;
+            }
+            gm.thinking = true;
+            const gen = gm.gen;
+            renderGmStatus();
+            whenQuiet(() => {
+                if (gen !== gm.gen) {
+                    return;
+                }
+                if (screen !== "gm") {
+                    gm.thinking = false;
+                    return;
+                }
+                renderGmStatus();
+                setTimeout(() => {
+                    if (gen !== gm.gen) {
+                        return;
+                    }
+                    gm.thinking = false;
+                    if (screen !== "gm") {
+                        return;
+                    }
+                    gmPlay(gmChoose(gm.b, gm.turn, gmLevel));
+                }, 500 + Math.random() * 500);
+            });
+        }
+
+        function gmPlay(i) {
+            const mover = gm.turn, foe = gmOther(mover);
+            const threatsBefore = gmWinningPoints(gm.b, foe);
+            gm.b[i] = mover;
+            gm.moves++;
+            gm.last = i;
+            gm.leaveArmed = false;
+            log(t("gmLogMove", { who: gmName(mover), sq: gmSquareName(i) }), "gm-log");
+
+            const five = gmFive(gm.b, i);
+            if (five) {
+                gm.fiveLine = five;
+                gmEnd(mover);
+                return;
+            }
+            if (gm.moves >= GM_SIZE) {
+                gmEnd(0);
+                return;
+            }
+            gm.turn = foe;
+
+            // threats always get a word; ordinary moves now and then
+            const v = { who: gmName(mover), other: gmName(foe), sq: gmSquareName(i), n: gm.moves };
+            const wins = gmWinningPoints(gm.b, mover);
+            let text = "";
+            if (wins.length >= 2) {
+                text = t("gmSayDouble", v);
+            } else if (wins.length === 1) {
+                text = t("gmSayFour", v);
+            } else if (threatsBefore.includes(i)) {
+                text = t("gmSayBlock", v);
+            } else if (++gm.quiet >= gm.nextTalk) {
+                text = t("gmSayMove", v);
+            }
+            if (text) {
+                gm.quiet = 0;
+                gm.nextTalk = 5 + Math.floor(Math.random() * 3);
+                say(gm.opp.id, text);
+            }
+            reportGmState();
+            gmStep();
+        }
+
+        // winner: the colour that won, 0 for a draw.
+        function gmEnd(winner) {
+            gm.over = true;
+            gm.winner = winner;
+            gm.thinking = false;
+            log(t("gmLogEnd", { result: gmResult() }), "gm-log");
+            const v = { npc: gm.opp.name, player: playerName };
+            say(gm.opp.id, t(winner === 0 ? "gmSayDraw" : winner === gm.human ? "gmSayPlayerWins" : "gmSayNpcWins", v), true);
+            reportGmState();
+            renderGm();
+        }
+
+        function gmResult() {
+            return gm.winner === 0 ? t("gmDrawResult") : t("resultWin", { name: gmName(gm.winner) });
+        }
+
+        // ---- the player's moves ----
+
+        function onGmPoint(i) {
+            if (gmPlayerActs() && !gm.b[i]) {
+                gmPlay(i);
+            }
+        }
+
+        function onGmLeave() {
+            if (!gm.playing || gm.over) {
+                return;
+            }
+            if (!gm.leaveArmed) {
+                gm.leaveArmed = true;
+                renderGm();
+                return;
+            }
+            gm.gen++;
+            gm.over = true;
+            gm.left = true;
+            gm.thinking = false;
+            gm.leaveArmed = false;
+            say(gm.opp.id, t("gmSayLeave", { player: playerName, npc: gm.opp.name }), true);
+            log(t("logLeave", { player: playerName }), "gm-log");
+            reportGmState();
+            renderGm();
+        }
+
+        function onGmAgain() {
+            gmNewGame(gm.opp);
+        }
+
+        // ---- what the NPC knows ----
+
+        function gmStateFor() {
+            const v = { npc: gm.opp.name, player: playerName };
+            if (gm.over) {
+                if (screen !== "gm") {
+                    return "";
+                }
+                return gm.left ? t("gmStateLeft", v) : t("gmStateResult", { ...v, result: gmResult() });
+            }
+            if (!gm.playing) {
+                return "";
+            }
+            let text = t("gmState", { ...v, npcColor: gmColorName(gmNpcColor()), playerColor: gmColorName(gm.human), n: gm.moves });
+            for (const c of [gmNpcColor(), gm.human]) {
+                const wins = gmWinningPoints(gm.b, c);
+                if (wins.length) {
+                    text += t("gmStateThreat", { who: gmName(c), sq: wins.map(gmSquareName).join(t("listComma")) });
+                }
+            }
+            text += t("gmStateTurn", { who: gmName(gm.turn) });
+            if (screen !== "gm") {
+                text += t("gmStatePaused");
+            }
+            return text;
+        }
+
+        function reportGmState() {
+            if (activeGame !== "gm") {
+                return;
+            }
+            send("rvState", JSON.stringify({ states: { [gm.opp.id]: gmStateFor() }, playing: gm.playing && !gm.over }));
+        }
+
+        // A game in progress is dropped (another game is starting).
+        function abandonGomoku() {
+            if (gm.playing && !gm.over) {
+                gm.playing = false;
+                gm.gen++;
+                gm.thinking = false;
+                voiceReset();
+            }
+        }
+
+        // Starts or resumes gomoku against opp ({id, name}).
+        function playGomoku(opp) {
+            const same = gm.playing && !gm.over && gm.opp.id === opp.id;
+            if (!same) {
+                abandonGomoku();
+            }
+            abandonReversi();
+            abandonDice();
+            abandonStb();
+            abandonBj();
+            abandonPk();
+            abandonCheckers();
+            abandonCribbage();
+            abandonYacht();
+            activeGame = "gm";
+            send("mgPlayers", opp.id);
+            if (same) {
+                showScreen("gm");
+                log(t("logResume"), "gm-log");
+                reportGmState();
+                gmStep();
+                return;
+            }
+            snapFaces([opp.id], () => {
+                showScreen("gm");
+                gmNewGame(opp);
+            });
+        }
+
+        // ---- rendering ----
+
+        const GM_STARS = new Set([3, 7, 11].flatMap((r) => [3, 7, 11].map((c) => r * GM_N + c)));
+
+        function gmBuildBoard() {
+            const box = $("gm-board");
+            box.innerHTML = "";
+            for (let i = 0; i < GM_SIZE; i++) {
+                const r = Math.floor(i / GM_N), c = i % GM_N;
+                const cell = document.createElement("div");
+                cell.className = "gm-cell" + (c === 0 ? " l" : "") + (c === GM_N - 1 ? " r" : "") +
+                    (r === 0 ? " t" : "") + (r === GM_N - 1 ? " b" : "") + (GM_STARS.has(i) ? " star" : "");
+                cell.onclick = () => onGmPoint(i);
+                box.appendChild(cell);
+            }
+        }
+
+        function gmStoneEl(c, cls = "") {
+            const el = document.createElement("div");
+            el.className = "gm-stone " + (c === GM_BLACK ? "black" : "white") + (cls ? " " + cls : "");
+            return el;
+        }
+
+        function renderGm() {
+            if (!gm.b.length) {
+                return;
+            }
+            const box = $("gm-board");
+            if (box.children.length !== GM_SIZE) {
+                gmBuildBoard();
+            }
+            const acts = gmPlayerActs();
+            const won = new Set(gm.fiveLine);
+            for (let i = 0; i < GM_SIZE; i++) {
+                const cell = box.children[i];
+                cell.innerHTML = "";
+                cell.classList.toggle("can", acts && !gm.b[i]);
+                if (gm.b[i]) {
+                    cell.appendChild(gmStoneEl(gm.b[i], (i === gm.last ? "last" : "") + (won.has(i) ? " win" : "")));
+                } else {
+                    if (GM_STARS.has(i)) {
+                        const dot = document.createElement("span");
+                        dot.className = "gm-dot";
+                        cell.appendChild(dot);
+                    }
+                    if (acts) {
+                        const ghost = document.createElement("div");
+                        ghost.className = "gm-ghost " + (gm.human === GM_BLACK ? "black" : "white");
+                        cell.appendChild(ghost);
+                    }
+                }
+            }
+
+            const live = gm.playing && !gm.over;
+            $("gm-face").dataset.face = gm.opp.id;
+            paintFace($("gm-face"), gm.opp.id, gm.opp.name);
+            for (const [who, c, name] of [["npc", gmNpcColor(), gm.opp.name], ["human", gm.human, playerName]]) {
+                $("gm-name-" + who).textContent = name;
+                const icon = $("gm-icon-" + who);
+                icon.innerHTML = "";
+                icon.appendChild(gmStoneEl(c, "mini"));
+                $("gm-count-" + who).textContent = String(gmStones(c));
+                $("gm-row-" + who).classList.toggle("active", live && gm.turn === c);
+            }
+            $("gm-meta").textContent = t("strength", { level: t("level" + (gmLevel >= 1 && gmLevel <= 4 ? gmLevel : 2)) });
+            $("gm-leave").style.display = live ? "" : "none";
+            $("gm-leave").textContent = t(gm.leaveArmed ? "leaveConfirm" : "leave");
+            $("gm-again").style.display = gm.over ? "" : "none";
+            renderGmStatus();
+        }
+
+        function renderGmStatus() {
+            if (!gm.b.length) {
+                return;
+            }
+            let text = "";
+            if (gm.over) {
+                if (gm.left) {
+                    text = t("diceLeftStatus");
+                } else if (gm.winner === 0) {
+                    text = t("gmDrawStatus");
+                } else if (gm.winner === gm.human) {
+                    text = t("gmYouWin");
+                } else {
+                    text = t("gmNpcWins", { npc: gm.opp.name });
+                }
+            } else if (gm.playing) {
+                if (gm.turn === gm.human && !gm.thinking) {
+                    text = t("gmYourMove");
+                } else if (voiceLine && voiceLine.speaker !== PLAYER_ID) {
+                    text = t("diceListening", { npc: gm.opp.name });
+                } else {
+                    text = t("thinking", { npc: gm.opp.name });
+                }
+            }
+            $("gm-status").textContent = text;
         }
 
         // ===== Cribbage =====
@@ -6884,6 +8422,8 @@
             abandonBj();
             abandonPk();
             abandonCheckers();
+            abandonYacht();
+            abandonGomoku();
             activeGame = "cb";
             send("mgPlayers", opp.id);
             if (same) {
@@ -6984,6 +8524,8 @@
             $("cb-leave").textContent = t(cb.leaveArmed ? "leaveConfirm" : "leave");
             $("cb-again").style.display = cb.over ? "" : "none";
             renderCbStatus();
+            renderYtStatus();
+            renderGmStatus();
         }
 
         function renderCbStatus() {
@@ -7110,7 +8652,7 @@
         let chatOn = false;       // MCM, and SkyrimNet is there
         let chatRaw = false;      // MCM: the typed line is said as written
         let lastSpoke = "";       // the NPC at the table who spoke last
-        const CHAT_LOGS = { board: "log", dice: "dice-log", stb: "stb-log", bj: "bj-log", pk: "pk-log", ck: "ck-log", cb: "cb-log" };
+        const CHAT_LOGS = { board: "log", dice: "dice-log", stb: "stb-log", bj: "bj-log", pk: "pk-log", ck: "ck-log", cb: "cb-log", yt: "yt-log", gm: "gm-log" };
 
         function tableNpcs() {
             if (activeGame === "reversi") return opponent.id ? [opponent] : [];
@@ -7119,6 +8661,8 @@
             if (activeGame === "bj") return bjOpponents();
             if (activeGame === "pk") return pkOpponents();
             if (activeGame === "ck") return ck.opp && ck.opp.id ? [ck.opp] : [];
+            if (activeGame === "yt") return ytOpponents();
+            if (activeGame === "gm") return gm.opp && gm.opp.id ? [gm.opp] : [];
             if (activeGame === "cb") {
                 const npc = cb.seats && cb.seats.length ? cbNpc() : null;
                 return npc ? [{ id: npc.id, name: npc.name }] : [];
@@ -7203,7 +8747,7 @@
         // "menu", "board" (Reversi), "dice", "stb", "bj", "pk", or null when the plugin has hidden the view. A
         // game counts as hidden (paused) whenever its screen is not up.
         let screen = null;
-        let activeGame = null;    // "reversi" | "dice" | "stb" | "bj" | "pk": the game whose state the NPCs see
+        let activeGame = null;    // "reversi" | "dice" | "stb" | "bj" | "pk" | "ck" | "cb" | "yt" | "gm": the game whose state the NPCs see
 
         function showScreen(name) {
             screen = name;
@@ -7215,6 +8759,8 @@
             $("pk").classList.toggle("open", name === "pk");
             $("ck").classList.toggle("open", name === "ck");
             $("cb").classList.toggle("open", name === "cb");
+            $("yt").classList.toggle("open", name === "yt");
+            $("gm").classList.toggle("open", name === "gm");
             hidden = name !== "board";
             placeChat();
             fitPanels();
@@ -7247,6 +8793,10 @@
                 reportPkState();
             } else if (activeGame === "ck") {
                 reportCkState();
+            } else if (activeGame === "gm") {
+                reportGmState();
+            } else if (activeGame === "yt") {
+                reportYtState();
             } else if (activeGame === "cb") {
                 reportCbState();
             }
@@ -7311,7 +8861,9 @@
                 }
             } },
             { id: "pk", title: "gamePk", desc: "gamePkDesc", opponents: 3, start: (chosen) => playPk(chosen) },
+            { id: "yt", title: "gameYt", desc: "gameYtDesc", opponents: 3, start: (chosen) => playYacht(chosen) },
             { id: "ck", title: "gameCk", desc: "gameCkDesc", opponents: 1, start: (chosen) => playCheckers(chosen[0]) },
+            { id: "gm", title: "gameGm", desc: "gameGmDesc", opponents: 1, start: (chosen) => playGomoku(chosen[0]) },
             { id: "cb", title: "gameCb", desc: "gameCbDesc", opponents: 1, start: (chosen) => playCribbage(chosen[0]) },
         ];
 
@@ -7334,6 +8886,11 @@
             } else if (activeGame === "dice" && dice.playing && !dice.over) {
                 const opps = diceOpponents();
                 list.appendChild(menuRow(t("resume", { game: t("gameDice"), npc: joinNames(opps.map((o) => o.name)) }), "", "", () => playDice(opps), "resume"));
+            } else if (activeGame === "gm" && gm.playing && !gm.over) {
+                list.appendChild(menuRow(t("resume", { game: t("gameGm"), npc: gm.opp.name }), "", "", () => playGomoku(gm.opp), "resume"));
+            } else if (activeGame === "yt" && yt.playing && !yt.over) {
+                const opps = ytOpponents();
+                list.appendChild(menuRow(t("resume", { game: t("gameYt"), npc: joinNames(opps.map((o) => o.name)) }), "", "", () => playYacht(opps), "resume"));
             } else if (activeGame === "stb" && stb.playing && !stb.over) {
                 const opps = stbOpponents();
                 list.appendChild(menuRow(t("resume", { game: t("gameStb"), npc: joinNames(opps.map((o) => o.name)) }), "", "", () => playStb(opps), "resume"));
@@ -7461,7 +9018,7 @@
 
         // ===== called from the plugin =====
 
-        // Options every open carries: { player, level, hints, color, diceLevel, stbLevel, bjLevel, bjRounds, pkLevel, pkHands, ckLevel, cbLevel, voice, voiceWait, strings }.
+        // Options every open carries: { player, level, hints, color, diceLevel, stbLevel, bjLevel, bjRounds, pkLevel, pkHands, ckLevel, cbLevel, ytLevel, gmLevel, voice, voiceWait, strings }.
         function applyOptions(opts) {
             applyStrings(opts.strings);
             playerName = opts.player || playerName;
@@ -7470,6 +9027,8 @@
             colorSetting = opts.color || colorSetting;
             diceLevel = opts.diceLevel || diceLevel;
             stbLevel = opts.stbLevel || stbLevel;
+            ytLevel = opts.ytLevel || ytLevel;
+            gmLevel = opts.gmLevel || gmLevel;
             bjLevel = opts.bjLevel || bjLevel;
             bjRounds = opts.bjRounds || bjRounds;
             pkLevel = opts.pkLevel || pkLevel;
@@ -7559,6 +9118,12 @@
             ck.over = false;
             abandonCribbage();
             cb.seats = [];
+            abandonYacht();
+            yt.seats = [];
+            yt.over = false;
+            abandonGomoku();
+            gm.b = [];
+            gm.over = false;
             cb.over = false;
             activeGame = null;
             voiceReset();

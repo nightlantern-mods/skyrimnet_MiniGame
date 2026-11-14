@@ -66,3 +66,9 @@ $SNMG_ChatMode	输入内容的说法
 $SNMG_ChatModeHelp	用角色的话：内容会先按你的角色的说话方式改写（一次 LLM 请求，使用本 MOD 自带的提示词）。按原文：你的角色原样说出你输入的内容。两种方式都是对选定的对手说，并且只有这位对手回应。
 $SNMG_ChatTransform	用角色的话
 $SNMG_ChatRaw	按原文
+$SNMG_HeaderYacht	快艇骰子
+$SNMG_YtDifficulty	对手强度
+$SNMG_YtDifficultyHelp	1 新手 / 2 普通 / 3 强手 / 4 大师。更强的对手会根据每一格通常能得多少分来决定保留哪些骰子，并把大格子留给好点数；大师在后段大幅落后时会去拼大格子。从下一局开始生效。
+$SNMG_HeaderGomoku	五子棋
+$SNMG_GmDifficulty	对手强度
+$SNMG_GmDifficultyHelp	1 新手 / 2 普通 / 3 强手 / 4 大师。更强的对手会更早堵住你的三子和四子；大师会同时形成两处威胁，也不让你这样做。从对手的下一手开始生效。

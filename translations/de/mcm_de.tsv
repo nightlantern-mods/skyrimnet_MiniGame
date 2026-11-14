@@ -66,3 +66,9 @@ $SNMG_ChatMode	Wie deine getippte Zeile gesagt wird
 $SNMG_ChatModeHelp	In den Worten deines Charakters: Die Zeile wird zuerst so umgeschrieben, wie dein Charakter spricht (eine LLM-Anfrage, mit dem eigenen Prompt dieser Mod). Wie geschrieben: Dein Charakter sagt genau, was du getippt hast. In beiden Fällen geht sie an den gewählten Gegner, und nur dieser antwortet.
 $SNMG_ChatTransform	In den Worten deines Charakters
 $SNMG_ChatRaw	Wie geschrieben
+$SNMG_HeaderYacht	Yacht
+$SNMG_YtDifficulty	Gegnerstärke
+$SNMG_YtDifficultyHelp	1 Anfänger / 2 Normal / 3 Stark / 4 Meister. Stärkere Gegner wählen die Würfel, die sie behalten, danach, was jedes Feld üblicherweise bringt, und sparen die großen Felder für große Würfe auf; ein Meister, der spät im Spiel weit zurückliegt, geht auf sie. Gilt ab dem nächsten Spiel.
+$SNMG_HeaderGomoku	Gomoku
+$SNMG_GmDifficulty	Gegnerstärke
+$SNMG_GmDifficultyHelp	1 Anfänger / 2 Normal / 3 Stark / 4 Meister. Stärkere Gegner blocken deine Dreier- und Vierer-Reihen früher, und ein Meister baut zwei Drohungen auf einmal und lässt dich das nicht tun. Gilt ab dem nächsten Zug des Gegners.

@@ -12,7 +12,7 @@
 
 #include <nlohmann/json.hpp>
 
-// SkyrimNet MiniGame: mini games against nearby NPCs on a web view (Reversi, Liar's Dice, Shut the Box, Blackjack, Texas Hold'em, Checkers, Cribbage),
+// SkyrimNet MiniGame: mini games against nearby NPCs on a web view (Reversi, Liar's Dice, Shut the Box, Blackjack, Texas Hold'em, Checkers, Cribbage, Yacht, Gomoku),
 // drawn by Magelight UI or Prisma UI (ui_host.h), whichever is installed.
 // The hotkey (MCM, skyrimnet_MiniGamePlayerAlias) calls skyrimnet_MiniGameNative.ToggleBoard(),
 // which opens the menu: pick a game, then the opponents from the NPCs nearby. The view runs the
@@ -246,6 +246,8 @@ namespace
             { "pkHands", a_settings.pokerHands },
             { "ckLevel", a_settings.checkersDifficulty },
             { "cbLevel", a_settings.cribbageDifficulty },
+            { "ytLevel", a_settings.yachtDifficulty },
+            { "gmLevel", a_settings.gomokuDifficulty },
             { "chat", a_settings.chatBox && SkyrimNetBridge::CanNarrate() },
             { "chatRaw", a_settings.chatMode == 1 },
             { "voice", SkyrimNetBridge::CanNarrate() },

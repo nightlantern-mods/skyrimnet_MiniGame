@@ -66,3 +66,9 @@ $SNMG_ChatMode	How your typed line is said
 $SNMG_ChatModeHelp	In your character's words: the line is first rewritten the way your character speaks (one LLM request, with this mod's own prompt). As written: your character says exactly what you typed. Either way it is said to the opponent chosen, and only that opponent answers.
 $SNMG_ChatTransform	In your character's words
 $SNMG_ChatRaw	As written
+$SNMG_HeaderYacht	Yacht
+$SNMG_YtDifficulty	Opponent strength
+$SNMG_YtDifficultyHelp	1 Beginner / 2 Normal / 3 Strong / 4 Master. Stronger opponents work out which dice to keep by what each box usually brings, and save the big boxes for big rolls; a Master far behind late in the game goes for them. Applies from the next game.
+$SNMG_HeaderGomoku	Gomoku
+$SNMG_GmDifficulty	Opponent strength
+$SNMG_GmDifficultyHelp	1 Beginner / 2 Normal / 3 Strong / 4 Master. Stronger opponents block your threes and fours sooner, and a Master builds two threats at once and keeps you from doing so. Applies from the opponent's next move.

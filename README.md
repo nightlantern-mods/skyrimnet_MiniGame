@@ -1,10 +1,10 @@
-# SkyrimNet MiniGame 0.5.0
+# SkyrimNet MiniGame 0.5.1
 
 Play table games with the people around you. Open the menu, pick a game and your opponents
 from the NPCs nearby, and play on a board drawn over the game. SkyrimNet gives your opponents
 a voice: they talk about the game as it goes, know how it stands, and remember it afterwards.
 
-Seven games so far:
+Nine games so far:
 
 - **Reversi** (Othello) against one NPC, at four strengths.
 - **Liar's Dice** against one to three NPCs. Everyone hides five dice under a cup; in turn you
@@ -15,7 +15,9 @@ Seven games so far:
 - **Texas Hold'em** against one to three NPCs. No-limit poker, and each opponent plays in a way that
   fits who they are.
 - **Checkers** (American draughts) against one NPC, at four strengths.
+- **Gomoku** (five in a row) against one NPC, at four strengths, on a 15 × 15 board.
 - **Cribbage** against one NPC, at four strengths: fifteens, pairs and runs, first to 121.
+- **Yacht** against one to three NPCs: five dice, up to three rolls a turn, twelve boxes to fill.
 
 When a game starts, your opponents come over to stand in front of you, and their faces are shown
 in frames on the board: drawn by [Phantasm](https://github.com/Severause/Phantasm) when it is
@@ -140,6 +142,17 @@ game waits for each one.
 A line is spoken at the start, when two or more pieces are taken at once or a king is crowned, and
 at the end, and the game waits for each one.
 
+### Gomoku
+
+- Free-style gomoku on a 15 × 15 board. Black moves first; in turn, place a stone on any empty
+  point. Five or more in a row, across, down or diagonally, wins. A full board is a draw.
+- Your colour comes from *Reversi: your color* in the MCM.
+- **Opponent strength** (MCM): stronger opponents block your threes and fours sooner, and a Master
+  builds two threats at once and keeps you from doing so.
+
+A line is spoken at the start, when someone lines up four or makes a double threat, when a four is
+blocked, now and then on an ordinary move, and at the end, and the game waits for each one.
+
 ### Cribbage
 
 - Two players, first to 121. Cut for the first deal: the lower card deals. Six cards each, two
@@ -156,6 +169,22 @@ at the end, and the game waits for each one.
 
 A line is spoken at the start, on big pegs, at each show and at the end, and the game waits for
 each one.
+
+### Yacht
+
+- The classic dice game for up to four players. On your turn, roll five dice up to three times;
+  between rolls, click the dice you want to keep. Then score the dice in one empty box of your
+  card. Dice that do not fit the box score zero there.
+- The twelve boxes: ones to sixes (the dice of that face), full house (three of a kind and a
+  pair: all five dice), four of a kind (those four), little straight (1 to 5: 30), big straight
+  (2 to 6: 30), choice (all five dice) and yacht (five of a kind: 50). There is no bonus.
+- After twelve rounds the highest total wins.
+- **Opponent strength** (MCM): stronger opponents choose the dice to keep by what each box
+  usually brings and save the big boxes; a Master far behind late in the game goes for them.
+
+One or two turns of each round get a line, and a yacht, a straight or a big full house or four of
+a kind always does; the start, rounds 4 and 8 (with the totals) and the end too. The game waits
+for each one.
 
 ## SkyrimNet
 
@@ -195,6 +224,8 @@ each one.
 | Texas Hold'em: hands in a game | 10 | 5 to 50. |
 | Checkers: opponent strength | 2 | 1 Beginner to 4 Master, each time the board opens; the steps on the board change it until then. |
 | Cribbage: opponent strength | 2 | 1 Beginner to 4 Master, each time the board opens; the steps on the table change it until then. |
+| Yacht: opponent strength | 2 | 1 Beginner to 4 Master. |
+| Gomoku: opponent strength | 2 | 1 Beginner to 4 Master. |
 | Commentary | On | Off: the games are silent. |
 | Commentary interval | 8 s | Reversi only: at most one remark on an ordinary move per this many seconds. |
 | Voice wait | 15 s | Liar's Dice, Shut the Box, Blackjack and Texas Hold'em wait for each line to be spoken; if nobody speaks for this long, the game moves on anyway. |
@@ -265,7 +296,7 @@ texts, into the mod project.
 
 ## Files
 
-- `skyrimnet_MiniGame_0.5.0.zip`: the mod as a FOMOD installer, in English, Japanese, Russian,
+- `skyrimnet_MiniGame_0.5.1.zip`: the mod as a FOMOD installer, in English, Japanese, Russian,
   German or Simplified Chinese, with `THIRD_PARTY_NOTICES.txt` and `COPYING.txt` (see License).
   Without an installer, use `core/<language>/` from the archive.
 

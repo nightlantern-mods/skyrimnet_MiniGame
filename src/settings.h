@@ -21,6 +21,8 @@ namespace Settings
         int  pokerHands = 10;      // Texas Hold'em: hands in a game at most
         int  checkersDifficulty = 2;  // Checkers: 1 beginner .. 4 master, each time the board opens
         int  cribbageDifficulty = 2;  // Cribbage: 1 beginner .. 4 master, each time the board opens
+        int  yachtDifficulty = 2;     // Yacht: 1 beginner .. 4 master
+        int  gomokuDifficulty = 2;    // Gomoku: 1 beginner .. 4 master
         bool commentary = true;
         int  cooldownSeconds = 8;
         int  voiceWaitSeconds = 15;  // a paced game moves on when the speaker stays silent this long
