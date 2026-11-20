@@ -796,6 +796,76 @@
             padding: 11px 10px;
         }
 
+        /* ---- Farkle ---- */
+
+        #fa-seats .seat {
+            width: 150px;
+            padding: 6px;
+        }
+
+        #fa-seats .face {
+            width: 84px;
+            height: 84px;
+            margin-bottom: 4px;
+            font-size: 34px;
+        }
+
+        #fa-dice .die.can {
+            cursor: pointer;
+        }
+
+        .die.dead {
+            opacity: 0.45;
+        }
+
+        .fa-kept {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 6px 12px;
+            min-height: 34px;
+            margin-top: 8px;
+            font-size: 13px;
+            color: #c9b98f;
+        }
+
+        .fa-kept-group {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            padding: 2px 6px;
+            border-radius: 6px;
+            background-color: rgba(10, 10, 10, 0.45);
+        }
+
+        .fa-kept-pts {
+            margin-left: 4px;
+            color: #e0b84a;
+        }
+
+        .fa-tables {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .fa-tables .yt-card td:first-child {
+            width: auto;
+        }
+
+        .fa-card td.fa-total {
+            color: #e8e2d4;
+        }
+
+        #fa-roll-button,
+        #fa-bank-button {
+            flex: none;
+            width: 100%;
+            margin-top: 8px;
+            padding: 11px 10px;
+        }
+
         /* ---- Blackjack ---- */
 
         .card {
@@ -1520,6 +1590,36 @@
         </div>
     </div>
 
+    <div class="panel" id="fa">
+        <div class="table">
+            <div class="seats" id="fa-seats"></div>
+            <div class="bid-box">
+                <div class="bid-label" id="fa-label"></div>
+                <div class="stb-roll" id="fa-dice"></div>
+                <div class="fa-kept" id="fa-kept"></div>
+            </div>
+            <div class="fa-tables">
+                <table class="yt-card fa-card" id="fa-card"></table>
+                <table class="yt-card fa-chart" id="fa-chart"></table>
+            </div>
+        </div>
+
+        <div class="side">
+            <h1 data-s="faTitle">Farkle</h1>
+            <div class="meta" data-s="faRules"></div>
+            <div class="meta" id="fa-meta"></div>
+            <div class="status" id="fa-status"></div>
+            <button class="primary" id="fa-roll-button" onclick="onFaRoll()" data-s="faRoll">Roll the dice</button>
+            <button id="fa-bank-button" onclick="onFaBank()">Bank</button>
+            <div class="log" id="fa-log"></div>
+            <div class="toolbar">
+                <button id="fa-leave" class="danger" onclick="onFaLeave()">Leave</button>
+                <button id="fa-again" class="primary" onclick="onFaAgain()" style="display: none;" data-s="again">Play again</button>
+                <button onclick="requestClose()" data-s="close">Close (Esc)</button>
+            </div>
+        </div>
+    </div>
+
     <div class="panel" id="bj">
         <div class="table">
             <div class="seats" id="bj-seats"></div>
@@ -1756,6 +1856,8 @@
             gameCkDesc: "One opponent. Jump your opponent's pieces; a capture must be taken. Reach the far row to crown a king.",
             gameYt: "Yacht",
             gameYtDesc: "Up to three opponents. Roll five dice up to three times a turn, then score them in one box of your card; the highest total after 12 rounds wins.",
+            gameFa: "Farkle",
+            gameFaDesc: "Up to three opponents. Roll six dice and set aside the ones that score, then push your luck or bank the points. The first to 10000 ends it.",
             gameGm: "Gomoku",
             gameGmDesc: "One opponent. Take turns placing stones on a 15 \u00d7 15 board; the first to line up five in a row wins.",
             gameCb: "Cribbage",
@@ -2182,6 +2284,65 @@
             ytStatePaused: " The dice are set aside for now; the game is paused.",
             ytStateResult: "{npc} has just finished a game of Yacht with {others}. Result: {result}. Totals: {totals}.",
             ytStateLeft: "{npc} was playing Yacht with {others}, but {player} left the table before it ended.",
+            faTitle: "Farkle",
+            faRules: "Roll six dice. Each roll, set aside at least one scoring die, then roll the rest or bank the turn's points. A roll with nothing that scores loses them. When all six have scored, roll all six again. The first to bank 10000 gives everyone else one last turn; the highest total wins.",
+            faRoll: "Roll the dice",
+            faKeepRoll: "Set aside, roll {n}",
+            faKeepBank: "Set aside, bank {n}",
+            faRound: "Round {r}",
+            faTotal: "Total {n}",
+            faTurnPts: "This turn: {n}",
+            faFarkleMark: "Farkle",
+            faChart1: "Each 1",
+            faChart5: "Each 5",
+            faChart3k: "Three of a kind",
+            faChart3kPts: "face × 100",
+            faChart111: "Three 1s",
+            faChart4k: "Four of a kind",
+            faChart5k: "Five of a kind",
+            faChart6k: "Six of a kind",
+            faChartStraight: "1 to 6",
+            faChartPairs: "Three pairs",
+            faYourRoll: "Your turn. Roll the dice.",
+            faYourPick: "Click the dice to set aside: every one of them must score.",
+            faSelPts: "These dice score {n}.",
+            faSelBad: "Not every die picked scores.",
+            faFarkleStatus: "Farkle! {who} loses this turn's points.",
+            faLastStatus: "{who} has reached {target}: this is everyone else's last turn.",
+            faYouWin: "You win with {n}!",
+            faNpcWins: "{npc} wins with {n}.",
+            faTieStatus: "{names} tie with {n}.",
+            faLogStart: "Order: {order}. First to {target}.",
+            faLogKeep: "{who}: sets aside {dice} for {n} ({total} this turn)",
+            faLogHot: "{who}: all six scored, rolls all six again",
+            faLogFarkle: "{who}: {dice}, farkle, loses {n}",
+            faLogBank: "{who}: banks {n}, total {total}",
+            faLogLast: "{who} has reached {target}: last turn for everyone else",
+            faLogEnd: "Game over: {result}",
+            faStart: "{player} sits down with {npcs} for a game of Farkle. Each turn a player rolls six dice and sets aside the ones that score (ones, fives, three or more of a kind, a straight or three pairs), then rolls the rest or banks the points. A roll where nothing scores is a farkle and loses the turn's points. The first to bank {target} points gives the others one last turn; the highest total wins.",
+            faLine: "In the Farkle game: {text}",
+            faComboStraight: "a straight from 1 to 6",
+            faComboPairs: "three pairs",
+            faComboKind: "{k} dice showing {face}",
+            faComboLine: "{who} rolls {combo} and sets aside {n} points!",
+            faHotLine: "Every one of {who}'s six dice scores, so all six are rolled again.",
+            faBankLine: "{who} stops and banks {n} points, for a total of {total}.",
+            faFarkleLostLine: "{who} pushes their luck and rolls a farkle: nothing scores, and the {n} points set aside this turn are lost. {who}'s total stays at {total}.",
+            faFarkleLine: "{who}'s first roll is a farkle: nothing scores, and the turn ends with no points. {who}'s total stays at {total}.",
+            faTargetLine: "{who} has reached {total} points, past the {target} to win! Everyone else gets one last turn to beat it.",
+            faStanding: "{r} rounds are done. The totals: {totals}.",
+            faEndPlayerWins: "The Farkle game is over: {player} wins with {n} points. {npc} admits defeat and concedes the game to {player}. Final totals: {totals}.",
+            faEndNpcWins: "The Farkle game is over: {npc} wins with {n} points and proudly declares victory. Final totals: {totals}.",
+            faEndTie: "The Farkle game is over: {names} tie with {n} points. {npc} says something about the shared win. Final totals: {totals}.",
+            faLeave: "{player} gets up and leaves the Farkle game before it is finished.",
+            pFa: "In our game of Farkle, I bank {n} points, for a total of {total}.",
+            faState: "{npc} is playing Farkle with {others}; the first to bank {target} points ends it. Totals: {totals}.",
+            faStateLast: " {who} has reached {target}, so this is the last round.",
+            faStateTurn: " It is {who}'s turn, with {n} points set aside so far; the dice just rolled show {dice}.",
+            faStateTurnRoll: " It is {who}'s turn to roll {k} dice, with {n} points set aside so far.",
+            faStatePaused: " The dice are set aside for now; the game is paused.",
+            faStateResult: "{npc} has just finished a game of Farkle with {others}. Result: {result}. Totals: {totals}.",
+            faStateLeft: "{npc} was playing Farkle with {others}, but {player} left the table before it ended.",
             chatPlaceholder: "Say something to the table…",
             chatSend: "Say",
             chatLog: "{player}: \u201c{text}\u201d",
@@ -4714,6 +4875,7 @@
             abandonCheckers();
             abandonCribbage();
             abandonGomoku();
+            abandonFarkle();
             activeGame = "yt";
             send("mgPlayers", opps.map((o) => o.id).join(","));
             if (same) {
@@ -4863,6 +5025,850 @@
                 }
             }
             $("yt-status").textContent = lines.join("\n");
+        }
+
+        // ===== Farkle =====
+
+        // The folk dice game: six dice. Each roll, at least one scoring die or combination is set
+        // aside; then the rest are rolled again or the turn's points are banked. A roll with
+        // nothing that scores (a farkle) loses the turn's points. When all six have scored they
+        // are all rolled again (hot dice). Once someone banks to the target, everyone else has one
+        // last turn; the highest total wins.
+        const FA_TARGET = 10000;
+        const FA_DICE = 6;
+
+        function faCounts(dice) {
+            const n = [0, 0, 0, 0, 0, 0, 0];
+            dice.forEach((d) => n[d]++);
+            return n;
+        }
+
+        // What these dice score when set aside together: 0 unless every one of them scores.
+        function faScore(dice) {
+            if (!dice.length) {
+                return 0;
+            }
+            const n = faCounts(dice);
+            let special = 0;
+            if (dice.length === 6 && (n.slice(1).every((c) => c === 1) || n.filter((c) => c === 2).length === 3)) {
+                special = 1500; // a straight one to six, or three pairs
+            }
+            let sum = 0;
+            for (let f = 1; f <= 6; f++) {
+                const c = n[f];
+                if (!c) {
+                    continue;
+                }
+                const single = f === 1 ? 100 : f === 5 ? 50 : 0;
+                let best = -1;
+                if (c >= 3) {
+                    best = c === 3 ? (f === 1 ? 1000 : f * 100) : c === 4 ? 1000 : c === 5 ? 2000 : 3000;
+                    if (single) {
+                        best = Math.max(best, (f === 1 ? 1000 : 500) + (c - 3) * single);
+                    }
+                } else if (single) {
+                    best = c * single;
+                }
+                if (best < 0) {
+                    return special;
+                }
+                sum += best;
+            }
+            return Math.max(special, sum);
+        }
+
+        // Every different way of setting scoring dice aside from this roll: [{idx, pts}].
+        function faOptions(dice) {
+            const seen = new Set();
+            const out = [];
+            for (let mask = 1; mask < 1 << dice.length; mask++) {
+                const idx = [];
+                for (let k = 0; k < dice.length; k++) {
+                    if (mask & (1 << k)) idx.push(k);
+                }
+                const sub = idx.map((k) => dice[k]);
+                const key = sub.slice().sort().join("");
+                if (seen.has(key)) {
+                    continue;
+                }
+                seen.add(key);
+                const pts = faScore(sub);
+                if (pts > 0) {
+                    out.push({ idx, pts });
+                }
+            }
+            return out;
+        }
+
+        // ---- opponent AI ----
+
+        // The best a turn can be expected to bring from here, playing for points alone:
+        // faValue(n, p) with n dice to roll and p points set aside this turn. Worked out once,
+        // over every roll of n dice and every way of setting dice aside from it.
+        const FA_ROLLS = [];   // FA_ROLLS[n]: [{prob, opts: [{pts, used}]}], one per different roll of n dice
+        const FA_MEMO = new Map();
+        const FA_CAP = 12000; // past this a turn is banked: the risk of rolling on is not worth it
+
+        function faRolls(n) {
+            if (FA_ROLLS[n]) {
+                return FA_ROLLS[n];
+            }
+            const tally = new Map();
+            const total = 6 ** n;
+            for (let r = 0; r < total; r++) {
+                const dice = [];
+                for (let k = 0, x = r; k < n; k++, x = Math.floor(x / 6)) dice.push(1 + (x % 6));
+                const key = dice.sort().join("");
+                tally.set(key, (tally.get(key) || 0) + 1);
+            }
+            FA_ROLLS[n] = [...tally].map(([key, count]) => {
+                const dice = key.split("").map(Number);
+                const opts = faOptions(dice).map((o) => ({ pts: o.pts, used: o.idx.length }));
+                return { prob: count / total, opts };
+            });
+            return FA_ROLLS[n];
+        }
+
+        // Rolling n dice with p set aside, then playing on as well as possible.
+        function faRollValue(n, p) {
+            let v = 0;
+            for (const roll of faRolls(n)) {
+                let best = 0;
+                for (const o of roll.opts) {
+                    best = Math.max(best, faValue(n - o.used || FA_DICE, p + o.pts));
+                }
+                v += roll.prob * best;
+            }
+            return v;
+        }
+
+        function faValue(n, p) {
+            if (p >= FA_CAP) {
+                return p;
+            }
+            const key = n * 100000 + p;
+            if (!FA_MEMO.has(key)) {
+                FA_MEMO.set(key, Math.max(p, faRollValue(n, p)));
+            }
+            return FA_MEMO.get(key);
+        }
+
+        // Seat s's choice for this roll: {idx: the dice set aside, bank: whether to stop}.
+        // ctx: {total, best: the best other total, last: whether this is s's last turn, target}.
+        // 1: sets aside everything that scores, banks at 300 to 500.
+        // 2: the same, banking by a table of how many dice are left.
+        // 3: plays for the most points per turn, worked out exactly, banking a touch early.
+        // 4: the same, but pushes on when far behind someone near the target.
+        function faDecide(dice, free, p, ctx, level) {
+            const opts = faOptions(dice);
+            const left = (o) => free - o.idx.length || FA_DICE;
+            // the last turn: only beating the best total is any use
+            const need = ctx.last ? ctx.best - ctx.total + 50 : Infinity;
+            if (level <= 2) {
+                const o = opts.reduce((a, b) => (b.pts > a.pts || (b.pts === a.pts && b.idx.length < a.idx.length) ? b : a));
+                const q = p + o.pts;
+                const n = left(o);
+                let bank;
+                if (ctx.last) {
+                    bank = q >= need;
+                } else if (level <= 1) {
+                    bank = q >= 300 + Math.floor(Math.random() * 5) * 50;
+                } else {
+                    bank = ctx.total + q >= ctx.target || q >= [0, 300, 300, 400, 1000, 2000, Infinity][n];
+                }
+                return { idx: o.idx, bank };
+            }
+            const chasing = level >= 4 && !ctx.last && ctx.best >= ctx.target - 2500 && ctx.best - ctx.total > 1500;
+            let pick = null;
+            for (const o of opts) {
+                const q = p + o.pts;
+                const n = left(o);
+                const roll = faRollValue(n, q);
+                let bank;
+                let value;
+                if (ctx.last) {
+                    // getting past the best total is all that counts
+                    bank = q >= need;
+                    value = bank ? 1e6 + q : roll;
+                } else if (ctx.total + q >= ctx.target) {
+                    bank = true;
+                    value = 1e5 + q;
+                } else if (chasing && n >= 3) {
+                    // far behind near the end: a small safe bank will not catch up
+                    bank = q >= Math.min(ctx.best - ctx.total, 2500);
+                    value = bank ? q : roll;
+                } else {
+                    bank = q >= roll - (level === 3 ? 70 : 0);
+                    value = bank ? q + (level === 3 ? 70 : 0) : roll;
+                }
+                if (!pick || value > pick.value) {
+                    pick = { idx: o.idx, bank, value };
+                }
+            }
+            return { idx: pick.idx, bank: pick.bank };
+        }
+
+        // ---- flow ----
+
+        let faLevel = 2;
+
+        const fa = {
+            gen: 0,          // bumped when a game is left or dropped: its pending steps stop
+            seats: [],       // seat 0 is the player: {id, name, human, total, last: points banked last turn, or -1 for a farkle}
+            first: 0,        // the seat that starts each round
+            turn: 0,         // the seat playing
+            round: 1,
+            free: FA_DICE,   // dice to roll next
+            dice: [],        // the roll on the table
+            sel: [],         // the dice of it the player has picked to set aside
+            kept: [],        // set aside this turn: [{dice, pts}]
+            turnPts: 0,      // points set aside this turn
+            hot: 0,          // times this turn all six scored
+            bigKeep: null,   // the biggest set this turn: {dice, pts}
+            farkle: false,   // the roll on the table scores nothing
+            rolling: false,
+            phase: "play",   // play | done: the turn's end stays in view a moment
+            endSeat: -1,     // the seat that first banked to the target: the game ends when its turn comes again
+            talkAt: [],      // the turns of this round (0 = the first seat's) that get a line of their own
+            roundLines: 0,   // lines said about this round's turns
+            playing: false,
+            over: false,
+            left: false,     // the player left before the end
+            winners: [],
+            thinking: false, // an NPC's move is on its way
+            leaveArmed: false,
+        };
+
+        const faName = (i) => fa.seats[i].name;
+        const faOpponents = () => fa.seats.filter((s) => !s.human).map((s) => ({ id: s.id, name: s.name }));
+        const faPlayerActs = () => fa.playing && !fa.over && fa.turn === 0 && !fa.rolling && fa.phase === "play" && screen === "fa";
+        const faTotalsText = () => fa.seats.map((x) => t("diceCount", { name: x.name, n: x.total })).join(t("listComma"));
+        const faSelDice = () => fa.dice.filter((d, k) => fa.sel[k]);
+        const faSelPts = () => faScore(faSelDice());
+
+        function newFaGame(opps) {
+            fa.gen++;
+            fa.seats = [
+                { id: "", name: playerName, human: true, total: 0, last: null },
+                ...opps.map((o) => ({ id: o.id, name: o.name, human: false, total: 0, last: null })),
+            ];
+            fa.first = Math.floor(Math.random() * fa.seats.length);
+            fa.turn = fa.first;
+            fa.round = 1;
+            fa.endSeat = -1;
+            faNewTurn();
+            faPlanTalk();
+            fa.playing = true;
+            fa.over = false;
+            fa.left = false;
+            fa.winners = [];
+            fa.thinking = false;
+            fa.leaveArmed = false;
+            $("fa-log").innerHTML = "";
+            $("fa-meta").textContent = t("strength", { level: t("level" + (faLevel >= 1 && faLevel <= 4 ? faLevel : 2)) });
+            const order = fa.seats.map((x, k) => faName((fa.first + k) % fa.seats.length));
+            log(t("faLogStart", { order: order.join(t("listComma")), target: FA_TARGET }), "fa-log");
+            say(opps[0].id, t("faStart", { player: playerName, npcs: joinNames(opps.map((o) => o.name)), target: FA_TARGET }));
+            reportFaState();
+            faStep();
+        }
+
+        function faNewTurn() {
+            fa.free = FA_DICE;
+            fa.dice = [];
+            fa.sel = [];
+            fa.kept = [];
+            fa.turnPts = 0;
+            fa.hot = 0;
+            fa.bigKeep = null;
+            fa.farkle = false;
+            fa.rolling = false;
+            fa.phase = "play";
+        }
+
+        // One turn in each round, and half the time a second, gets a line even when nothing stands
+        // out; big moments always get one on top.
+        function faPlanTalk() {
+            const n = fa.seats.length;
+            const first = Math.floor(Math.random() * n);
+            fa.talkAt = [first];
+            if (n > 1 && Math.random() < 0.5) {
+                fa.talkAt.push((first + 1 + Math.floor(Math.random() * (n - 1))) % n);
+            }
+            fa.roundLines = 0;
+        }
+
+        // What seat i knows of the game when choosing.
+        function faCtx(i) {
+            const s = fa.seats[i];
+            const others = fa.seats.filter((x) => x !== s).map((x) => x.total);
+            return { total: s.total, best: Math.max(...others), last: fa.endSeat >= 0, target: FA_TARGET };
+        }
+
+        // The seat playing moves: the player through the board, an NPC once the table is quiet.
+        function faStep() {
+            renderFa();
+            if (!fa.playing || fa.over || fa.rolling || fa.thinking || fa.phase !== "play" || fa.seats[fa.turn].human) {
+                return;
+            }
+            fa.thinking = true;
+            const gen = fa.gen, seat = fa.turn;
+            renderFaStatus();
+            whenQuiet(() => {
+                if (gen !== fa.gen) {
+                    return;
+                }
+                if (screen !== "fa") {
+                    // carried on when the table is back on screen
+                    fa.thinking = false;
+                    return;
+                }
+                renderFaStatus();
+                setTimeout(() => {
+                    if (gen !== fa.gen) {
+                        return;
+                    }
+                    if (screen !== "fa") {
+                        fa.thinking = false;
+                        return;
+                    }
+                    if (!fa.dice.length) {
+                        fa.thinking = false;
+                        faRoll();
+                        return;
+                    }
+                    // the dice set aside light up for a moment before they are taken
+                    const plan = faDecide(fa.dice, fa.free, fa.turnPts, faCtx(seat), faLevel);
+                    fa.sel = fa.dice.map((d, k) => plan.idx.includes(k));
+                    renderFa();
+                    setTimeout(() => {
+                        if (gen !== fa.gen) {
+                            return;
+                        }
+                        fa.thinking = false;
+                        faKeep(seat, plan.bank);
+                    }, 750);
+                }, 650 + Math.random() * 500);
+            });
+        }
+
+        // The dice tumble for a moment, then the roll stands.
+        function faRoll() {
+            const gen = fa.gen;
+            const throwDice = () => Array.from({ length: fa.free }, () => 1 + Math.floor(Math.random() * 6));
+            fa.rolling = true;
+            fa.sel = [];
+            fa.dice = throwDice();
+            renderFa();
+            const tumble = setInterval(() => {
+                if (gen !== fa.gen) {
+                    clearInterval(tumble);
+                    return;
+                }
+                fa.dice = throwDice();
+                renderFaDice();
+            }, 90);
+            setTimeout(() => {
+                clearInterval(tumble);
+                if (gen !== fa.gen) {
+                    return;
+                }
+                fa.rolling = false;
+                fa.dice = throwDice();
+                fa.sel = fa.dice.map(() => false);
+                if (!faOptions(fa.dice).length) {
+                    faFarkle();
+                    return;
+                }
+                reportFaState();
+                faStep();
+            }, 650);
+        }
+
+        // Seat i sets the picked dice aside, then banks or leaves the rest to roll.
+        function faKeep(i, bank) {
+            const s = fa.seats[i];
+            const dice = faSelDice();
+            const pts = faScore(dice);
+            fa.turnPts += pts;
+            fa.kept.push({ dice, pts });
+            if (!fa.bigKeep || pts > fa.bigKeep.pts) {
+                fa.bigKeep = { dice, pts };
+            }
+            fa.free -= dice.length;
+            fa.leaveArmed = false;
+            log(t("faLogKeep", { who: s.name, dice: dice.join(t("listComma")), n: pts, total: fa.turnPts }), "fa-log");
+            if (fa.free === 0) {
+                fa.free = FA_DICE;
+                if (!bank) {
+                    fa.hot++;
+                    log(t("faLogHot", { who: s.name }), "fa-log");
+                }
+            }
+            fa.dice = [];
+            fa.sel = [];
+            if (bank) {
+                faEndTurn(i, true);
+                return;
+            }
+            reportFaState();
+            if (s.human) {
+                faRoll();
+            } else {
+                faStep();
+            }
+        }
+
+        // The roll on the table scores nothing: the turn's points are lost.
+        function faFarkle() {
+            fa.farkle = true;
+            log(t("faLogFarkle", { who: faName(fa.turn), dice: fa.dice.join(t("listComma")), n: fa.turnPts }), "fa-log");
+            faEndTurn(fa.turn, false);
+        }
+
+        // The NPC after seat i, to voice what happened to the player.
+        function faNextNpc(i) {
+            for (let k = 1; k <= fa.seats.length; k++) {
+                const x = fa.seats[(i + k) % fa.seats.length];
+                if (!x.human) {
+                    return x;
+                }
+            }
+            return null;
+        }
+
+        // How the biggest set of the turn is called in a line, when it stands out.
+        function faComboText(dice) {
+            const n = faCounts(dice);
+            if (dice.length === 6 && n.slice(1).every((c) => c === 1)) {
+                return t("faComboStraight");
+            }
+            if (dice.length === 6 && n.filter((c) => c === 2).length === 3) {
+                return t("faComboPairs");
+            }
+            const f = n.findIndex((c, k) => k > 0 && c >= 3);
+            return f > 0 ? t("faComboKind", { k: n[f], face: f }) : null;
+        }
+
+        // Seat i's turn is over, banked or lost to a farkle.
+        function faEndTurn(i, banked) {
+            const s = fa.seats[i];
+            const lost = fa.turnPts;
+            if (banked) {
+                s.total += fa.turnPts;
+                s.last = fa.turnPts;
+                log(t("faLogBank", { who: s.name, n: fa.turnPts, total: s.total }), "fa-log");
+                if (s.human && playerVoice) {
+                    say(PLAYER_ID, t("pFa", { n: fa.turnPts, total: s.total }), true);
+                }
+            } else {
+                s.last = -1;
+            }
+
+            // what stands out in the turn always gets a line, from the one who played it or the next NPC
+            const parts = [];
+            const combo = fa.bigKeep && fa.bigKeep.pts >= 1000 ? faComboText(fa.bigKeep.dice) : null;
+            if (combo) {
+                parts.push(t("faComboLine", { who: s.name, combo, n: fa.bigKeep.pts }));
+            }
+            if (fa.hot) {
+                parts.push(t("faHotLine", { who: s.name }));
+            }
+            const notable = parts.length > 0 || (banked && lost >= 2000) || (!banked && lost >= 1000);
+            const offset = (i - fa.first + fa.seats.length) % fa.seats.length;
+            if (notable || (fa.talkAt.includes(offset) && fa.roundLines < 2)) {
+                parts.push(banked
+                    ? t("faBankLine", { who: s.name, n: lost, total: s.total })
+                    : lost > 0 ? t("faFarkleLostLine", { who: s.name, n: lost, total: s.total }) : t("faFarkleLine", { who: s.name, total: s.total }));
+                fa.roundLines++;
+            }
+            if (banked && fa.endSeat < 0 && s.total >= FA_TARGET) {
+                fa.endSeat = i;
+                parts.push(t("faTargetLine", { who: s.name, target: FA_TARGET, total: s.total }));
+                log(t("faLogLast", { who: s.name, target: FA_TARGET }), "fa-log");
+            }
+            let speaker = s.human ? faNextNpc(i) : s;
+
+            const next = (i + 1) % fa.seats.length;
+            const roundOver = next === fa.first;
+            if (fa.endSeat >= 0 && next === fa.endSeat) {
+                faEnd(parts.length ? t("faLine", { text: parts.join(" ") }) : "");
+                return;
+            }
+            if (roundOver && fa.round % 5 === 0 && fa.endSeat < 0) {
+                if (!parts.length) {
+                    speaker = fa.seats.filter((x) => !x.human).sort((a, b) => b.total - a.total)[0];
+                }
+                parts.push(t("faStanding", { r: fa.round, totals: faTotalsText() }));
+            }
+            if (parts.length && speaker) {
+                say(speaker.id, t("faLine", { text: parts.join(" ") }));
+            }
+            fa.phase = "done";
+            reportFaState();
+            renderFa();
+
+            const gen = fa.gen;
+            setTimeout(() => {
+                if (gen !== fa.gen) {
+                    return;
+                }
+                fa.turn = next;
+                if (roundOver) {
+                    fa.round++;
+                    faPlanTalk();
+                }
+                faNewTurn();
+                reportFaState();
+                faStep();
+            }, fa.farkle ? 1800 : s.human ? 800 : 1400);
+        }
+
+        // Everyone has had a turn since the target was reached: the highest total wins.
+        function faEnd(line) {
+            const top = Math.max(...fa.seats.map((x) => x.total));
+            fa.winners = fa.seats.flatMap((x, k) => (x.total === top ? [k] : []));
+            fa.over = true;
+            fa.phase = "play";
+            fa.dice = fa.farkle ? fa.dice : [];
+            const totals = faTotalsText();
+            let speaker;
+            let text;
+            if (fa.winners.length > 1) {
+                speaker = fa.seats[fa.winners.find((k) => k > 0)];
+                text = t("faEndTie", { names: joinNames(fa.winners.map(faName)), n: top, npc: speaker.name, totals });
+            } else if (fa.winners[0] === 0) {
+                speaker = fa.seats.filter((x) => !x.human).sort((a, b) => b.total - a.total)[0];
+                text = t("faEndPlayerWins", { player: playerName, npc: speaker.name, n: top, totals });
+            } else {
+                speaker = fa.seats[fa.winners[0]];
+                text = t("faEndNpcWins", { npc: speaker.name, n: top, totals });
+            }
+            say(speaker.id, (line ? line + " " : "") + text, true);
+            log(t("faLogEnd", { result: faResult() }), "fa-log");
+            reportFaState();
+            renderFa();
+        }
+
+        function faResult() {
+            if (fa.winners.length > 1) {
+                return t("stbTieResult", { names: joinNames(fa.winners.map(faName)) });
+            }
+            return t("resultWin", { name: faName(fa.winners[0]) });
+        }
+
+        // ---- the player's moves ----
+
+        // Rolls at the start of the turn; after a roll, sets the picked dice aside and rolls the rest.
+        function onFaRoll() {
+            if (!faPlayerActs()) {
+                return;
+            }
+            if (!fa.dice.length) {
+                faRoll();
+            } else if (faSelPts() > 0) {
+                faKeep(0, false);
+            }
+        }
+
+        function onFaBank() {
+            if (faPlayerActs() && fa.dice.length && faSelPts() > 0) {
+                faKeep(0, true);
+            }
+        }
+
+        function onFaDie(k) {
+            if (!faPlayerActs() || !fa.dice.length) {
+                return;
+            }
+            fa.sel[k] = !fa.sel[k];
+            renderFa();
+        }
+
+        function onFaLeave() {
+            if (!fa.playing || fa.over) {
+                return;
+            }
+            if (!fa.leaveArmed) {
+                fa.leaveArmed = true;
+                renderFa();
+                return;
+            }
+            fa.gen++;
+            fa.over = true;
+            fa.left = true;
+            fa.rolling = false;
+            fa.thinking = false;
+            fa.leaveArmed = false;
+            say(fa.seats[1].id, t("faLeave", { player: playerName }), true);
+            log(t("logLeave", { player: playerName }), "fa-log");
+            reportFaState();
+            renderFa();
+        }
+
+        function onFaAgain() {
+            newFaGame(faOpponents());
+        }
+
+        // ---- what each NPC knows ----
+
+        function faStateFor(k) {
+            const s = fa.seats[k];
+            const vars = {
+                npc: s.name, player: playerName, target: FA_TARGET, totals: faTotalsText(),
+                others: joinNames(fa.seats.filter((x) => x !== s).map((x) => x.name)),
+            };
+            if (fa.over) {
+                if (screen !== "fa") {
+                    return "";
+                }
+                return fa.left ? t("faStateLeft", vars) : t("faStateResult", { ...vars, result: faResult() });
+            }
+            if (!fa.playing) {
+                return "";
+            }
+            let text = t("faState", vars);
+            if (fa.endSeat >= 0) {
+                text += t("faStateLast", { who: faName(fa.endSeat), target: FA_TARGET });
+            }
+            if (fa.phase === "play") {
+                const who = faName(fa.turn);
+                text += fa.dice.length && !fa.rolling
+                    ? t("faStateTurn", { who, n: fa.turnPts, dice: fa.dice.join(t("listComma")) })
+                    : t("faStateTurnRoll", { who, n: fa.turnPts, k: fa.free });
+            }
+            if (screen !== "fa") {
+                text += t("faStatePaused");
+            }
+            return text;
+        }
+
+        function reportFaState() {
+            if (activeGame !== "fa") {
+                return;
+            }
+            const states = {};
+            fa.seats.forEach((x, k) => {
+                if (!x.human) {
+                    states[x.id] = faStateFor(k);
+                }
+            });
+            send("rvState", JSON.stringify({ states, playing: fa.playing && !fa.over }));
+        }
+
+        // A game in progress is dropped (another game is starting).
+        function abandonFarkle() {
+            if (fa.playing && !fa.over) {
+                fa.playing = false;
+                fa.gen++;
+                fa.rolling = false;
+                fa.thinking = false;
+                voiceReset();
+            }
+        }
+
+        // Starts or resumes Farkle against opps ([{id, name}], one to three).
+        function playFarkle(opps) {
+            const same = fa.playing && !fa.over &&
+                faOpponents().map((o) => o.id).join() === opps.map((o) => o.id).join();
+            if (!same) {
+                abandonFarkle();
+            }
+            abandonDice();
+            abandonReversi();
+            abandonStb();
+            abandonBj();
+            abandonPk();
+            abandonCheckers();
+            abandonCribbage();
+            abandonYacht();
+            abandonGomoku();
+            activeGame = "fa";
+            send("mgPlayers", opps.map((o) => o.id).join(","));
+            if (same) {
+                showScreen("fa");
+                log(t("logResume"), "fa-log");
+                reportFaState();
+                faStep();
+                return;
+            }
+            snapFaces(opps.map((o) => o.id), () => {
+                showScreen("fa");
+                newFaGame(opps);
+            });
+        }
+
+        // ---- rendering ----
+
+        function renderFa() {
+            if (!fa.seats.length) {
+                return;
+            }
+            const live = fa.playing && !fa.over;
+            const seats = $("fa-seats");
+            seats.innerHTML = "";
+            fa.seats.forEach((x, k) => {
+                if (x.human) {
+                    return;
+                }
+                const card = document.createElement("div");
+                card.className = "seat" + (live && fa.turn === k ? " active" : "");
+                const name = document.createElement("div");
+                name.className = "seat-name";
+                name.textContent = x.name;
+                const meta = document.createElement("div");
+                meta.className = "seat-meta";
+                meta.textContent = t("faTotal", { n: x.total });
+                card.append(faceEl(x.id, x.name), name, meta);
+                seats.appendChild(card);
+            });
+
+            $("fa-label").textContent = t("faRound", { r: fa.round }) + (live ? t("pkStyleSep") + faName(fa.turn) : "");
+            renderFaDice();
+            renderFaKept();
+            renderFaCard();
+
+            const acting = faPlayerActs();
+            const mine = live && fa.turn === 0 && fa.phase === "play" && !fa.rolling;
+            const pts = faSelPts();
+            const roll = $("fa-roll-button");
+            const bank = $("fa-bank-button");
+            roll.style.display = mine ? "" : "none";
+            bank.style.display = mine && fa.dice.length ? "" : "none";
+            if (!fa.dice.length) {
+                roll.textContent = t("faRoll");
+                roll.disabled = !acting;
+            } else {
+                const n = fa.free - faSelDice().length || FA_DICE;
+                roll.textContent = t("faKeepRoll", { n });
+                roll.disabled = !acting || pts <= 0;
+                bank.textContent = t("faKeepBank", { n: fa.turnPts + Math.max(pts, 0) });
+                bank.disabled = !acting || pts <= 0;
+            }
+            $("fa-leave").style.display = live ? "" : "none";
+            $("fa-leave").textContent = t(fa.leaveArmed ? "leaveConfirm" : "leave");
+            $("fa-again").style.display = fa.over ? "" : "none";
+            renderFaStatus();
+        }
+
+        function renderFaDice() {
+            const box = $("fa-dice");
+            box.innerHTML = "";
+            const picking = faPlayerActs() && fa.dice.length > 0;
+            fa.dice.forEach((d, k) => {
+                const held = fa.sel[k] && !fa.rolling;
+                const el = dieEl(d, "big" + (fa.rolling ? " rolling" : "") + (held ? " held" : "") + (picking ? " can" : "") + (fa.farkle ? " dead" : ""));
+                if (picking) {
+                    el.onclick = () => onFaDie(k);
+                }
+                box.appendChild(el);
+            });
+        }
+
+        // The dice set aside this turn, with what each set scored.
+        function renderFaKept() {
+            const box = $("fa-kept");
+            box.innerHTML = "";
+            if (!fa.kept.length) {
+                return;
+            }
+            const label = document.createElement("span");
+            label.className = "fa-kept-label";
+            label.textContent = t("faTurnPts", { n: fa.farkle ? 0 : fa.turnPts });
+            box.appendChild(label);
+            for (const k of fa.kept) {
+                const group = document.createElement("span");
+                group.className = "fa-kept-group";
+                k.dice.forEach((d) => group.appendChild(dieEl(d)));
+                const pts = document.createElement("span");
+                pts.className = "fa-kept-pts";
+                pts.textContent = k.pts;
+                group.appendChild(pts);
+                box.appendChild(group);
+            }
+        }
+
+        // Totals, each seat's last turn, and what scores.
+        function renderFaCard() {
+            const table = $("fa-card");
+            table.innerHTML = "";
+            const live = fa.playing && !fa.over;
+            for (let k = 0; k < fa.seats.length; k++) {
+                const x = fa.seats[k];
+                const tr = document.createElement("tr");
+                if (live && fa.turn === k) tr.className = "turn";
+                const name = document.createElement("td");
+                name.textContent = x.name;
+                const last = document.createElement("td");
+                last.textContent = x.last === null ? "" : x.last < 0 ? t("faFarkleMark") : "+" + x.last;
+                const total = document.createElement("td");
+                total.className = "fa-total";
+                total.textContent = x.total;
+                tr.append(name, last, total);
+                table.appendChild(tr);
+            }
+            const chart = $("fa-chart");
+            if (!chart.children.length) {
+                for (const [key, pts] of FA_CHART) {
+                    const tr = document.createElement("tr");
+                    const name = document.createElement("td");
+                    name.textContent = t(key);
+                    const val = document.createElement("td");
+                    val.textContent = typeof pts === "number" ? pts : t(pts);
+                    tr.append(name, val);
+                    chart.appendChild(tr);
+                }
+            }
+        }
+
+        const FA_CHART = [
+            ["faChart1", 100], ["faChart5", 50], ["faChart3k", "faChart3kPts"], ["faChart111", 1000],
+            ["faChart4k", 1000], ["faChart5k", 2000], ["faChart6k", 3000], ["faChartStraight", 1500], ["faChartPairs", 1500],
+        ];
+
+        function renderFaStatus() {
+            if (!fa.seats.length) {
+                return;
+            }
+            const lines = [];
+            if (fa.over) {
+                const top = fa.left ? 0 : fa.seats[fa.winners[0]].total;
+                if (fa.left) {
+                    lines.push(t("diceLeftStatus"));
+                } else if (fa.winners.length > 1) {
+                    lines.push(t("faTieStatus", { names: joinNames(fa.winners.map(faName)), n: top }));
+                } else if (fa.winners[0] === 0) {
+                    lines.push(t("faYouWin", { n: top }));
+                } else {
+                    lines.push(t("faNpcWins", { npc: faName(fa.winners[0]), n: top }));
+                }
+            } else if (fa.playing) {
+                const x = fa.seats[fa.turn];
+                if (fa.farkle) {
+                    lines.push(t("faFarkleStatus", { who: x.name }));
+                } else if (fa.phase !== "play" || fa.rolling) {
+                    // nothing to say while the dice roll or the turn closes
+                } else if (x.human) {
+                    if (!fa.dice.length) {
+                        lines.push(t("faYourRoll"));
+                    } else {
+                        const pts = faSelPts();
+                        lines.push(t("faYourPick"));
+                        if (faSelDice().length) {
+                            lines.push(pts > 0 ? t("faSelPts", { n: pts }) : t("faSelBad"));
+                        }
+                    }
+                } else if (voiceLine && voiceLine.speaker !== PLAYER_ID) {
+                    const speaker = fa.seats.find((y) => y.id === voiceLine.speaker);
+                    lines.push(t("diceListening", { npc: speaker ? speaker.name : x.name }));
+                } else {
+                    lines.push(t("thinking", { npc: x.name }));
+                }
+                if (fa.endSeat >= 0) {
+                    lines.push(t("faLastStatus", { who: faName(fa.endSeat), target: FA_TARGET }));
+                }
+            }
+            $("fa-status").textContent = lines.join("\n");
         }
 
         // ===== Blackjack =====
@@ -6662,6 +7668,7 @@
             abandonCribbage();
             abandonYacht();
             abandonGomoku();
+            abandonFarkle();
         }
 
         // The strength control on both panels: four steps, lit up to the level. Plain elements, not
@@ -7187,6 +8194,7 @@
             abandonCribbage();
             abandonYacht();
             abandonGomoku();
+            abandonFarkle();
             activeGame = "ck";
             send("mgPlayers", opp.id);
             if (same) {
@@ -7695,6 +8703,7 @@
             abandonCheckers();
             abandonCribbage();
             abandonYacht();
+            abandonFarkle();
             activeGame = "gm";
             send("mgPlayers", opp.id);
             if (same) {
@@ -8424,6 +9433,7 @@
             abandonCheckers();
             abandonYacht();
             abandonGomoku();
+            abandonFarkle();
             activeGame = "cb";
             send("mgPlayers", opp.id);
             if (same) {
@@ -8652,7 +9662,7 @@
         let chatOn = false;       // MCM, and SkyrimNet is there
         let chatRaw = false;      // MCM: the typed line is said as written
         let lastSpoke = "";       // the NPC at the table who spoke last
-        const CHAT_LOGS = { board: "log", dice: "dice-log", stb: "stb-log", bj: "bj-log", pk: "pk-log", ck: "ck-log", cb: "cb-log", yt: "yt-log", gm: "gm-log" };
+        const CHAT_LOGS = { board: "log", dice: "dice-log", stb: "stb-log", bj: "bj-log", pk: "pk-log", ck: "ck-log", cb: "cb-log", yt: "yt-log", gm: "gm-log", fa: "fa-log" };
 
         function tableNpcs() {
             if (activeGame === "reversi") return opponent.id ? [opponent] : [];
@@ -8662,6 +9672,7 @@
             if (activeGame === "pk") return pkOpponents();
             if (activeGame === "ck") return ck.opp && ck.opp.id ? [ck.opp] : [];
             if (activeGame === "yt") return ytOpponents();
+            if (activeGame === "fa") return faOpponents();
             if (activeGame === "gm") return gm.opp && gm.opp.id ? [gm.opp] : [];
             if (activeGame === "cb") {
                 const npc = cb.seats && cb.seats.length ? cbNpc() : null;
@@ -8747,7 +9758,7 @@
         // "menu", "board" (Reversi), "dice", "stb", "bj", "pk", or null when the plugin has hidden the view. A
         // game counts as hidden (paused) whenever its screen is not up.
         let screen = null;
-        let activeGame = null;    // "reversi" | "dice" | "stb" | "bj" | "pk" | "ck" | "cb" | "yt" | "gm": the game whose state the NPCs see
+        let activeGame = null;    // "reversi" | "dice" | "stb" | "bj" | "pk" | "ck" | "cb" | "yt" | "gm" | "fa": the game whose state the NPCs see
 
         function showScreen(name) {
             screen = name;
@@ -8761,6 +9772,7 @@
             $("cb").classList.toggle("open", name === "cb");
             $("yt").classList.toggle("open", name === "yt");
             $("gm").classList.toggle("open", name === "gm");
+            $("fa").classList.toggle("open", name === "fa");
             hidden = name !== "board";
             placeChat();
             fitPanels();
@@ -8797,6 +9809,8 @@
                 reportGmState();
             } else if (activeGame === "yt") {
                 reportYtState();
+            } else if (activeGame === "fa") {
+                reportFaState();
             } else if (activeGame === "cb") {
                 reportCbState();
             }
@@ -8862,6 +9876,7 @@
             } },
             { id: "pk", title: "gamePk", desc: "gamePkDesc", opponents: 3, start: (chosen) => playPk(chosen) },
             { id: "yt", title: "gameYt", desc: "gameYtDesc", opponents: 3, start: (chosen) => playYacht(chosen) },
+            { id: "fa", title: "gameFa", desc: "gameFaDesc", opponents: 3, start: (chosen) => playFarkle(chosen) },
             { id: "ck", title: "gameCk", desc: "gameCkDesc", opponents: 1, start: (chosen) => playCheckers(chosen[0]) },
             { id: "gm", title: "gameGm", desc: "gameGmDesc", opponents: 1, start: (chosen) => playGomoku(chosen[0]) },
             { id: "cb", title: "gameCb", desc: "gameCbDesc", opponents: 1, start: (chosen) => playCribbage(chosen[0]) },
@@ -8891,6 +9906,9 @@
             } else if (activeGame === "yt" && yt.playing && !yt.over) {
                 const opps = ytOpponents();
                 list.appendChild(menuRow(t("resume", { game: t("gameYt"), npc: joinNames(opps.map((o) => o.name)) }), "", "", () => playYacht(opps), "resume"));
+            } else if (activeGame === "fa" && fa.playing && !fa.over) {
+                const opps = faOpponents();
+                list.appendChild(menuRow(t("resume", { game: t("gameFa"), npc: joinNames(opps.map((o) => o.name)) }), "", "", () => playFarkle(opps), "resume"));
             } else if (activeGame === "stb" && stb.playing && !stb.over) {
                 const opps = stbOpponents();
                 list.appendChild(menuRow(t("resume", { game: t("gameStb"), npc: joinNames(opps.map((o) => o.name)) }), "", "", () => playStb(opps), "resume"));
@@ -9018,7 +10036,7 @@
 
         // ===== called from the plugin =====
 
-        // Options every open carries: { player, level, hints, color, diceLevel, stbLevel, bjLevel, bjRounds, pkLevel, pkHands, ckLevel, cbLevel, ytLevel, gmLevel, voice, voiceWait, strings }.
+        // Options every open carries: { player, level, hints, color, diceLevel, stbLevel, bjLevel, bjRounds, pkLevel, pkHands, ckLevel, cbLevel, ytLevel, gmLevel, faLevel, voice, voiceWait, strings }.
         function applyOptions(opts) {
             applyStrings(opts.strings);
             playerName = opts.player || playerName;
@@ -9029,6 +10047,7 @@
             stbLevel = opts.stbLevel || stbLevel;
             ytLevel = opts.ytLevel || ytLevel;
             gmLevel = opts.gmLevel || gmLevel;
+            faLevel = opts.faLevel || faLevel;
             bjLevel = opts.bjLevel || bjLevel;
             bjRounds = opts.bjRounds || bjRounds;
             pkLevel = opts.pkLevel || pkLevel;
@@ -9124,6 +10143,9 @@
             abandonGomoku();
             gm.b = [];
             gm.over = false;
+            abandonFarkle();
+            fa.seats = [];
+            fa.over = false;
             cb.over = false;
             activeGame = null;
             voiceReset();

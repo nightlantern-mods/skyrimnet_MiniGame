@@ -257,6 +257,23 @@
 		},
 		{
 			"type": "header",
+			"text": "$SNMG_HeaderFarkle"
+		},
+		{
+			"id": "iDifficulty:Farkle",
+			"type": "slider",
+			"text": "$SNMG_FaDifficulty",
+			"help": "$SNMG_FaDifficultyHelp",
+			"valueOptions": {
+				"min": 1,
+				"max": 4,
+				"step": 1,
+				"formatString": "{0}",
+				"sourceType": "ModSettingInt"
+			}
+		},
+		{
+			"type": "header",
 			"text": "$SNMG_HeaderSkyrimNet"
 		},
 		{

@@ -1,10 +1,10 @@
-# SkyrimNet MiniGame 0.5.1
+# SkyrimNet MiniGame 0.5.2
 
 Play table games with the people around you. Open the menu, pick a game and your opponents
 from the NPCs nearby, and play on a board drawn over the game. SkyrimNet gives your opponents
 a voice: they talk about the game as it goes, know how it stands, and remember it afterwards.
 
-Nine games so far:
+Ten games so far:
 
 - **Reversi** (Othello) against one NPC, at four strengths.
 - **Liar's Dice** against one to three NPCs. Everyone hides five dice under a cup; in turn you
@@ -18,6 +18,7 @@ Nine games so far:
 - **Gomoku** (five in a row) against one NPC, at four strengths, on a 15 × 15 board.
 - **Cribbage** against one NPC, at four strengths: fifteens, pairs and runs, first to 121.
 - **Yacht** against one to three NPCs: five dice, up to three rolls a turn, twelve boxes to fill.
+- **Farkle** against one to three NPCs: six dice, set aside what scores and push your luck, first to 10000.
 
 When a game starts, your opponents come over to stand in front of you, and their faces are shown
 in frames on the board: drawn by [Phantasm](https://github.com/Severause/Phantasm) when it is
@@ -186,6 +187,23 @@ One or two turns of each round get a line, and a yacht, a straight or a big full
 a kind always does; the start, rounds 4 and 8 (with the totals) and the end too. The game waits
 for each one.
 
+### Farkle
+
+- The folk dice game for up to four players. On your turn, roll six dice and click the ones to
+  set aside: every die set aside must score, and at least one must be set aside each roll. Then
+  roll the rest again, or stop and bank the points set aside this turn.
+- What scores: each 1 (100) and each 5 (50); three of a kind (the face × 100, three 1s 1000);
+  four of a kind 1000, five 2000, six 3000; a straight 1 to 6 or three pairs 1500.
+- A roll with nothing that scores is a farkle: the points of the turn are lost. When all six dice
+  have scored, all six are rolled again.
+- The first to bank 10000 gives everyone else one last turn; the highest total wins.
+- **Opponent strength** (MCM): weaker opponents bank small amounts early; stronger ones work out
+  which dice to set aside and when to stop; a Master far behind near the end pushes for more.
+
+One or two turns of each round get a line, and a big combination, all six dice scoring, a big
+loss to a farkle or reaching 10000 always does; the start, every fifth round (with the totals)
+and the end too. The game waits for each one.
+
 ## SkyrimNet
 
 - **Commentary.** Each moment of a game is told to SkyrimNet as a narration from one opponent,
@@ -226,6 +244,7 @@ for each one.
 | Cribbage: opponent strength | 2 | 1 Beginner to 4 Master, each time the board opens; the steps on the table change it until then. |
 | Yacht: opponent strength | 2 | 1 Beginner to 4 Master. |
 | Gomoku: opponent strength | 2 | 1 Beginner to 4 Master. |
+| Farkle: opponent strength | 2 | 1 Beginner to 4 Master. |
 | Commentary | On | Off: the games are silent. |
 | Commentary interval | 8 s | Reversi only: at most one remark on an ordinary move per this many seconds. |
 | Voice wait | 15 s | Liar's Dice, Shut the Box, Blackjack and Texas Hold'em wait for each line to be spoken; if nobody speaks for this long, the game moves on anyway. |
@@ -296,7 +315,7 @@ texts, into the mod project.
 
 ## Files
 
-- `skyrimnet_MiniGame_0.5.1.zip`: the mod as a FOMOD installer, in English, Japanese, Russian,
+- `skyrimnet_MiniGame_0.5.2.zip`: the mod as a FOMOD installer, in English, Japanese, Russian,
   German or Simplified Chinese, with `THIRD_PARTY_NOTICES.txt` and `COPYING.txt` (see License).
   Without an installer, use `core/<language>/` from the archive.
 

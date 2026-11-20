@@ -72,3 +72,6 @@ $SNMG_YtDifficultyHelp	1 Beginner / 2 Normal / 3 Strong / 4 Master. Stronger opp
 $SNMG_HeaderGomoku	Gomoku
 $SNMG_GmDifficulty	Opponent strength
 $SNMG_GmDifficultyHelp	1 Beginner / 2 Normal / 3 Strong / 4 Master. Stronger opponents block your threes and fours sooner, and a Master builds two threats at once and keeps you from doing so. Applies from the opponent's next move.
+$SNMG_HeaderFarkle	Farkle
+$SNMG_FaDifficulty	Opponent strength
+$SNMG_FaDifficultyHelp	1 Beginner / 2 Normal / 3 Strong / 4 Master. Weaker opponents bank small amounts early; stronger ones work out which dice to set aside and when to stop, and a Master far behind near the end pushes for more. Applies from the opponent's next roll.

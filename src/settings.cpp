@@ -82,6 +82,7 @@ namespace Settings
         v.checkersDifficulty = std::clamp(ToInt(ini, "Checkers:iDifficulty", v.checkersDifficulty), 1, 4);
         v.gomokuDifficulty = std::clamp(ToInt(ini, "Gomoku:iDifficulty", v.gomokuDifficulty), 1, 4);
         v.yachtDifficulty = std::clamp(ToInt(ini, "Yacht:iDifficulty", v.yachtDifficulty), 1, 4);
+        v.farkleDifficulty = std::clamp(ToInt(ini, "Farkle:iDifficulty", v.farkleDifficulty), 1, 4);
         v.cribbageDifficulty = std::clamp(ToInt(ini, "Cribbage:iDifficulty", v.cribbageDifficulty), 1, 4);
         v.commentary = ToInt(ini, "SkyrimNet:bCommentary", v.commentary) != 0;
         v.cooldownSeconds = std::clamp(ToInt(ini, "SkyrimNet:iCooldown", v.cooldownSeconds), 0, 600);
