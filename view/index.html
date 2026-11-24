@@ -321,6 +321,18 @@
             line-height: 1.6;
         }
 
+        /* a challenge to any game but Reversi: a panel of its own */
+        .challenge .box {
+            width: 420px;
+            text-align: center;
+        }
+
+        .challenge p {
+            margin: 0 0 18px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
         /* ---- menu: pick a game, then the opponents ---- */
 
         .menu {
@@ -1620,6 +1632,16 @@
         </div>
     </div>
 
+    <div class="panel challenge" id="ch">
+        <div class="box">
+            <p id="ch-text"></p>
+            <div class="toolbar">
+                <button class="primary" onclick="onChAccept()" data-s="accept">Accept</button>
+                <button onclick="onChDecline()" data-s="decline">Decline</button>
+            </div>
+        </div>
+    </div>
+
     <div class="panel" id="bj">
         <div class="table">
             <div class="seats" id="bj-seats"></div>
@@ -1922,6 +1944,10 @@
             resignNarration: "{player} resigns the Reversi game, so {npc} wins. Discs at resignation: {score}. {npc} turns to {player} and proudly declares victory.",
             declined: "{player} turns down {npc}'s challenge to a game of Reversi.",
             ignored: "{player} does not answer {npc}'s challenge to a game of Reversi.",
+            inviteGame: "{npc} challenges you to a game of {game}.",
+            menuAllBlocked: "Every game is turned off in the MCM blacklist.",
+            declinedGame: "{player} turns down {npc}'s challenge to a game of {game}.",
+            ignoredGame: "{player} does not answer {npc}'s challenge to a game of {game}.",
 
             // the opponent's prompt while the board is open
             statePlaying: "{npc} is playing Reversi with {player}. {npc} has {npcColor}, {player} has {playerColor}. Discs: {npc} {o}, {player} {h}, {empty} squares left. {standing}.",
@@ -3068,6 +3094,37 @@
 
         function requestClose() {
             send("rvClose", "");
+        }
+
+        // ===== a challenge to any other game =====
+
+        // An NPC challenged the player through SkyrimNet (LiarsDice_Challenge and the like): the
+        // game starts with them alone at the table once accepted.
+        let chGame = null;   // the game offered (an entry of GAMES), while the question is up
+        let chOpp = null;    // who offered it: {id, name}
+
+        // What the challenger is told about the answer: they react to it.
+        function chTell(key) {
+            send("rvNarrate", JSON.stringify({ text: t(key, { npc: chOpp.name, player: playerName, game: t(chGame.title) }), level: "important", speaker: chOpp.id }));
+            chGame = null;
+        }
+
+        function onChAccept() {
+            if (!chGame) {
+                return;
+            }
+            const game = chGame;
+            chGame = null;
+            menuGame = null;   // Back from the dealer choice goes to the game list
+            game.start([chOpp]);
+        }
+
+        function onChDecline() {
+            if (!chGame) {
+                return;
+            }
+            chTell("declinedGame");
+            requestClose();
         }
 
         // ===== voice: one line at a time =====
@@ -9773,6 +9830,7 @@
             $("yt").classList.toggle("open", name === "yt");
             $("gm").classList.toggle("open", name === "gm");
             $("fa").classList.toggle("open", name === "fa");
+            $("ch").classList.toggle("open", name === "ch");
             hidden = name !== "board";
             placeChat();
             fitPanels();
@@ -9883,6 +9941,7 @@
         ];
 
         let actors = [];          // nearby NPCs from the plugin: {id, name, distance, crosshair}
+        let blockedGames = [];    // ids of the games the MCM blacklist turns off: left out of the menu
         let menuGame = null;      // the game being set up
         let menuChosen = [];      // ids of the chosen opponents, in the order picked
 
@@ -9925,8 +9984,15 @@
                 const opp = { id: cbNpc().id, name: cbNpc().name };
                 list.appendChild(menuRow(t("resume", { game: t("gameCb"), npc: opp.name }), "", "", () => playCribbage(opp), "resume"));
             }
-            for (const game of GAMES) {
+            const offered = GAMES.filter((game) => !blockedGames.includes(game.id));
+            for (const game of offered) {
                 list.appendChild(menuRow(t(game.title), t(game.desc), "", () => chooseOpponents(game)));
+            }
+            if (!offered.length) {
+                const none = document.createElement("div");
+                none.className = "meta";
+                none.textContent = t("menuAllBlocked");
+                list.appendChild(none);
             }
             fitPanels();
         }
@@ -10048,6 +10114,7 @@
             ytLevel = opts.ytLevel || ytLevel;
             gmLevel = opts.gmLevel || gmLevel;
             faLevel = opts.faLevel || faLevel;
+            blockedGames = Array.isArray(opts.blocked) ? opts.blocked : [];
             bjLevel = opts.bjLevel || bjLevel;
             bjRounds = opts.bjRounds || bjRounds;
             pkLevel = opts.pkLevel || pkLevel;
@@ -10076,9 +10143,30 @@
             playReversi(opts.opponent, true);
         };
 
+        // An NPC challenged the player to another game: opts.game (an id of GAMES), opts.opponent {id, name}.
+        window.mgChallenge = (opts) => {
+            applyOptions(opts);
+            const game = GAMES.find((g) => g.id === opts.game);
+            if (!game || blockedGames.includes(game.id)) {
+                requestClose();   // turned off in the MCM since SkyrimNet chose it
+                return;
+            }
+            if (game.id === "reversi") {
+                playReversi(opts.opponent, true);
+                return;
+            }
+            chGame = game;
+            chOpp = opts.opponent;
+            $("ch-text").textContent = t("inviteGame", { npc: chOpp.name, game: t(game.title) });
+            showScreen("ch");
+        };
+
         // The plugin hid the view (Esc, the hotkey). A game in progress waits for the next open.
         window.rvHidden = () => {
             showScreen(null);
+            if (chGame) {
+                chTell("ignoredGame");
+            }
             if ($("invite").classList.contains("open")) {
                 showInvite(false);
                 narrate(t("ignored", { npc: opponent.name, player: playerName }), "important");
@@ -10118,6 +10206,7 @@
             thinking = false;
             opponent = { id: "", name: t("opponentDefault") };
             showInvite(false);
+            chGame = null;
             $("log").innerHTML = "";
             setStatus("");
             abandonDice();
@@ -10165,6 +10254,8 @@
             }
             if ($("invite").classList.contains("open")) {
                 onDecline();
+            } else if (screen === "ch" && chGame) {
+                onChDecline();
             } else if (($("step-opponents").classList.contains("open") || $("step-dealer").classList.contains("open")) && $("menu").classList.contains("open")) {
                 menuBack();
             } else {

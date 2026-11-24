@@ -12,6 +12,6 @@
     { "name": "SkyrimNet MiniGame", "file": "skyrimnet_MiniGame.esp", "required": true }
   ],
   "languages": ["en"],
-  "version": "0.5.2",
+  "version": "0.6.0",
   "min_skyrimnet_version": "0.25.0"
 }

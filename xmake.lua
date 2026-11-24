@@ -5,7 +5,7 @@ set_xmakever("3.0.0")
 includes(os.getenv("COMMONLIB_SSE_NG") or "C:/Modding/MotionCommander/lib/commonlibsse-ng")
 
 local PLUGIN_NAME = "skyrimnet_MiniGame"
-local PLUGIN_VERSION = "0.5.2"
+local PLUGIN_VERSION = "0.6.0"
 
 local VIEW_NAME = "skyrimnet_MiniGame"
 

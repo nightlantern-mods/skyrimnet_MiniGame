@@ -9,11 +9,11 @@
 // Everything that talks to SkyrimNet. Every function is a no-op when SkyrimNet is missing.
 namespace SkyrimNetBridge
 {
-    // Resolves the API and registers the minigame_state decorator, the challenge action and a
-    // listener for spoken lines. a_canChallenge (thread-safe) says whether an NPC may challenge
-    // the player now; a_onChallenge runs when one does; a_onDialogue(speaker, line) runs on
-    // SkyrimNet's threads whenever an NPC or the player speaks. Call at kDataLoaded.
-    void Init(std::function<bool(RE::Actor*)> a_canChallenge, std::function<void(RE::FormID)> a_onChallenge,
+    // Resolves the API and registers the minigame_state decorator, one challenge action per game
+    // and a listener for spoken lines. a_canChallenge(npc, game id) (thread-safe) says whether an
+    // NPC may challenge the player to that game now; a_onChallenge(npc, game id) runs when one does; a_onDialogue(speaker,
+    // line) runs on SkyrimNet's threads whenever an NPC or the player speaks. Call at kDataLoaded.
+    void Init(std::function<bool(RE::Actor*, const std::string&)> a_canChallenge, std::function<void(RE::FormID, std::string)> a_onChallenge,
         std::function<void(RE::FormID, std::string)> a_onDialogue);
 
     // Whether Narrate reaches SkyrimNet at all (it is there and commentary is on in the MCM).

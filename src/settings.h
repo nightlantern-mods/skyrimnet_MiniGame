@@ -1,5 +1,8 @@
 #pragma once
 
+#include <string>
+#include <vector>
+
 // MCM settings. MCM Helper writes the user's values to Data/MCM/Settings/skyrimnet_MiniGame.ini;
 // the defaults live in Data/MCM/Config/skyrimnet_MiniGame/settings.ini.
 namespace Settings
@@ -32,6 +35,7 @@ namespace Settings
         bool chatBox = true;         // a text box under each game's log: the player talks to an opponent
         int  chatMode = 0;           // what is typed there: 0 through Transform Dialogue, 1 said as written
         int  lineLength = 1;         // the opponents' lines about the game: 0 a few words, 1 short, 2 as SkyrimNet has it, 3 longer
+        std::vector<std::string> blocked;  // the view's ids of the games the MCM blacklist turns off: not in the menu, no challenges
     };
 
     // Re-reads both files. Call from any thread.

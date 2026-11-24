@@ -92,6 +92,17 @@ namespace Settings
         v.chatBox = ToInt(ini, "SkyrimNet:bChatBox", v.chatBox) != 0;
         v.chatMode = std::clamp(ToInt(ini, "SkyrimNet:iChatMode", v.chatMode), 0, 1);
         v.lineLength = std::clamp(ToInt(ini, "SkyrimNet:iLineLength", v.lineLength), 0, 3);
+        // the blacklist: one switch per game, the view's game id against its MCM key
+        static constexpr std::pair<const char*, const char*> kGames[] = {
+            { "reversi", "Blacklist:bReversi" }, { "dice", "Blacklist:bLiarsDice" }, { "stb", "Blacklist:bShutTheBox" },
+            { "bj", "Blacklist:bBlackjack" }, { "pk", "Blacklist:bPoker" }, { "ck", "Blacklist:bCheckers" },
+            { "gm", "Blacklist:bGomoku" }, { "cb", "Blacklist:bCribbage" }, { "yt", "Blacklist:bYacht" }, { "fa", "Blacklist:bFarkle" },
+        };
+        for (const auto& [game, key] : kGames) {
+            if (ToInt(ini, key, 0) != 0) {
+                v.blocked.emplace_back(game);
+            }
+        }
 
         std::scoped_lock lock(g_lock);
         g_values = v;

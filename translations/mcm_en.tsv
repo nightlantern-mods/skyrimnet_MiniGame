@@ -43,7 +43,7 @@ $SNMG_CommentaryHelp	Tells SkyrimNet about the game so your opponents talk. Reve
 $SNMG_Cooldown	Commentary interval (seconds)
 $SNMG_CooldownHelp	Reversi: at most one remark on an ordinary move per this many seconds; striking moves such as corners and comebacks wait half as long. The start, the end and resigning always go through. Lower means more talk. (Liar's Dice, Shut the Box, Blackjack and Texas Hold'em pace themselves by the voice instead.)
 $SNMG_Challenge	NPCs may challenge you
-$SNMG_ChallengeHelp	Lets an NPC challenge you to Reversi in conversation (the SkyrimNet action Reversi_Challenge). The board opens with the challenge, and you can accept or decline.
+$SNMG_ChallengeHelp	Lets an NPC challenge you to any of the games in conversation (SkyrimNet actions such as Reversi_Challenge and Farkle_Challenge, one per game). A window asks whether you accept: the game then starts with that NPC alone at the table.
 $SNMG_VoiceWait	Voice wait (seconds)
 $SNMG_VoiceWaitHelp	Liar's Dice, Shut the Box, Blackjack and Texas Hold'em wait for each line to be spoken before the next person acts. If nobody speaks within this many seconds, the game moves on anyway.
 $SNMG_PlayerVoice	You speak your own moves
@@ -75,3 +75,6 @@ $SNMG_GmDifficultyHelp	1 Beginner / 2 Normal / 3 Strong / 4 Master. Stronger opp
 $SNMG_HeaderFarkle	Farkle
 $SNMG_FaDifficulty	Opponent strength
 $SNMG_FaDifficultyHelp	1 Beginner / 2 Normal / 3 Strong / 4 Master. Weaker opponents bank small amounts early; stronger ones work out which dice to set aside and when to stop, and a Master far behind near the end pushes for more. Applies from the opponent's next roll.
+$SNMG_HeaderBlacklist	Blacklist
+$SNMG_BlacklistHelp	On: this game is turned off. It is left out of the menu, and NPCs no longer challenge you to it in conversation. A game of it already under way can still be resumed. Applies the next time the menu opens.
+$SNMG_PageSettings	Settings

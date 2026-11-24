@@ -64,7 +64,7 @@ namespace SkyrimNetBridge
         }
     }
 
-    void Init(std::function<bool(RE::Actor*)> a_canChallenge, std::function<void(RE::FormID)> a_onChallenge,
+    void Init(std::function<bool(RE::Actor*, const std::string&)> a_canChallenge, std::function<void(RE::FormID, std::string)> a_onChallenge,
         std::function<void(RE::FormID, std::string)> a_onDialogue)
     {
         if (!FindFunctions() || !PublicGetVersion) {
@@ -123,20 +123,43 @@ namespace SkyrimNetBridge
         }
 
         if (PublicRegisterCPPAction) {
-            const bool registered = PublicRegisterCPPAction("Reversi_Challenge",
-                "Challenge the player to a game of Reversi (Othello) on a small board you carry. Choose this only when you would "
-                "genuinely like to play a board game with them right now: they asked for a game, you are idle or relaxing together, "
-                "or you want a friendly contest. Not during danger, urgent business or a serious conversation.",
-                [a_canChallenge](RE::Actor* a_actor) { return a_actor && a_canChallenge(a_actor); },
-                [a_onChallenge](RE::Actor* a_actor, std::string) {
-                    if (!a_actor) {
-                        return false;
-                    }
-                    a_onChallenge(a_actor->GetFormID());
-                    return true;
-                },
-                "dialogue", "Social", 50, "{}", "", "", "");
-            logger::info("Reversi_Challenge action {}", registered ? "registered" : "NOT registered");
+            // One action per game: {the view's game id, the action, what the game is}.
+            struct Challenge
+            {
+                const char* game;
+                const char* action;
+                const char* what;
+            };
+            static constexpr Challenge kChallenges[] = {
+                { "reversi", "Reversi_Challenge", "Challenge the player to a game of Reversi (Othello) on a small board you carry." },
+                { "dice", "LiarsDice_Challenge", "Challenge the player to a game of Liar's Dice, the bluffing game played with dice hidden under cups, as in a tavern." },
+                { "stb", "ShutTheBox_Challenge", "Challenge the player to a game of Shut the Box, a quick dice game of shutting numbered tiles." },
+                { "bj", "Blackjack_Challenge", "Challenge the player to a game of Blackjack (twenty-one) with a deck of cards, played for chips." },
+                { "pk", "TexasHoldem_Challenge", "Challenge the player to a game of Texas Hold'em poker, a card game of betting and bluffing, played for chips." },
+                { "ck", "Checkers_Challenge", "Challenge the player to a game of Checkers (draughts) on a small board you carry." },
+                { "gm", "Gomoku_Challenge", "Challenge the player to a game of Gomoku, five stones in a row on a board you carry." },
+                { "cb", "Cribbage_Challenge", "Challenge the player to a game of Cribbage, the card game scored with pegs on a board." },
+                { "yt", "Yacht_Challenge", "Challenge the player to a game of Yacht, the dice game of rolling for scoring combinations." },
+                { "fa", "Farkle_Challenge", "Challenge the player to a game of Farkle, the push-your-luck dice game." },
+            };
+            constexpr const char* kWhen =
+                " Choose this only when you would genuinely like to play this game with them right now: they asked for it, "
+                "you are idle or relaxing together, or you want a friendly contest. Not during danger, urgent business or a "
+                "serious conversation.";
+            for (const auto& c : kChallenges) {
+                const std::string game = c.game;
+                const bool        registered = PublicRegisterCPPAction(c.action, std::string(c.what) + kWhen,
+                    [a_canChallenge, game](RE::Actor* a_actor) { return a_actor && a_canChallenge(a_actor, game); },
+                    [a_onChallenge, game](RE::Actor* a_actor, std::string) {
+                        if (!a_actor) {
+                            return false;
+                        }
+                        a_onChallenge(a_actor->GetFormID(), game);
+                        return true;
+                    },
+                    "dialogue", "Social", 50, "{}", "", "", "");
+                logger::info("{} action {}", c.action, registered ? "registered" : "NOT registered");
+            }
         }
     }
 

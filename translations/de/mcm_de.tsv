@@ -43,7 +43,7 @@ $SNMG_CommentaryHelp	Teilt SkyrimNet den Spielverlauf mit, damit deine Gegner re
 $SNMG_Cooldown	Kommentarabstand (Sekunden)
 $SNMG_CooldownHelp	Reversi: höchstens eine Bemerkung zu einem gewöhnlichen Zug pro so viele Sekunden; auffällige Züge wie Ecken und Aufholjagden warten halb so lang. Anfang, Ende und Aufgabe kommen immer durch. Weniger heißt mehr Gerede. (Lügenwürfeln, Shut the Box, Blackjack und Texas Hold'em richten ihr Tempo stattdessen nach der Stimme.)
 $SNMG_Challenge	NPCs dürfen dich herausfordern
-$SNMG_ChallengeHelp	Erlaubt einem NPC, dich im Gespräch zu Reversi herauszufordern (die SkyrimNet-Aktion Reversi_Challenge). Das Brett öffnet sich mit der Herausforderung, und du kannst annehmen oder ablehnen.
+$SNMG_ChallengeHelp	Erlaubt einem NPC, dich im Gespräch zu jedem der Spiele herauszufordern (SkyrimNet-Aktionen wie Reversi_Challenge und Farkle_Challenge, eine pro Spiel). Ein Fenster fragt, ob du annimmst; dann beginnt das Spiel mit diesem NPC allein am Tisch.
 $SNMG_VoiceWait	Warten auf die Stimme (Sekunden)
 $SNMG_VoiceWaitHelp	Lügenwürfeln, Shut the Box, Blackjack und Texas Hold'em warten, bis jede Zeile gesprochen ist, bevor die nächste Person handelt. Spricht innerhalb so vieler Sekunden niemand, geht das Spiel trotzdem weiter.
 $SNMG_PlayerVoice	Du sprichst deine eigenen Züge
@@ -75,3 +75,6 @@ $SNMG_GmDifficultyHelp	1 Anfänger / 2 Normal / 3 Stark / 4 Meister. Stärkere G
 $SNMG_HeaderFarkle	Farkle
 $SNMG_FaDifficulty	Stärke des Gegners
 $SNMG_FaDifficultyHelp	1 Anfänger / 2 Normal / 3 Stark / 4 Meister. Schwächere Gegner sichern früh kleine Beträge; stärkere berechnen, welche Würfel sie beiseitelegen und wann sie aufhören, und ein Meister, der kurz vor Schluss weit zurückliegt, geht auf mehr. Gilt ab dem nächsten Wurf des Gegners.
+$SNMG_HeaderBlacklist	Sperrliste
+$SNMG_BlacklistHelp	An: Dieses Spiel ist abgeschaltet. Es fehlt im Menü, und NPCs fordern dich im Gespräch nicht mehr dazu heraus. Eine schon begonnene Partie kann weiterhin fortgesetzt werden. Gilt ab dem nächsten Öffnen des Menüs.
+$SNMG_PageSettings	Einstellungen

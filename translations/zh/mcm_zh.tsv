@@ -43,7 +43,7 @@ $SNMG_CommentaryHelp	把游戏进程告诉 SkyrimNet，让对手开口说话。�
 $SNMG_Cooldown	解说间隔（秒）
 $SNMG_CooldownHelp	黑白棋：每隔这么多秒最多对普通的一手评论一次；占角、逆转等精彩的一手只需等待一半时间。开局、终局和认输总会说出。数值越小说得越多。（吹牛骰子、关盒子、二十一点和德州扑克则按语音节奏进行。）
 $SNMG_Challenge	NPC 可以向你挑战
-$SNMG_ChallengeHelp	允许 NPC 在对话中向你发起黑白棋挑战（SkyrimNet 动作 Reversi_Challenge）。棋盘会随挑战一起打开，你可以接受或拒绝。
+$SNMG_ChallengeHelp	允许 NPC 在对话中向你发起任意一种游戏的挑战（SkyrimNet 动作，如 Reversi_Challenge、Farkle_Challenge，每种游戏一个）。会弹出窗口询问你是否接受，接受后就与该 NPC 单独开始游戏。
 $SNMG_VoiceWait	等待语音（秒）
 $SNMG_VoiceWaitHelp	吹牛骰子、关盒子、二十一点和德州扑克会等每句话说完后，下一个人才行动。如果在这么多秒内没有人说话，游戏仍会继续。
 $SNMG_PlayerVoice	说出你自己的行动
@@ -75,3 +75,6 @@ $SNMG_GmDifficultyHelp	1 新手 / 2 普通 / 3 强手 / 4 大师。更强的对�
 $SNMG_HeaderFarkle	法克尔骰子
 $SNMG_FaDifficulty	对手强度
 $SNMG_FaDifficultyHelp	1 新手 / 2 普通 / 3 强 / 4 大师。较弱的对手会早早存下少量分数；较强的对手会计算放下哪些骰子、何时停手；大师在接近终局且大幅落后时会冒险追分。从对手的下一次掷骰起生效。
+$SNMG_HeaderBlacklist	黑名单
+$SNMG_BlacklistHelp	开启：停用这个游戏。它不会出现在菜单中，NPC 也不会再在对话中向你发起这个游戏的挑战。已经开始的对局仍可继续。从下次打开菜单时生效。
+$SNMG_PageSettings	设置

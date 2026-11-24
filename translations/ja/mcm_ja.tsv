@@ -43,7 +43,7 @@ $SNMG_CommentaryHelp	ゲームの様子を SkyrimNet に伝え、相手の NPC �
 $SNMG_Cooldown	実況の間隔（秒）
 $SNMG_CooldownHelp	リバーシで、ふつうの手の実況はこの秒数に 1 回まで、角や逆転などの目立つ手はその半分の間隔まで詰めます。開始・終局・投了はいつでも伝えます。小さいほどよく話します。（嘘つきダイス、シャット・ザ・ボックス、ブラックジャック、テキサス・ホールデムは声に合わせて進むので、この設定は使いません）
 $SNMG_Challenge	NPC からの対局申し込み
-$SNMG_ChallengeHelp	会話の流れで NPC がリバーシの勝負を挑めるようにします（SkyrimNet のアクション Reversi_Challenge）。申し込まれると盤が開き、受けるか断るかを選べます。
+$SNMG_ChallengeHelp	会話の流れで NPC がどのゲームでも勝負を挑めるようにします（SkyrimNet のアクション。Reversi_Challenge、Farkle_Challenge など、ゲームごとに 1 つ）。申し込まれると受けるか断るかを聞く窓が出て、受けるとその NPC だけを相手にゲームが始まります。
 $SNMG_VoiceWait	声を待つ時間（秒）
 $SNMG_VoiceWaitHelp	嘘つきダイス、シャット・ザ・ボックス、ブラックジャック、テキサス・ホールデムでは、NPC がセリフを話し終えてから次の人が動きます。この秒数のあいだ誰も話さなければ、待たずに先へ進みます。
 $SNMG_PlayerVoice	自分の手を声に出す
@@ -75,3 +75,6 @@ $SNMG_GmDifficultyHelp	1 初心者 / 2 普通 / 3 強い / 4 達人。強い相�
 $SNMG_HeaderFarkle	ファークル
 $SNMG_FaDifficulty	相手の強さ
 $SNMG_FaDifficultyHelp	1 初心者 / 2 普通 / 3 強い / 4 達人。弱い相手は少ない点で早めに確定します。強い相手は、どのサイコロを取り分けていつ止めるかを計算して決め、達人は終盤に大きく負けていると多めの点を狙います。相手の次の振りから反映されます。
+$SNMG_HeaderBlacklist	ブラックリスト
+$SNMG_BlacklistHelp	オンにすると、このゲームを使わなくなります。メニューに出なくなり、会話の中で NPC から誘われることもなくなります。すでに途中まで遊んでいるゲームは、続きから遊べます。次にメニューを開いたときから反映されます。
+$SNMG_PageSettings	設定

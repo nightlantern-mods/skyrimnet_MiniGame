@@ -1,4 +1,4 @@
-# SkyrimNet MiniGame 0.5.2
+# SkyrimNet MiniGame 0.6.0
 
 Play table games with the people around you. Open the menu, pick a game and your opponents
 from the NPCs nearby, and play on a board drawn over the game. SkyrimNet gives your opponents
@@ -217,8 +217,12 @@ and the end too. The game waits for each one.
   Dialogue, so your character says them aloud in their own words.
 - **Talk at the table** (MCM option). Type a line under the log and your character says it to one
   of your opponents, in their own words or as written; that opponent answers, knowing the game.
-- **Challenges.** An NPC may challenge you to Reversi in conversation (the action
-  `Reversi_Challenge`). The board opens with the challenge, and you can accept or decline.
+- **Challenges.** An NPC may challenge you to any of the games in conversation, through one
+  SkyrimNet action per game (`Reversi_Challenge`, `LiarsDice_Challenge`, `ShutTheBox_Challenge`,
+  `Blackjack_Challenge`, `TexasHoldem_Challenge`, `Checkers_Challenge`, `Gomoku_Challenge`,
+  `Cribbage_Challenge`, `Yacht_Challenge`, `Farkle_Challenge`). A window asks whether you accept;
+  the game then starts with that NPC alone at the table. Declining, or closing the window, is told
+  to them.
 - Opponents are marked busy in SkyrimNet while a game is played, so they are not pulled into
   other conversations.
 
@@ -252,7 +256,11 @@ and the end too. The game waits for each one.
 | Length of their lines | Short | How long your opponents' remarks about the game are: a few words, short (one or two sentences), SkyrimNet's own (no instruction) or longer (two to four sentences). Only for the NPCs at the table while a game is played; nothing in SkyrimNet's own settings changes. A request to the model, not a hard limit. |
 | Talk at the table | On | A text box under each game's log: what you type is said by your character to one opponent (the one you name, else whoever spoke last), who answers. The game waits for both lines. Enter says it, Esc leaves the box. Japanese, Chinese and Korean input needs Magelight UI. |
 | How your typed line is said | In your character's words | In your character's words: first rewritten the way your character speaks (one LLM request, with the mod's own prompt `skyrimnet_minigame_player_line`). As written: exactly what you typed. Either way it is said to the opponent chosen, and only that opponent answers. |
-| NPCs may challenge you | On | The `Reversi_Challenge` action. |
+| NPCs may challenge you | On | The challenge actions, one per game. |
+
+The **Blacklist** page has a switch for each game, all off by default. A game switched on there is
+left out of the menu, and NPCs no longer challenge you to it; a game of it already under way can
+still be resumed.
 
 ## Notes and limits
 
@@ -315,7 +323,7 @@ texts, into the mod project.
 
 ## Files
 
-- `skyrimnet_MiniGame_0.5.2.zip`: the mod as a FOMOD installer, in English, Japanese, Russian,
+- `skyrimnet_MiniGame_0.6.0.zip`: the mod as a FOMOD installer, in English, Japanese, Russian,
   German or Simplified Chinese, with `THIRD_PARTY_NOTICES.txt` and `COPYING.txt` (see License).
   Without an installer, use `core/<language>/` from the archive.
 

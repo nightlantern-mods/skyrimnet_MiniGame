@@ -257,6 +257,7 @@ namespace
             { "gather", a_settings.gather },
             { "facePhoto", a_settings.facePhoto && (PhantasmFaces::Ready() || !g_photoUnsafe) },
             { "strings", strings },
+            { "blocked", a_settings.blocked },
         };
     }
 
@@ -287,14 +288,16 @@ namespace
         ShowView("mgOpen", options, settings.pauseGame);
     }
 
-    // Game thread: a_opponent challenges the player to Reversi; the player may still decline.
-    void OpenChallenge(RE::Actor* a_opponent)
+    // Game thread: a_opponent challenges the player to a_game (the view's game id); the player
+    // may still decline.
+    void OpenChallenge(RE::Actor* a_opponent, const std::string& a_game)
     {
         Settings::Reload();
         const auto settings = Settings::Get();
         auto       options = ViewOptions(settings);
         options["opponent"] = { { "id", std::format("{:08X}", a_opponent->GetFormID()) }, { "name", GameText(a_opponent->GetDisplayFullName()) } };
-        ShowView("rvOpen", options, settings.pauseGame);
+        options["game"] = a_game;
+        ShowView(a_game == "reversi" ? "rvOpen" : "mgChallenge", options, settings.pauseGame);
     }
 
     // ---- opponents' faces ----
@@ -560,10 +563,12 @@ namespace
         return true;
     }
 
-    // SkyrimNet: may this NPC challenge the player now? Runs on SkyrimNet's threads.
-    bool CanChallenge(RE::Actor* a_actor)
+    // SkyrimNet: may this NPC challenge the player to a_game (the view's game id) now? Runs on
+    // SkyrimNet's threads. Not to a game the MCM blacklist turns off.
+    bool CanChallenge(RE::Actor* a_actor, const std::string& a_game)
     {
-        if (!Settings::Get().challenge || g_open || !UiHost::Ready()) {
+        const auto settings = Settings::Get();
+        if (!settings.challenge || std::ranges::find(settings.blocked, a_game) != settings.blocked.end() || g_open || !UiHost::Ready()) {
             return false;
         }
         const auto player = RE::PlayerCharacter::GetSingleton();
@@ -572,23 +577,23 @@ namespace
 
     // SkyrimNet: the NPC challenges the player. The board opens with the challenge once no menu
     // is up (SkyrimNet may decide this while one is), or not at all after a while.
-    void OnChallenge(RE::FormID a_actor)
+    void OnChallenge(RE::FormID a_actor, std::string a_game)
     {
-        std::thread([a_actor]() {
+        std::thread([a_actor, a_game]() {
             for (int tries = 0; tries < 40; ++tries) {
                 const auto ui = RE::UI::GetSingleton();
                 if (ui && !ui->GameIsPaused()) {
-                    SKSE::GetTaskInterface()->AddTask([a_actor]() {
+                    SKSE::GetTaskInterface()->AddTask([a_actor, a_game]() {
                         const auto actor = RE::TESForm::LookupByID<RE::Actor>(a_actor);
                         if (!g_open && CanPlay(actor)) {
-                            OpenChallenge(actor);
+                            OpenChallenge(actor, a_game);
                         }
                     });
                     return;
                 }
                 std::this_thread::sleep_for(std::chrono::milliseconds(500));
             }
-            logger::info("Challenge from {:08X} dropped: a menu stayed open", a_actor);
+            logger::info("Challenge from {:08X} ({}) dropped: a menu stayed open", a_actor, a_game);
         }).detach();
     }
 
